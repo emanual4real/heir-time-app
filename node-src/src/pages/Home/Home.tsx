@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchItems } from '../services/item-service';
-import { Item } from '../models/Item.model';
-import { ItemComponent } from '../components/Item';
 import { Box, Container } from '@mui/material';
+import { fetchItems } from '../../services';
+import { Item } from '../../models';
+import { ItemComponent } from '../../components';
+import './Home.css';
 
-const Home = () => {
+export const Home = () => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -18,13 +19,7 @@ const Home = () => {
   }, []);
   return (
     <Container>
-      Home
-      <Box
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-around'
-        }}>
+      <Box className="home-container">
         {items.map((item) => (
           <ItemComponent key={item.id} item={item} />
         ))}
@@ -32,5 +27,3 @@ const Home = () => {
     </Container>
   );
 };
-
-export default Home;
