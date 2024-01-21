@@ -1,17 +1,36 @@
-import React, { useEffect } from 'react';
-import { fetchItemById, fetchItems } from '../services/item-service';
+import { useEffect, useState } from 'react';
+import { fetchItems } from '../services/item-service';
+import { Item } from '../models/Item.model';
+import { ItemComponent } from '../components/Item';
+import { Box, Container } from '@mui/material';
 
 const Home = () => {
-  useEffect(() => {
-    const getItem = async () => {
-      const item = await fetchItems();
+  const [items, setItems] = useState<Item[]>([]);
 
-      console.log(item);
+  useEffect(() => {
+    const getItems = async () => {
+      const data = await fetchItems();
+
+      setItems(data);
     };
 
-    getItem();
+    getItems();
   }, []);
-  return <div>Home</div>;
+  return (
+    <Container>
+      Home
+      <Box
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-around'
+        }}>
+        {items.map((item) => (
+          <ItemComponent key={item.id} item={item} />
+        ))}
+      </Box>
+    </Container>
+  );
 };
 
 export default Home;
