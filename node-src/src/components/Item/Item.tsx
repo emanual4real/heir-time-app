@@ -12,8 +12,8 @@ export interface ItemProps {
 }
 export const ItemComponent = (props: ItemProps) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={props.item.imagePath} title="item" />
+    <Card sx={{ maxWidth: 500 }}>
+      <CardMedia sx={{ height: 300 }} image={props.item.imagePath} title="item" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.item.title}
@@ -26,20 +26,19 @@ export const ItemComponent = (props: ItemProps) => {
         <ul>
           <li>Parting Date: {props.item.releaseDate}</li>
           <li>Location: {props.item.location}.</li>
-          {props.item.itemStatus === ItemStatus.Decided ? (
+          {props.item.statusName === ItemStatus.Decided ? (
             <li>
-              Status: {props.item.itemStatus} - {props.item.recipient}
+              Status: {props.item.statusName} - {props.item.recipient}
             </li>
           ) : (
-            <li>Status: {props.item.itemStatus}</li>
+            <li>Status: {props.item.statusName}</li>
           )}
         </ul>
       </CardContent>
       <CardActions>
-        {props.item.itemStatus === ItemStatus.Undecided ? (
+        {props.item.statusName === ItemStatus.Undecided ? (
           <>
             <Button size="small">Bid Now</Button>
-            <Button size="small">Learn More</Button>
           </>
         ) : null}
       </CardActions>

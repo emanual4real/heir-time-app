@@ -17,6 +17,7 @@ public class Item
   public required DateTime ReleaseDate { get; set; }
   [BsonElement("itemStatus")]
   public required Status ItemStatus { get; set; }
+  public required string StatusName { get { return ItemStatus.ToString(); } set { StatusName = ItemStatus.ToString(); } }
   [BsonElement("description")]
   public string? Description { get; set; }
   [BsonElement("location")]
