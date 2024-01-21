@@ -4,21 +4,21 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { EndowmentStatus } from '../../types/enums/EndowmentStatus';
+import { ItemStatus } from '../../types/enums/ItemStatus';
 
-export interface EndowmentProps {
+export interface ItemProps {
   description: string;
   title: string;
   releaseDate: string;
   location: string;
-  status: EndowmentStatus;
+  status: ItemStatus;
   imagePath?: string;
   recipient?: string;
 }
-export const Endowment = (props: EndowmentProps) => {
+export const Item = (props: ItemProps) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={props.imagePath} title="endowment" />
+      <CardMedia sx={{ height: 140 }} image={props.imagePath} title="item" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.title}
@@ -31,7 +31,7 @@ export const Endowment = (props: EndowmentProps) => {
         <ul>
           <li>Parting Date: {props.releaseDate}</li>
           <li>Location: {props.location}.</li>
-          {props.status === EndowmentStatus.Decided ? (
+          {props.status === ItemStatus.Decided ? (
             <li>
               Status: {props.status} - {props.recipient}
             </li>
@@ -41,7 +41,7 @@ export const Endowment = (props: EndowmentProps) => {
         </ul>
       </CardContent>
       <CardActions>
-        {props.status === EndowmentStatus.Undecided ? (
+        {props.status === ItemStatus.Undecided ? (
           <>
             <Button size="small">Bid Now</Button>
             <Button size="small">Learn More</Button>

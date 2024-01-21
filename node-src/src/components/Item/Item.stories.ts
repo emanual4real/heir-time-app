@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Endowment } from '.';
-import { EndowmentStatus } from '../../types/enums/EndowmentStatus';
+import { Item } from '.';
+import { ItemStatus } from '../../types/enums/ItemStatus';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Components/Endowment',
-  component: Endowment,
+  title: 'Components/Item',
+  component: Item,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered'
@@ -14,7 +14,7 @@ const meta = {
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {}
-} satisfies Meta<typeof Endowment>;
+} satisfies Meta<typeof Item>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -27,7 +27,7 @@ export const Undecided: Story = {
     imagePath: '/couch.jpg',
     releaseDate: '1/1/2025',
     location: 'Madison County, N.C.',
-    status: EndowmentStatus.Undecided
+    status: ItemStatus.Undecided
   }
 };
 
@@ -39,7 +39,7 @@ export const Decided: Story = {
     imagePath: '/couch.jpg',
     releaseDate: '1/1/2025',
     location: 'Madison County, N.C.',
-    status: EndowmentStatus.Decided,
+    status: ItemStatus.Decided,
     recipient: 'Emanual'
   }
 };
@@ -52,6 +52,6 @@ export const Goodwill: Story = {
     imagePath: '/couch.jpg',
     releaseDate: '1/1/2025',
     location: 'Madison County, N.C.',
-    status: EndowmentStatus.Goodwill
+    status: ItemStatus.Goodwill
   }
 };

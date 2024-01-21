@@ -16,12 +16,12 @@ interface Form {
   date: string | null;
 }
 
-interface BiddingProps {
+interface BiddingFormProps {
   form: Form;
   onSubmit: (form: Form) => void;
 }
 
-export const Bidding = (props: BiddingProps) => {
+export const BiddingForm = (props: BiddingFormProps) => {
   const [formData, setFormData] = useState<Form>({
     itemId: props.form.itemId,
     bid: props.form.bid,
