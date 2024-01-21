@@ -1,30 +1,58 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
-import { Box, Button } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import './Carousel.css';
 
 interface CarouselProps {
   itemCount: number;
-  children: ReactElement;
+  itemsPerPage: number;
+  children: ReactElement[];
 }
-
-interface ArrowsProps {
-  left?: boolean;
-}
-const Arrows = (props: ArrowsProps) => (
-  <Button
-    variant="left-arrow"
-    endIcon={props.left ? <ArrowBackIosRoundedIcon /> : <ArrowForwardIosRoundedIcon />}></Button>
-);
 
 export const Carousel = (props: CarouselProps) => {
-  return (
-    <Box>
-      <Arrows left={false} />
-      <Arrows left={true} />
+  const [page, setPage] = useState<number>(props.itemCount / props.itemsPerPage);
 
-      <Box>{props.children}</Box>
+  const firstItemIndex = page * props.itemsPerPage;
+  const lastItemIndex = props.itemsPerPage * (page + 1);
+  const maxPages =
+    props.itemCount % props.itemsPerPage === 0
+      ? (props.itemCount % props.itemsPerPage) - 1
+      : Math.trunc(props.itemCount / props.itemsPerPage);
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (page < maxPages) {
+      setPage(page + 1);
+    }
+  };
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+      }}>
+      <IconButton
+        sx={{ backgroundColor: 'beige' }}
+        disabled={page === 0}
+        onClick={handlePreviousPage}>
+        <ArrowBackIosRoundedIcon />
+      </IconButton>
+      {props.children.slice(firstItemIndex, lastItemIndex)}
+      <IconButton
+        sx={{ backgroundColor: 'beige' }}
+        disabled={page === maxPages}
+        onClick={handleNextPage}>
+        <ArrowForwardIosRoundedIcon />
+      </IconButton>
     </Box>
   );
 };

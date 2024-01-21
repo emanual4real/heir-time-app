@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
 import { fetchItems } from '../../services';
 import { Item } from '../../models';
-import { ItemComponent } from '../../components';
+import { Carousel, ItemComponent } from '../../components';
 import './Home.css';
 
 export const Home = () => {
@@ -20,9 +20,11 @@ export const Home = () => {
   return (
     <Container>
       <Box className="home-container">
-        {items.map((item) => (
-          <ItemComponent key={item.id} item={item} />
-        ))}
+        <Carousel itemCount={items.length} itemsPerPage={2}>
+          {items.map((item) => (
+            <ItemComponent key={item.id} item={item} />
+          ))}
+        </Carousel>
       </Box>
     </Container>
   );
