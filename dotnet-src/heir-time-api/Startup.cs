@@ -30,6 +30,11 @@ public class Startup
         services.AddSingleton<IItemRepository, ItemRepository>();
     }
 
+    private void ConfigureCors(IApplicationBuilder app)
+    {
+        app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173"));
+    }
+
     // This method gets called by the runtime. Use this method to add services to the container
     public void ConfigureServices(IServiceCollection services)
     {
@@ -38,6 +43,7 @@ public class Startup
         RegisterRepositories(services);
 
         services.AddSwaggerGen();
+        services.AddCors();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -57,6 +63,8 @@ public class Startup
         app.UseRouting();
 
         app.UseAuthorization();
+
+        ConfigureCors(app);
 
         app.UseEndpoints(endpoints =>
         {

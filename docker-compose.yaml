@@ -7,8 +7,9 @@ services:
       - .:/workspace:cached
     command: sleep infinity
     links:
-      - node-app
       - mongo
+    depends_on:
+     - mongo
     networks:
       - app-network
 
@@ -17,6 +18,10 @@ services:
     volumes:
       - .:/workspace:cached
     command: sleep infinity
+    depends_on:
+     - dotnet-api
+    links:
+      - dotnet-api
     networks:
       - app-network
 
