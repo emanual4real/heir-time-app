@@ -1,19 +1,52 @@
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
+import { Link } from '@tanstack/react-router';
+import './NavBar.css';
 
 export const NavBar = () => {
   return (
     <Box sx={{ flexGrow: 1, marginBottom: '30px' }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Heir Time
-          </Typography>
-          <Button color="inherit">Admin</Button>
-          <Button color="inherit">Login</Button>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+            <Link to="/" className="link">
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                <img src="/favicon.ico" />
+                <Typography variant="h5" component="div" sx={{ marginLeft: '10px', flexGrow: 15 }}>
+                  Heir Time
+                </Typography>
+              </Box>
+            </Link>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              flexGrow: 1
+            }}>
+            <Link to="/admin" className="link">
+              <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
+                Admin
+              </Typography>
+            </Link>
+            <Link to="/login" className="link">
+              <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
+                Login
+              </Typography>
+            </Link>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

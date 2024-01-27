@@ -1,8 +1,6 @@
 import './App.css';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
-import { Home } from './pages';
-import { NavBar } from './components';
 import { routeTree } from './routeTree.gen';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
@@ -19,9 +17,7 @@ declare module '@tanstack/react-router' {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <RouterProvider router={router} />
-      {/* <Home /> */}
     </ThemeProvider>
   );
 }
