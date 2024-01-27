@@ -12,6 +12,7 @@ export const NavBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Heir Time
           </Typography>
+          <Button color="inherit">Admin</Button>
           <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
