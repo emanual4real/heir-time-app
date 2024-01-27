@@ -38,15 +38,14 @@ public class ItemRepository : IItemRepository, IDisposable
 
     public async Task<string?> DeleteItem(string id)
     {
-        await _collection.DeleteOneAsync(id);
+        await _collection.DeleteOneAsync(a => a.Id == id);
 
         return id;
     }
 
     public async Task<Item?> UpdateItem(Item item)
     {
-        var filter = Builders<Item>.Filter.Eq("_id", item.Id);
-        await _collection.ReplaceOneAsync(filter, item);
+        await _collection.ReplaceOneAsync(x => x.Id == item.Id, item);
 
         return await _collection.Find(x => x.Id == item.Id).FirstOrDefaultAsync();
     }
