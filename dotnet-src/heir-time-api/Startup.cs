@@ -32,7 +32,7 @@ public class Startup
 
     private void ConfigureCors(IApplicationBuilder app)
     {
-        app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173"));
+        app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173").AllowAnyHeader());
     }
 
     // This method gets called by the runtime. Use this method to add services to the container
@@ -51,7 +51,6 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
 
-        Console.WriteLine(env.IsDevelopment());
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
