@@ -1,5 +1,5 @@
 export enum ItemStatus {
-  Undecided = 'Undecided',
-  Decided = 'Decided',
-  Goodwill = 'Goodwill'
+  Undecided = 0,
+  Decided = 1,
+  Goodwill = 2
 }
