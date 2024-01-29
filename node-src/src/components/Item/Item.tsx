@@ -38,7 +38,7 @@ export const ItemComponent = (props: ItemProps) => {
         <ul>
           <li>Parting Date: {props.item.releaseDate}</li>
           <li>Location: {props.item.location}</li>
-          {props.item.statusName === ItemStatus.Decided ? (
+          {props.item.itemStatus === ItemStatus.Decided ? (
             <li>
               Status: {props.item.statusName} - {props.item.recipient}
             </li>
@@ -48,7 +48,7 @@ export const ItemComponent = (props: ItemProps) => {
         </ul>
       </CardContent>
       <CardActions>
-        {props.item.statusName === ItemStatus.Undecided ? (
+        {props.item.itemStatus === ItemStatus.Undecided ? (
           <>
             <Button size="small">Bid Now</Button>
           </>

@@ -6,15 +6,31 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ItemForm } from '..';
 import { Item } from '../../models';
+import { ItemStatus } from '../../types/enums/ItemStatus';
+import { format } from 'date-fns';
 
 export interface NewItemDialogProps {
   onSubmit: (item: Partial<Item>) => void;
 }
 
 export const NewItemDialog = (props: NewItemDialogProps) => {
+  const defaultState: Partial<Item> = {
+    title: '',
+    description: '',
+    releaseDate: format(new Date(), 'yyyy-MM-dd'),
+    location: '',
+    itemStatus: 0,
+    statusName: ItemStatus[ItemStatus.Undecided]
+  };
+
   const [open, setOpen] = useState(false);
-  const [disabled, setDisabled] = useState(true);
-  const [form, setForm] = useState<Partial<Item>>();
+  const [form, setForm] = useState<Partial<Item>>(defaultState);
+
+  const resetState = () => {
+    setForm(defaultState);
+  };
+
+  const disabled = form.title === '' || form.description === '' || form.location === '';
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,6 +38,7 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    resetState();
   };
 
   const handleClickYes = () => {
@@ -44,9 +61,9 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
         <DialogTitle id="alert-dialog-title">{'Delete this item forever?'}</DialogTitle>
         <DialogContent>
           <ItemForm
-            onChange={(formData) => {
-              setDisabled(formData.disabled);
-              setForm(formData.item);
+            item={form}
+            onChange={(field) => {
+              setForm({ ...form, ...field });
             }}
           />
         </DialogContent>

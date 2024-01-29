@@ -1,30 +1,15 @@
 import { FormControl, FormGroup, TextField } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
-import { ItemStatus } from '../../types/enums/ItemStatus';
-import { format } from 'date-fns';
+import { ChangeEvent } from 'react';
 import { Item } from '../../models';
 
 export interface ItemFormProps {
-  item?: Item;
-  onChange: (form: { item: Partial<Item>; disabled: boolean }) => void;
+  item: Partial<Item>;
+  onChange: (field: Partial<Item>) => void;
 }
 
 export const ItemForm = (props: ItemFormProps) => {
-  const [formData, setFormData] = useState<Partial<Item>>({
-    title: props.item?.title ?? '',
-    description: props.item?.description ?? '',
-    location: props.item?.location ?? '',
-    releaseDate: props.item?.releaseDate ?? format(new Date(), 'yyyy-MM-dd'),
-    itemStatus: props.item?.itemStatus ?? ItemStatus.Undecided
-  });
-
-  const disabled = formData.title === '' || formData.description === '' || formData.location === '';
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (props.onChange) {
-      props.onChange({ item: formData, disabled });
-    }
+    props.onChange({ [e.target.name]: e.target.value });
   };
 
   return (
@@ -37,7 +22,7 @@ export const ItemForm = (props: ItemFormProps) => {
             label="Title"
             helperText="Give a meaningful title to this item"
             variant="filled"
-            value={formData.title}
+            value={props.item.title ?? ''}
             required
             onChange={handleChange}></TextField>
         </FormControl>
@@ -48,7 +33,7 @@ export const ItemForm = (props: ItemFormProps) => {
             label="Description"
             variant="filled"
             helperText="Provide any additional information"
-            value={formData.description}
+            value={props.item.description ?? ''}
             rows={4}
             multiline
             required
@@ -61,7 +46,7 @@ export const ItemForm = (props: ItemFormProps) => {
             label="Location"
             variant="filled"
             helperText="Where is this item located?"
-            value={formData.location}
+            value={props.item.location ?? ''}
             required
             onChange={handleChange}></TextField>
         </FormControl>
@@ -72,7 +57,7 @@ export const ItemForm = (props: ItemFormProps) => {
             label="Release Date"
             variant="filled"
             type="date"
-            value={formData.releaseDate}
+            value={props.item.releaseDate ?? ''}
             helperText="When will this item become available?"
             InputLabelProps={{ shrink: true }}
             onChange={handleChange}></TextField>
@@ -83,7 +68,7 @@ export const ItemForm = (props: ItemFormProps) => {
             name="itemStatus"
             label="Status"
             variant="filled"
-            value={ItemStatus[0]}
+            value={props.item.statusName ?? ''}
             InputLabelProps={{ shrink: true }}
             disabled></TextField>
         </FormControl>

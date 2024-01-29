@@ -4,8 +4,8 @@ export interface Item {
   id: string;
   title: string;
   releaseDate: string;
-  itemStatus: number;
-  statusName: ItemStatus;
+  itemStatus: ItemStatus;
+  statusName: string;
   description: string;
   location?: string;
   imagePath?: string;

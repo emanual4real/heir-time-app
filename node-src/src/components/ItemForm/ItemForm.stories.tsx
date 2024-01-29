@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ItemForm } from '.';
 import { ItemStatus } from '../../types/enums/ItemStatus';
+import { format } from 'date-fns';
 
 const meta = {
   title: 'Components/ItemForm',
@@ -22,6 +23,15 @@ type Story = StoryObj<typeof meta>;
 
 export const NewItem: Story = {
   args: {
+    item: {
+      id: '',
+      title: '',
+      description: '',
+      releaseDate: format(new Date(), 'yyyy-MM-dd'),
+      location: '',
+      itemStatus: 0,
+      statusName: ItemStatus[ItemStatus.Undecided]
+    },
     onChange: (form) => {
       console.log(form);
     }
@@ -36,8 +46,8 @@ export const EditItem: Story = {
       description: 'Existing item description',
       releaseDate: '2025-01-01',
       location: 'Somewhere in BFE',
-      itemStatus: 0,
-      statusName: ItemStatus.Undecided
+      itemStatus: 1,
+      statusName: ItemStatus[ItemStatus.Decided]
     },
     onChange: (form) => {
       console.log(form);
