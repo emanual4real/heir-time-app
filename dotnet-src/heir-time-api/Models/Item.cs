@@ -25,7 +25,7 @@ public class Item
   [BsonElement("location")]
   public string? Location { get; set; }
   [BsonElement("imagePath")]
-  public string? ImagePath { get; set; }
+  public string? ImagePath { get; set; } = "https://media.istockphoto.com/id/1352945762/vector/no-image-available-like-missing-picture.jpg?s=612x612&w=0&k=20&c=4X-znbt02a8EIdxwDFaxfmKvUhTnLvLMv1i1f3bToog=";
   [BsonElement("recipient")]
   public string? Recipient { get; set; }
 }
