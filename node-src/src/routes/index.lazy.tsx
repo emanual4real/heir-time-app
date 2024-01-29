@@ -1,10 +1,10 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { Home } from '../pages';
+import { ItemCarousel } from '../pages/ItemCarousel';
+
+const IndexWithProps = () => {
+  return <ItemCarousel isAdmin={false} />;
+};
 
 export const Route = createLazyFileRoute('/')({
-  component: Index
+  component: IndexWithProps
 });
-
-function Index() {
-  return <Home />;
-}

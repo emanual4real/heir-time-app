@@ -12,7 +12,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:storybook/recommended'
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'routeTree.gen.ts'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

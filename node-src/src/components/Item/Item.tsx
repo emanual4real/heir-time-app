@@ -6,11 +6,18 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { ItemStatus } from '../../types/enums/ItemStatus';
 import { Item } from '../../models/Item.model';
+import { DeleteDialog } from '..';
 
 export interface ItemProps {
   item: Item;
+  isAdmin?: boolean;
+  handleDelete: (id: string) => void;
 }
 export const ItemComponent = (props: ItemProps) => {
+  const onDeleteClick = () => {
+    props.handleDelete(props.item.id);
+  };
+
   return (
     <Card sx={{ maxWidth: 500 }}>
       <CardMedia sx={{ height: 300 }} image={props.item.imagePath} title="item" />
@@ -41,6 +48,7 @@ export const ItemComponent = (props: ItemProps) => {
             <Button size="small">Bid Now</Button>
           </>
         ) : null}
+        {props.isAdmin ? <DeleteDialog handleDelete={onDeleteClick} /> : null}
       </CardActions>
     </Card>
   );

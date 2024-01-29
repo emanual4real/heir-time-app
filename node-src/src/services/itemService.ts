@@ -35,3 +35,19 @@ export const postItem = async (item: Partial<Item>): Promise<Item[]> => {
 
   return await response.json();
 };
+
+export const deleteItem = async (id: string): Promise<string> => {
+  const options: RequestInit = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  const response = await fetch(`${API_URL}/api/item/${id}`, options);
+
+  if ([200, 202].includes(response.status)) {
+    return id;
+  } else {
+    throw new Error(`${id} not found`);
+  }
+};
