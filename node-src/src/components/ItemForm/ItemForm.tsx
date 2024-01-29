@@ -1,6 +1,7 @@
 import { FormControl, FormGroup, TextField } from '@mui/material';
 import { ChangeEvent } from 'react';
 import { Item } from '../../models';
+import { format, parseISO } from 'date-fns';
 
 export interface ItemFormProps {
   item: Partial<Item>;
@@ -10,6 +11,16 @@ export interface ItemFormProps {
 export const ItemForm = (props: ItemFormProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     props.onChange({ [e.target.name]: e.target.value });
+  };
+
+  const releaseDate = (): string => {
+    if (props.item.releaseDate) {
+      const date = parseISO(props.item.releaseDate);
+
+      return format(date, 'yyyy-MM-dd');
+    } else {
+      return '';
+    }
   };
 
   return (
@@ -57,7 +68,7 @@ export const ItemForm = (props: ItemFormProps) => {
             label="Release Date"
             variant="filled"
             type="date"
-            value={props.item.releaseDate ?? ''}
+            value={releaseDate()}
             helperText="When will this item become available?"
             InputLabelProps={{ shrink: true }}
             onChange={handleChange}></TextField>

@@ -26,11 +26,11 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Partial<Item>>(defaultState);
 
+  const disabled = form.title === '' || form.description === '' || form.location === '';
+
   const resetState = () => {
     setForm(defaultState);
   };
-
-  const disabled = form.title === '' || form.description === '' || form.location === '';
 
   const handleClickOpen = () => {
     setOpen(true);

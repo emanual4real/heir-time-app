@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { ItemStatus } from '../../types/enums/ItemStatus';
 import { Item } from '../../models/Item.model';
 import { DeleteDialog, EditItemDialog } from '..';
+import { format, parseISO } from 'date-fns';
 
 export interface ItemProps {
   item: Item;
@@ -15,6 +16,16 @@ export interface ItemProps {
   handleEdit: (item: Item) => void;
 }
 export const ItemComponent = (props: ItemProps) => {
+  const releaseDate = (): string => {
+    if (props.item.releaseDate) {
+      const date = parseISO(props.item.releaseDate);
+
+      return format(date, 'yyyy-MM-dd');
+    } else {
+      return '';
+    }
+  };
+
   const onDeleteClick = () => {
     props.handleDelete(props.item.id);
   };
@@ -24,7 +35,7 @@ export const ItemComponent = (props: ItemProps) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 500 }}>
+    <Card sx={{ width: 400 }}>
       <CardMedia sx={{ height: 300 }} image={props.item.imagePath} title="item" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -36,7 +47,7 @@ export const ItemComponent = (props: ItemProps) => {
         <br />
         <Typography variant="h6">Information</Typography>
         <ul>
-          <li>Parting Date: {props.item.releaseDate}</li>
+          <li>Parting Date: {releaseDate()}</li>
           <li>Location: {props.item.location}</li>
           {props.item.itemStatus === ItemStatus.Decided ? (
             <li>

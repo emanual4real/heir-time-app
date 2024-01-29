@@ -14,8 +14,9 @@ export interface EditItemDialogProps {
 
 export const EditItemDialog = (props: EditItemDialogProps) => {
   const [open, setOpen] = useState(false);
-  const [disabled, setDisabled] = useState(true);
   const [form, setForm] = useState<Item>(props.item);
+
+  const disabled = form.title === '' || form.description === '' || form.location === '';
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -45,11 +46,9 @@ export const EditItemDialog = (props: EditItemDialogProps) => {
         <DialogTitle id="alert-dialog-title">{'Delete this item forever?'}</DialogTitle>
         <DialogContent>
           <ItemForm
-            item={props.item}
-            onChange={(formData) => {
-              console.log(formData.disabled);
-              setDisabled(formData.disabled);
-              setForm({ ...form, ...formData.item });
+            item={form}
+            onChange={(field) => {
+              setForm({ ...form, ...field });
             }}
           />
         </DialogContent>
