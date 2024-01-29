@@ -14,7 +14,7 @@ export const NavBar = () => {
               justifyContent: 'space-between',
               alignItems: 'center'
             }}>
-            <Link to="/" className="link">
+            <Link to="/" className="nav-link">
               <Box
                 sx={{
                   display: 'flex',
@@ -36,12 +36,12 @@ export const NavBar = () => {
               justifyContent: 'flex-end',
               flexGrow: 1
             }}>
-            <Link to="/admin" className="link">
+            <Link to="/admin" className="nav-link">
               <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
                 Admin
               </Typography>
             </Link>
-            <Link to="/login" className="link">
+            <Link to="/login" className="nav-link">
               <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
                 Login
               </Typography>

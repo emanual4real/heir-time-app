@@ -17,6 +17,8 @@ export const NewItemForm = (props: NewItemFormProps) => {
     itemStatus: ItemStatus.Undecided
   });
 
+  const disabled = formData.title === '' || formData.description === '' || formData.location === '';
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     props.onSubmit(formData);
@@ -83,7 +85,12 @@ export const NewItemForm = (props: NewItemFormProps) => {
             disabled></TextField>
         </FormControl>
       </FormGroup>
-      <Button type="submit" variant="contained" color="primary" style={{ float: 'right' }}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        style={{ float: 'right' }}
+        disabled={disabled}>
         Submit
       </Button>
     </form>

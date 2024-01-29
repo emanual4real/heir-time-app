@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import { fetchItems } from '../../services';
 import { Item } from '../../models';
 import { Carousel, ItemComponent } from '../../components';
@@ -18,14 +18,12 @@ export const Home = () => {
     getItems();
   }, []);
   return (
-    <Container>
-      <Box className="home-container">
-        <Carousel itemCount={items.length} itemsPerPage={2}>
-          {items.map((item) => (
-            <ItemComponent key={item.id} item={item} />
-          ))}
-        </Carousel>
-      </Box>
-    </Container>
+    <Box className="home-container">
+      <Carousel itemCount={items.length} itemsPerPage={2}>
+        {items.map((item) => (
+          <ItemComponent key={item.id} item={item} />
+        ))}
+      </Carousel>
+    </Box>
   );
 };

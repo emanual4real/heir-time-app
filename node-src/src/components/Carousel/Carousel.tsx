@@ -17,7 +17,7 @@ export const Carousel = (props: CarouselProps) => {
   const lastItemIndex = props.itemsPerPage * (page + 1);
   const maxPages =
     props.itemCount % props.itemsPerPage === 0
-      ? (props.itemCount % props.itemsPerPage) - 1
+      ? Math.trunc(props.itemCount / props.itemsPerPage) - 1
       : Math.trunc(props.itemCount / props.itemsPerPage);
 
   const handlePreviousPage = () => {
