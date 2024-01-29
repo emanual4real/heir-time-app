@@ -51,3 +51,21 @@ export const deleteItem = async (id: string): Promise<string> => {
     throw new Error(`${id} not found`);
   }
 };
+
+export const updateItem = async (item: Item): Promise<Item> => {
+  const options: RequestInit = {
+    method: 'PUT',
+    body: JSON.stringify(item),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const response = await fetch(`${API_URL}/api/item`, options);
+
+  if ([200].includes(response.status)) {
+    return item;
+  } else {
+    throw new Error(response.statusText);
+  }
+};

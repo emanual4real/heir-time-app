@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { deleteItem, fetchItems } from '../../services';
+import { deleteItem, updateItem, fetchItems } from '../../services';
 import { Item } from '../../models';
 import { Carousel, ItemComponent } from '../../components';
 import './ItemCarousel.css';
@@ -30,6 +30,18 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
     }
   };
 
+  const handleEdit = async (item: Partial<Item>) => {
+    const originalItem = items.find((row) => row.id === item.id);
+    const newItem = { ...originalItem, ...item } as Item;
+    const response = await updateItem(newItem);
+
+    if (response) {
+      const updatedList = items.filter((row) => row.id !== response.id);
+      updatedList.push(response);
+      setItems(updatedList);
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
       <Carousel itemCount={items.length} itemsPerPage={2}>
@@ -39,6 +51,7 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
             item={item}
             isAdmin={props.isAdmin}
             handleDelete={handleDelete}
+            handleEdit={handleEdit}
           />
         ))}
       </Carousel>

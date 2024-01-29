@@ -1,20 +1,22 @@
-import { Box, Typography } from '@mui/material';
-import { Link } from '@tanstack/react-router';
+import { Box, Button } from '@mui/material';
+import { useNavigate } from '@tanstack/react-router';
+import { NewItemDialog } from '../../components';
+import { postItem } from '../../services';
+import { Item } from '../../models';
 
 export const Admin = () => {
+  const navigate = useNavigate({ from: '/admin' });
+
+  const onSubmit = (item: Partial<Item>) => {
+    postItem(item);
+  };
+
   return (
-    <Box>
-      <Link to="/addItem" className="link">
-        <Typography>Add new item</Typography>
-      </Link>
-
-      <Link to="/editItem" className="link">
-        <Typography>Edit existing item</Typography>
-      </Link>
-
-      <Link to="/deleteItem" className="link">
-        <Typography>Delete existing item</Typography>
-      </Link>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+      <NewItemDialog onSubmit={onSubmit} />
+      <Button variant="text" onClick={() => navigate({ to: '/editItem' })}>
+        Edit or Delete items
+      </Button>
     </Box>
   );
 };

@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { NewItemForm } from '.';
+import { NewItemDialog } from '.';
+import { Item } from '../../models';
 
 const meta = {
-  title: 'Components/NewItemForm',
-  component: NewItemForm,
+  title: 'Components/NewItemDialog',
+  component: NewItemDialog,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered'
@@ -11,17 +12,15 @@ const meta = {
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
-  argTypes: {
-    onSubmit: { action: 'onSubmit' }
-  }
-} satisfies Meta<typeof NewItemForm>;
+  argTypes: {}
+} satisfies Meta<typeof NewItemDialog>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Standard: Story = {
+export const Primary: Story = {
   args: {
-    onSubmit: (form) => {
+    onSubmit: (form: Partial<Item>) => {
       console.log(form);
     }
   }

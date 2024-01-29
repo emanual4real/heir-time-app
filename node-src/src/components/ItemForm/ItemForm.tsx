@@ -1,31 +1,34 @@
-import { Button, FormControl, FormGroup, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { FormControl, FormGroup, TextField } from '@mui/material';
+import { ChangeEvent, useState } from 'react';
 import { ItemStatus } from '../../types/enums/ItemStatus';
 import { format } from 'date-fns';
 import { Item } from '../../models';
 
-export interface NewItemFormProps {
-  onSubmit: (form: Partial<Item>) => void;
+export interface ItemFormProps {
+  item?: Item;
+  onChange: (form: { item: Partial<Item>; disabled: boolean }) => void;
 }
 
-export const NewItemForm = (props: NewItemFormProps) => {
+export const ItemForm = (props: ItemFormProps) => {
   const [formData, setFormData] = useState<Partial<Item>>({
-    title: '',
-    description: '',
-    location: '',
-    releaseDate: format(new Date(), 'yyyy-MM-dd'),
-    itemStatus: ItemStatus.Undecided
+    title: props.item?.title ?? '',
+    description: props.item?.description ?? '',
+    location: props.item?.location ?? '',
+    releaseDate: props.item?.releaseDate ?? format(new Date(), 'yyyy-MM-dd'),
+    itemStatus: props.item?.itemStatus ?? ItemStatus.Undecided
   });
 
   const disabled = formData.title === '' || formData.description === '' || formData.location === '';
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    props.onSubmit(formData);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (props.onChange) {
+      props.onChange({ item: formData, disabled });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <FormGroup>
         <FormControl>
           <TextField
@@ -36,7 +39,7 @@ export const NewItemForm = (props: NewItemFormProps) => {
             variant="filled"
             value={formData.title}
             required
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}></TextField>
+            onChange={handleChange}></TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -49,7 +52,7 @@ export const NewItemForm = (props: NewItemFormProps) => {
             rows={4}
             multiline
             required
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}></TextField>
+            onChange={handleChange}></TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -60,7 +63,7 @@ export const NewItemForm = (props: NewItemFormProps) => {
             helperText="Where is this item located?"
             value={formData.location}
             required
-            onChange={(e) => setFormData({ ...formData, location: e.target.value })}></TextField>
+            onChange={handleChange}></TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -72,7 +75,7 @@ export const NewItemForm = (props: NewItemFormProps) => {
             value={formData.releaseDate}
             helperText="When will this item become available?"
             InputLabelProps={{ shrink: true }}
-            onChange={(e) => setFormData({ ...formData, releaseDate: e.target.value })}></TextField>
+            onChange={handleChange}></TextField>
         </FormControl>
         <FormControl>
           <TextField
@@ -85,14 +88,6 @@ export const NewItemForm = (props: NewItemFormProps) => {
             disabled></TextField>
         </FormControl>
       </FormGroup>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        style={{ float: 'right' }}
-        disabled={disabled}>
-        Submit
-      </Button>
     </form>
   );
 };

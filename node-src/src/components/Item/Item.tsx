@@ -6,16 +6,21 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { ItemStatus } from '../../types/enums/ItemStatus';
 import { Item } from '../../models/Item.model';
-import { DeleteDialog } from '..';
+import { DeleteDialog, EditItemDialog } from '..';
 
 export interface ItemProps {
   item: Item;
   isAdmin?: boolean;
   handleDelete: (id: string) => void;
+  handleEdit: (item: Item) => void;
 }
 export const ItemComponent = (props: ItemProps) => {
   const onDeleteClick = () => {
     props.handleDelete(props.item.id);
+  };
+
+  const onEditClick = (item: Item) => {
+    props.handleEdit(item);
   };
 
   return (
@@ -32,7 +37,7 @@ export const ItemComponent = (props: ItemProps) => {
         <Typography variant="h6">Information</Typography>
         <ul>
           <li>Parting Date: {props.item.releaseDate}</li>
-          <li>Location: {props.item.location}.</li>
+          <li>Location: {props.item.location}</li>
           {props.item.statusName === ItemStatus.Decided ? (
             <li>
               Status: {props.item.statusName} - {props.item.recipient}
@@ -49,6 +54,7 @@ export const ItemComponent = (props: ItemProps) => {
           </>
         ) : null}
         {props.isAdmin ? <DeleteDialog handleDelete={onDeleteClick} /> : null}
+        {props.isAdmin ? <EditItemDialog item={props.item} onSubmit={onEditClick} /> : null}
       </CardActions>
     </Card>
   );

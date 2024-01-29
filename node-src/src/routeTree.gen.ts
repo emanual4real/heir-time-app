@@ -10,9 +10,7 @@ import { Route as rootRoute } from './routes/__root'
 
 const LoginLazyImport = createFileRoute('/login')()
 const EditItemLazyImport = createFileRoute('/editItem')()
-const DeleteItemLazyImport = createFileRoute('/deleteItem')()
 const AdminLazyImport = createFileRoute('/admin')()
-const AddItemLazyImport = createFileRoute('/addItem')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -27,20 +25,10 @@ const EditItemLazyRoute = EditItemLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/editItem.lazy').then((d) => d.Route))
 
-const DeleteItemLazyRoute = DeleteItemLazyImport.update({
-  path: '/deleteItem',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/deleteItem.lazy').then((d) => d.Route))
-
 const AdminLazyRoute = AdminLazyImport.update({
   path: '/admin',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/admin.lazy').then((d) => d.Route))
-
-const AddItemLazyRoute = AddItemLazyImport.update({
-  path: '/addItem',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/addItem.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -55,16 +43,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/addItem': {
-      preLoaderRoute: typeof AddItemLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/admin': {
       preLoaderRoute: typeof AdminLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/deleteItem': {
-      preLoaderRoute: typeof DeleteItemLazyImport
       parentRoute: typeof rootRoute
     }
     '/editItem': {
@@ -82,9 +62,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  AddItemLazyRoute,
   AdminLazyRoute,
-  DeleteItemLazyRoute,
   EditItemLazyRoute,
   LoginLazyRoute,
 ])
