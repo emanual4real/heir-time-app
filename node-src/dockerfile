@@ -1,0 +1,18 @@
+FROM node:20
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --omit=dev
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]
+
+# BUILD Command
+# docker build -t node-heir-time .
+# RUN Command
+# docker run -p 5173:5173 node-heir-time
