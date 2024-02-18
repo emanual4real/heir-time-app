@@ -26,6 +26,9 @@ services:
       - dotnet-api
     networks:
       - app-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
   mongo:
     image: mongo
