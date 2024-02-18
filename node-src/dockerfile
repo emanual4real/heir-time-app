@@ -6,6 +6,8 @@ COPY package*.json ./
 
 RUN npm ci --omit=dev
 
+RUN npm i vite
+
 COPY . .
 
 EXPOSE 5173
