@@ -7,5 +7,6 @@ export default defineConfig({
   plugins: [react(), TanStackRouterVite()],
   server: {
     host: true
-  }
+  },
+  envDir: 'environments'
 });
