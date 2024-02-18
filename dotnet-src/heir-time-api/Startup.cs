@@ -32,7 +32,7 @@ public class Startup
 
     private void ConfigureCors(IApplicationBuilder app)
     {
-        app.UseCors(builder => builder.WithOrigins(["http://127.0.0.1:5173", "http://localhost:5173"]).AllowAnyHeader().AllowAnyMethod());
+        app.UseCors(builder => builder.WithOrigins(["http://127.0.0.1:5173", "http://localhost:5173", "http://18.232.149.16"]).AllowAnyHeader().AllowAnyMethod());
     }
 
     // This method gets called by the runtime. Use this method to add services to the container
