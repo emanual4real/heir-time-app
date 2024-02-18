@@ -33,9 +33,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - type: bind
-        source: ./db
-        target: /data/db
+      - db-data:/etc/data
     networks:
       - app-network
     environment:
