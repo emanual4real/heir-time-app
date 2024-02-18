@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  dotnet-api:
+    build: 
+      context: ../dotnet-src
+      dockerfile: dockerfile
+    ports:
+      - "8080:8080"
+    links:
+      - mongo
+    depends_on:
+     - mongo
+    networks:
+      - app-network
+
+  node-app:
+    build: 
+      context: ../node-src
+      dockerfile: dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+     - dotnet-api
+    links:
+      - dotnet-api
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - type: bind
+        source: ./db
+        target: /data/db
+    networks:
+      - app-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+networks:
+  app-network:
+    driver: bridge
