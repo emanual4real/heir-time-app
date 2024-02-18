@@ -19,7 +19,7 @@ services:
       context: ../node-src
       dockerfile: dockerfile
     ports:
-      - "5173:5173"
+      - "5173:80"
     depends_on:
      - dotnet-api
     links:
