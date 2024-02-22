@@ -14,7 +14,8 @@
         "ms-dotnettools.csharp",
         "ms-dotnettools.csdevkit",
         "ms-dotnettools.vscodeintellicode-csharp",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "SonarSource.sonarlint-vscode"
       ]
     }
   }
