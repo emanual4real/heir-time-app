@@ -1,5 +1,5 @@
 namespace heir_time_api.Enums;
-public enum Status : int
+public enum Status
 {
   Undecided = 0,
   Decided = 1,

@@ -4,11 +4,11 @@ using MongoDB.Driver;
 
 namespace heir_time_api.Repositories.Items;
 
-public class ItemRepository : IItemRepository, IDisposable
+public class ItemRepository : IItemRepository
 {
     readonly string databaseName = "heir-time";
     readonly string collectionName = "items";
-    IMongoCollection<Item> _collection;
+    readonly IMongoCollection<Item> _collection;
 
 
 
@@ -22,10 +22,9 @@ public class ItemRepository : IItemRepository, IDisposable
         return await _collection.Find(x => true).ToListAsync();
     }
 
-    public async Task<Item?> GetItemById(string id)
+    public async Task<Item?> GetItemById(string itemId)
     {
-        var filter = Builders<Item>.Filter.Eq("_id", id);
-        return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        return await _collection.Find(x => x.Id == itemId).FirstOrDefaultAsync();
     }
 
     public async Task<Item?> InsertItem(Item item)
@@ -36,11 +35,11 @@ public class ItemRepository : IItemRepository, IDisposable
 
     }
 
-    public async Task<string?> DeleteItem(string id)
+    public async Task<string?> DeleteItem(string itemId)
     {
-        await _collection.DeleteOneAsync(a => a.Id == id);
+        await _collection.DeleteOneAsync(a => a.Id == itemId);
 
-        return id;
+        return itemId;
     }
 
     public async Task<Item?> UpdateItem(Item item)
@@ -48,10 +47,5 @@ public class ItemRepository : IItemRepository, IDisposable
         await _collection.ReplaceOneAsync(x => x.Id == item.Id, item);
 
         return await _collection.Find(x => x.Id == item.Id).FirstOrDefaultAsync();
-    }
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
     }
 }

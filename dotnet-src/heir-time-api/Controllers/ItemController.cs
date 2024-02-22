@@ -7,7 +7,7 @@ namespace heir_time_api.Controllers;
 [Route("api/[controller]")]
 public class ItemController : ControllerBase
 {
-    IItemRepository _repository;
+    readonly IItemRepository _repository;
 
     public ItemController(IItemRepository repository)
     {
