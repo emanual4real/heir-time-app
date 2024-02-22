@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using heir_time_api.Repositories.Items;
 using System.Text.Json;
+using heir_time_api.Repositories.Users;
 
 namespace heir_time_api;
 
@@ -28,11 +29,12 @@ public class Startup
     private void RegisterRepositories(IServiceCollection services)
     {
         services.AddSingleton<IItemRepository, ItemRepository>();
+        services.AddSingleton<IUserRepository, UserRepository>();
     }
 
     private void ConfigureCors(IApplicationBuilder app)
     {
-        app.UseCors(builder => builder.WithOrigins(["http://127.0.0.1:5173", "http://localhost:5173", "http://18.232.149.16"]).AllowAnyHeader().AllowAnyMethod());
+        app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173", "http://localhost:5173", "http://18.232.149.16").AllowAnyHeader().AllowAnyMethod());
     }
 
     // This method gets called by the runtime. Use this method to add services to the container
@@ -71,10 +73,8 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapGet("/", async context =>
             {
-                await context.Response.WriteAsync("Welcome to running ASP.NET Core on AWS Lambda");
+                await context.Response.WriteAsync("Welcome to running ASP.NET Core");
             });
         });
-
-
     }
 }
