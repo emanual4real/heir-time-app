@@ -34,6 +34,22 @@ public class UserRepository : IUserRepository
         return _collection.Find(x => x.Id == userId).FirstOrDefaultAsync();
     }
 
+    public Task<List<User>> GetAllUsers()
+    {
+        return _collection.Find(x => true).ToListAsync();
+    }
+
+    public Task<User> GetUserByEmail(string email)
+    {
+        Console.WriteLine(email);
+        return _collection.Find(x => x.EmailAddress == email).FirstOrDefaultAsync();
+    }
+
+    public Task<User> GetUserByEmailAndPassword(string email, string password)
+    {
+        return _collection.Find(x => x.EmailAddress == email && x.Password == password).FirstOrDefaultAsync();
+    }
+
     public async Task<User?> UpdateUser(User user)
     {
         await _collection.ReplaceOneAsync(x => x.Id == user.Id, user);

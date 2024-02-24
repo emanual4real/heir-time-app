@@ -14,18 +14,23 @@ public class User
     [BsonElement("lastName")]
     public required string LastName { get; set; }
 
+    [BsonElement("emailAddress")]
+    public required string EmailAddress { get; set; }
+
+    [BsonElement("password")]
+    public required string Password { get; set; }
+
     [BsonElement("ownedProjects")]
     public string[]? OwnedProjects { get; set; }
 
     [BsonElement("endowmentProjects")]
     public string[]? EndowmentProjects { get; set; }
 
-    [BsonElement("emailAddress")]
-    public required string EmailAddress { get; set; }
-
     [BsonElement("phoneNumber")]
     public string? PhoneNumber { get; set; }
 
     [BsonElement("address")]
     public string? Address { get; set; }
+
+
 }
