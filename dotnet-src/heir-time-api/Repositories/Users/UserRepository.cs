@@ -1,6 +1,5 @@
 
 using heir_time_api.Models;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace heir_time_api.Repositories.Users;
@@ -15,6 +14,22 @@ public class UserRepository : IUserRepository
     {
         _collection = client.GetDatabase(databaseName).GetCollection<User>(collectionName);
     }
+
+    // TODO: Figure out how to put this in a decorator
+    private User StripPassword(User user)
+    {
+        user.Password = null;
+
+        return user;
+    }
+
+    private List<User> StripPassword(List<User> users)
+    {
+        users.ForEach(u => u.Password = null);
+
+        return users;
+    }
+
     public async Task<User?> CreateUser(User user)
     {
         var existingUser = await _collection.Find(x => x.EmailAddress == user.EmailAddress).FirstOrDefaultAsync();
@@ -25,36 +40,47 @@ public class UserRepository : IUserRepository
         }
 
         await _collection.InsertOneAsync(user);
-        return await _collection.Find(x => x.EmailAddress == user.EmailAddress).FirstOrDefaultAsync();
+        var newUser = await _collection.Find(x => x.EmailAddress == user.EmailAddress).FirstOrDefaultAsync();
+
+        return StripPassword(newUser);
 
     }
 
-    public Task<User> GetUserById(string userId)
+    public async Task<User> GetUserById(string userId)
     {
-        return _collection.Find(x => x.Id == userId).FirstOrDefaultAsync();
+        var user = await _collection.Find(x => x.Id == userId).FirstOrDefaultAsync();
+
+        return StripPassword(user);
     }
 
-    public Task<List<User>> GetAllUsers()
+    public async Task<User> GetUserByEmail(string email)
     {
-        return _collection.Find(x => true).ToListAsync();
+        var user = await _collection.Find(x => x.EmailAddress == email).FirstOrDefaultAsync();
+
+        return StripPassword(user);
     }
 
-    public Task<User> GetUserByEmail(string email)
+    public async Task<List<User>> GetAllUsers()
     {
-        Console.WriteLine(email);
-        return _collection.Find(x => x.EmailAddress == email).FirstOrDefaultAsync();
+        var users = await _collection.Find(x => true).ToListAsync();
+
+        return StripPassword(users);
     }
 
-    public Task<User> GetUserByEmailAndPassword(string email, string password)
+    public async Task<User> GetUserByEmailAndPassword(string email, string password)
     {
-        return _collection.Find(x => x.EmailAddress == email && x.Password == password).FirstOrDefaultAsync();
+        var user = await _collection.Find(x => x.EmailAddress == email && x.Password == password).FirstOrDefaultAsync();
+
+        return StripPassword(user);
     }
 
     public async Task<User?> UpdateUser(User user)
     {
         await _collection.ReplaceOneAsync(x => x.Id == user.Id, user);
 
-        return await _collection.Find(x => x.Id == user.Id).FirstOrDefaultAsync();
+        var updatedUser = await _collection.Find(x => x.Id == user.Id).FirstOrDefaultAsync();
+
+        return StripPassword(updatedUser);
 
     }
 

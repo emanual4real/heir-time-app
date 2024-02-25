@@ -1,9 +1,7 @@
 
 using heir_time_api.Models;
-using heir_time_api.Repositories.Users;
 using heir_time_api.Services.User;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace heir_time_api.Controllers;
@@ -23,7 +21,6 @@ public class UserController : ControllerBase
     [HttpGet("{email}")]
     public async Task<User> GetUser(string email)
     {
-        Console.WriteLine(email);
         return await _userService.GetUser(email);
     }
 
@@ -37,23 +34,21 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [Route("authenticate")]
     [HttpPost]
-    public async Task<ActionResult> Login([FromBody] User user)
+    public async Task<ActionResult> Login([FromBody] Login login)
     {
-        var token = await _userService.Authenticate(user.EmailAddress, user.Password);
+        var token = await _userService.Authenticate(login.EmailAddress, login.Password);
 
         if (token == null)
         {
             return Unauthorized();
         }
 
+        var user = await _userService.GetUser(login.EmailAddress);
+
         return Ok(new { token, user });
     }
 
-    // [HttpGet("{userId}")]
-    // public async Task<User> GetUserById(string userId)
-    // {
-    //     return await _repository.GetUserById(userId);
-    // }
+
 
     // [HttpPost]
     // public async Task<User?> CreateUser([FromBody] User user)

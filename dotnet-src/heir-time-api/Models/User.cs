@@ -18,7 +18,7 @@ public class User
     public required string EmailAddress { get; set; }
 
     [BsonElement("password")]
-    public required string Password { get; set; }
+    public string? Password { get; set; }
 
     [BsonElement("ownedProjects")]
     public string[]? OwnedProjects { get; set; }
