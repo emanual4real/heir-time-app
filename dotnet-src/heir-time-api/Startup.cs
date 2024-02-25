@@ -2,10 +2,10 @@
 using heir_time_api.Repositories.Items;
 using System.Text.Json;
 using heir_time_api.Repositories.Users;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using heir_time_api.Services.User;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Net;
 
 namespace heir_time_api;
 
@@ -17,6 +17,12 @@ public class Startup
     }
 
     public IConfiguration Configuration { get; }
+
+    private Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        return Task.CompletedTask;
+    }
 
     private MongoClient ConfigureMongoDb()
     {
@@ -53,22 +59,14 @@ public class Startup
         services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddSingleton<IMongoClient>(sp => ConfigureMongoDb());
 
-        services.AddAuthentication(x =>
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(x =>
-        {
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("JwtKey").ToString())),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
+            options.Cookie.SameSite = SameSiteMode.Strict;
+            options.Cookie.Name = "Heir-Time-Cookie";
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            options.SlidingExpiration = true;
+            options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;
+            options.Events.OnRedirectToLogin = UnAuthorizedResponse;
         });
 
         RegisterRepositories(services);
@@ -94,6 +92,13 @@ public class Startup
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+
+        var cookiePolicyOptions = new CookiePolicyOptions
+        {
+            MinimumSameSitePolicy = SameSiteMode.Strict,
+        };
+
+        app.UseCookiePolicy(cookiePolicyOptions);
 
         ConfigureCors(app);
 

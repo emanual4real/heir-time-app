@@ -1,6 +1,9 @@
 
+using System.Security.Claims;
 using heir_time_api.Models;
 using heir_time_api.Services.User;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +47,27 @@ public class UserController : ControllerBase
         }
 
         var user = await _userService.GetUser(login.EmailAddress);
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, user.EmailAddress),
+            new("FirstName", user.FirstName),
+            new("LastName", user.LastName)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var authProperties = new AuthenticationProperties
+        {
+            AllowRefresh = true,
+            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1),
+            IsPersistent = false,
+            IssuedUtc = DateTimeOffset.Now,
+            // RedirectUrl = <string>
+        };
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
 
         return Ok(new { token, user });
     }

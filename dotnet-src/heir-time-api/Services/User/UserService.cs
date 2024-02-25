@@ -36,7 +36,7 @@ public class UserService : IUserService
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
 
-            Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]{
+            Subject = new ClaimsIdentity(new Claim[]{
                 new Claim(ClaimTypes.Email, email),
             }),
 
