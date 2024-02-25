@@ -2,6 +2,10 @@
 using heir_time_api.Repositories.Items;
 using System.Text.Json;
 using heir_time_api.Repositories.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using heir_time_api.Services.User;
 
 namespace heir_time_api;
 
@@ -32,6 +36,11 @@ public class Startup
         services.AddSingleton<IUserRepository, UserRepository>();
     }
 
+    private void RegisterServices(IServiceCollection services)
+    {
+        services.AddScoped<IUserService, UserService>();
+    }
+
     private void ConfigureCors(IApplicationBuilder app)
     {
         app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173", "http://localhost:5173", "http://18.232.149.16").AllowAnyHeader().AllowAnyMethod());
@@ -43,7 +52,27 @@ public class Startup
         services.AddMvcCore().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddSingleton<IMongoClient>(sp => ConfigureMongoDb());
+
+        services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("JwtKey").ToString())),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
+
         RegisterRepositories(services);
+        RegisterServices(services);
 
         services.AddSwaggerGen();
         services.AddCors();
@@ -63,7 +92,7 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-
+        app.UseAuthentication();
         app.UseAuthorization();
 
         ConfigureCors(app);

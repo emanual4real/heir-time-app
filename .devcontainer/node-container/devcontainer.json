@@ -37,7 +37,8 @@
         "dsznajder.es7-react-js-snippets",
         "esbenp.prettier-vscode",
         "vscode-icons-team.vscode-icons",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "wayou.vscode-todo-highlight"
       ]
     }
   }

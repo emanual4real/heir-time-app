@@ -1,9 +1,11 @@
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace heir_time_api.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 public class ItemController : ControllerBase
 {
