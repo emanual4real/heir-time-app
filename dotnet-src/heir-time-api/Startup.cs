@@ -49,7 +49,7 @@ public class Startup
 
     private void ConfigureCors(IApplicationBuilder app)
     {
-        app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173", "http://localhost:5173", "http://18.232.149.16").AllowAnyHeader().AllowAnyMethod());
+        app.UseCors(builder => builder.WithOrigins("http://127.0.0.1:5173", "http://localhost:5173", "http://18.232.149.16").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
     }
 
     // This method gets called by the runtime. Use this method to add services to the container
@@ -61,8 +61,10 @@ public class Startup
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
         {
-            options.Cookie.SameSite = SameSiteMode.Strict;
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.Name = "Heir-Time-Cookie";
+            options.Cookie.Path = "/";
             options.ExpireTimeSpan = TimeSpan.FromHours(1);
             options.SlidingExpiration = true;
             options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;
@@ -93,12 +95,13 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        var cookiePolicyOptions = new CookiePolicyOptions
-        {
-            MinimumSameSitePolicy = SameSiteMode.Strict,
-        };
+        // var cookiePolicyOptions = new CookiePolicyOptions
+        // {
+        //     MinimumSameSitePolicy = SameSiteMode.None,
+        //     CheckConsentNeeded = context => true,
+        // };
 
-        app.UseCookiePolicy(cookiePolicyOptions);
+        app.UseCookiePolicy();
 
         ConfigureCors(app);
 
