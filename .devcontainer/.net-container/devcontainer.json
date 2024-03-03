@@ -17,7 +17,17 @@
         "dbaeumer.vscode-eslint",
         "SonarSource.sonarlint-vscode",
         "wayou.vscode-todo-highlight"
-      ]
+      ],
+      "settings": {
+        "sonarlint.rules": {
+          "javascript:1481": {
+              "level": "off",
+          },
+          "javascript:S103": {
+              "level": "off",
+          }
+        }
+      }
     }
   }
   // Features to add to the dev container. More info: https://containers.dev/features.
