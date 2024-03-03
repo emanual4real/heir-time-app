@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { login } from '../../services/userService';
+import { AuthContext } from '../../context';
 
 export const Login = () => {
-  const FORM_ENDPOINT = 'http://localhost:8080/api/User/authenticate';
+  const [email, setEmail] = useState('emanual4real@hotmail.com');
+  const [password, setPassword] = useState('Password123');
+  const { auth, setAuth } = useContext(AuthContext);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    const user = await login(email, password);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    login(email, password);
-
+    // setAuth({ loggedIn: true, user });
     e.preventDefault();
   };
 
-  console.log('cookie', document.cookie);
+  console.log('auth', auth);
 
   return (
     <div>
       <h1>{email}</h1>
       <h1>{password}</h1>
-      <form onSubmit={handleSubmit}>
+      <form
+      // onSubmit={handleSubmit}
+      >
         <FormGroup>
           <FormControl>
             <TextField
@@ -45,7 +48,12 @@ export const Login = () => {
               onChange={(e) => setPassword(e.target.value)}></TextField>
           </FormControl>
         </FormGroup>
-        <Button type="submit" variant="contained" color="primary" style={{ float: 'right' }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          style={{ float: 'right' }}
+          onClick={handleSubmit}>
           Submit
         </Button>
       </form>

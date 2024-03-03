@@ -1,15 +1,7 @@
 import { Item } from '../models/Item.model';
+import { createRequestOptions } from './fetchOptions';
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-const getOptions: RequestInit = {
-  method: 'GET',
-  mode: 'cors',
-  credentials: 'include',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-};
 
 /**
  * Fetch specific item
@@ -17,7 +9,8 @@ const getOptions: RequestInit = {
  * @returns one item
  */
 export const fetchItemById = async (id: string): Promise<Item> => {
-  const response = await fetch(`${API_URL}/api/item/${id}`, getOptions);
+  const options = createRequestOptions('GET');
+  const response = await fetch(`${API_URL}/api/item/${id}`, options);
 
   return await response.json();
 };
@@ -27,33 +20,21 @@ export const fetchItemById = async (id: string): Promise<Item> => {
  * @returns List of Items
  */
 export const fetchItems = async (): Promise<Item[]> => {
-  const response = await fetch(`${API_URL}/api/item`, getOptions);
+  const options = createRequestOptions('GET');
+  const response = await fetch(`${API_URL}/api/item`, options);
 
   return await response.json();
 };
 
 export const postItem = async (item: Partial<Item>): Promise<Item[]> => {
-  const options: RequestInit = {
-    method: 'POST',
-    body: JSON.stringify(item),
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+  const options = createRequestOptions('POST', item);
   const response = await fetch(`${API_URL}/api/item`, options);
 
   return await response.json();
 };
 
 export const deleteItem = async (id: string): Promise<string> => {
-  const options: RequestInit = {
-    method: 'DELETE',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+  const options = createRequestOptions('DELETE');
   const response = await fetch(`${API_URL}/api/item/${id}`, options);
 
   if ([200, 202].includes(response.status)) {
@@ -64,15 +45,7 @@ export const deleteItem = async (id: string): Promise<string> => {
 };
 
 export const updateItem = async (item: Item): Promise<Item> => {
-  const options: RequestInit = {
-    method: 'PUT',
-    body: JSON.stringify(item),
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
+  const options = createRequestOptions('PUT', item);
   const response = await fetch(`${API_URL}/api/item`, options);
 
   if ([200].includes(response.status)) {
