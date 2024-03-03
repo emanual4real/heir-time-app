@@ -2,13 +2,22 @@ import { Item } from '../models/Item.model';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+const getOptions: RequestInit = {
+  method: 'GET',
+  mode: 'cors',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+
 /**
  * Fetch specific item
  * @param id item id
  * @returns one item
  */
 export const fetchItemById = async (id: string): Promise<Item> => {
-  const response = await fetch(`${API_URL}/api/item/${id}`);
+  const response = await fetch(`${API_URL}/api/item/${id}`, getOptions);
 
   return await response.json();
 };
@@ -18,7 +27,7 @@ export const fetchItemById = async (id: string): Promise<Item> => {
  * @returns List of Items
  */
 export const fetchItems = async (): Promise<Item[]> => {
-  const response = await fetch(`${API_URL}/api/item`);
+  const response = await fetch(`${API_URL}/api/item`, getOptions);
 
   return await response.json();
 };
@@ -27,6 +36,7 @@ export const postItem = async (item: Partial<Item>): Promise<Item[]> => {
   const options: RequestInit = {
     method: 'POST',
     body: JSON.stringify(item),
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     }
@@ -39,6 +49,7 @@ export const postItem = async (item: Partial<Item>): Promise<Item[]> => {
 export const deleteItem = async (id: string): Promise<string> => {
   const options: RequestInit = {
     method: 'DELETE',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     }
@@ -56,6 +67,7 @@ export const updateItem = async (item: Item): Promise<Item> => {
   const options: RequestInit = {
     method: 'PUT',
     body: JSON.stringify(item),
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     }

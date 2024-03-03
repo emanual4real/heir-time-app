@@ -14,6 +14,8 @@ export const Login = () => {
     e.preventDefault();
   };
 
+  console.log('cookie', document.cookie);
+
   return (
     <div>
       <h1>{email}</h1>
