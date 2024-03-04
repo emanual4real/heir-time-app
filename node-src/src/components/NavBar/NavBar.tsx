@@ -46,6 +46,11 @@ export const NavBar = () => {
                 Login
               </Typography>
             </Link>
+            <Link to="/logout" className="nav-link">
+              <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
+                Logout
+              </Typography>
+            </Link>
           </Box>
         </Toolbar>
       </AppBar>
