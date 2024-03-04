@@ -3,6 +3,8 @@ import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
 import { routeTree } from './routeTree.gen';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { AuthContext, AuthState } from './context';
+import { useState } from 'react';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -14,12 +16,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
-function App() {
+const App = () => {
+  const [auth, setAuth] = useState<AuthState>({ loggedIn: false, user: null });
+
+  const value = { auth, setAuth };
+
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <AuthContext.Provider value={value}>
+        <RouterProvider router={router} />
+      </AuthContext.Provider>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

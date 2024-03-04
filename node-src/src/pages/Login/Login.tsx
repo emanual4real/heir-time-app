@@ -1,54 +1,57 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { login } from '../../services/userService';
+import { AuthContext } from '../../context';
 
 export const Login = () => {
-  const FORM_ENDPOINT = 'http://localhost:8080/api/User/authenticate';
+  const [email, setEmail] = useState('emanual4real@hotmail.com');
+  const [password, setPassword] = useState('Password123');
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { auth, setAuth } = useContext(AuthContext);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    login(email, password);
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    const user = await login(email, password);
+    setAuth({ loggedIn: true, user });
 
     e.preventDefault();
   };
 
-  console.log('cookie', document.cookie);
+  console.log('auth', auth);
 
   return (
     <div>
-      <h1>{email}</h1>
-      <h1>{password}</h1>
-      <form onSubmit={handleSubmit}>
-        <FormGroup>
-          <FormControl>
-            <TextField
-              id="email"
-              name="email"
-              label="Email"
-              value={email}
-              helperText="Email address used to sign up"
-              variant="filled"
-              required
-              onChange={(e) => setEmail(e.target.value)}></TextField>
-          </FormControl>
-          <FormControl>
-            <TextField
-              id="password"
-              name="password"
-              label="Password"
-              value={password}
-              variant="filled"
-              type="password"
-              required
-              onChange={(e) => setPassword(e.target.value)}></TextField>
-          </FormControl>
-        </FormGroup>
-        <Button type="submit" variant="contained" color="primary" style={{ float: 'right' }}>
-          Submit
-        </Button>
-      </form>
+      <FormGroup>
+        <FormControl>
+          <TextField
+            id="email"
+            name="email"
+            label="Email"
+            value={email}
+            helperText="Email address used to sign up"
+            variant="filled"
+            required
+            onChange={(e) => setEmail(e.target.value)}></TextField>
+        </FormControl>
+        <FormControl>
+          <TextField
+            id="password"
+            name="password"
+            label="Password"
+            value={password}
+            variant="filled"
+            type="password"
+            required
+            onChange={(e) => setPassword(e.target.value)}></TextField>
+        </FormControl>
+      </FormGroup>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        style={{ float: 'right' }}
+        onClick={handleSubmit}>
+        Submit
+      </Button>
     </div>
   );
 };
