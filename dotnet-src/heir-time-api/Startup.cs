@@ -65,6 +65,8 @@ public class Startup
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.Name = "Heir-Time-Cookie";
             options.Cookie.Path = "/";
+            // TODO: localhost doesn't work in postman
+            options.Cookie.Domain = ".localhost";
             options.ExpireTimeSpan = TimeSpan.FromHours(1);
             options.SlidingExpiration = true;
             options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;

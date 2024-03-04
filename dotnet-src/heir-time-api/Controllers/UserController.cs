@@ -35,7 +35,7 @@ public class UserController : ControllerBase
 
 
     [AllowAnonymous]
-    [Route("authenticate")]
+    [Route("login")]
     [HttpPost]
     public async Task<ActionResult> Login([FromBody] Login login)
     {
@@ -63,13 +63,24 @@ public class UserController : ControllerBase
             ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1),
             IsPersistent = false,
             IssuedUtc = DateTimeOffset.Now,
-            // RedirectUrl = <string>
         };
 
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
 
         return Ok(new { token, user });
+    }
+
+    [HttpGet]
+    [Route("logout")]
+    public async Task<ActionResult> Logout() {
+        try {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            return Ok();
+        } catch (Exception ex) {
+            return StatusCode(500);
+        }
     }
 
 
