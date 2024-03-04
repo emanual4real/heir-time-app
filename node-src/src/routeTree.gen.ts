@@ -13,13 +13,13 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AdminImport } from './routes/admin'
 
 // Create Virtual Routes
 
 const LogoutLazyImport = createFileRoute('/logout')()
 const LoginLazyImport = createFileRoute('/login')()
 const EditItemLazyImport = createFileRoute('/editItem')()
-const AdminLazyImport = createFileRoute('/admin')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -39,10 +39,10 @@ const EditItemLazyRoute = EditItemLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/editItem.lazy').then((d) => d.Route))
 
-const AdminLazyRoute = AdminLazyImport.update({
+const AdminRoute = AdminImport.update({
   path: '/admin',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/admin.lazy').then((d) => d.Route))
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -58,7 +58,7 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/admin': {
-      preLoaderRoute: typeof AdminLazyImport
+      preLoaderRoute: typeof AdminImport
       parentRoute: typeof rootRoute
     }
     '/editItem': {
@@ -80,7 +80,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  AdminLazyRoute,
+  AdminRoute,
   EditItemLazyRoute,
   LoginLazyRoute,
   LogoutLazyRoute,

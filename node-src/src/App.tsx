@@ -1,13 +1,10 @@
 import './App.css';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
-import { routeTree } from './routeTree.gen';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { RouterProvider } from '@tanstack/react-router';
 import { AuthContext, AuthState } from './context';
 import { useState } from 'react';
-
-// Create a new router instance
-const router = createRouter({ routeTree });
+import { router } from './router';
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -24,7 +21,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthContext.Provider value={value}>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} context={{ auth }} />
       </AuthContext.Provider>
     </ThemeProvider>
   );
