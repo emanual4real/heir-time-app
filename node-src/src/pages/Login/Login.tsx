@@ -7,7 +7,7 @@ export const Login = () => {
   const [email, setEmail] = useState('emanual4real@hotmail.com');
   const [password, setPassword] = useState('Password123');
 
-  const { auth, setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     const user = await login(email, password);
@@ -15,8 +15,6 @@ export const Login = () => {
 
     e.preventDefault();
   };
-
-  console.log('auth', auth);
 
   return (
     <div>

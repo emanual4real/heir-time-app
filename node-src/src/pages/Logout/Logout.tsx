@@ -1,18 +1,19 @@
 import { Button } from '@mui/material';
 import { logout } from '../../services';
-import { ReactElement } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../../context';
 
-export interface LogoutProps {
-  children: ReactElement;
-}
+export const Logout = () => {
+  const { auth, setAuth } = useContext(AuthContext);
 
-export const Logout = (props: LogoutProps) => {
-  const handleOnClick = () => {
-    logout();
+  const handleOnClick = async () => {
+    await logout();
+
+    setAuth({ loggedIn: false, user: null });
   };
 
   return (
-    <Button variant="text" onClick={handleOnClick}>
+    <Button variant="text" disabled={!auth.loggedIn} onClick={handleOnClick}>
       Logout
     </Button>
   );

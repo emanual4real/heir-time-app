@@ -14,9 +14,11 @@ export const login = async (emailAddress: string, password: string): Promise<obj
   return await response.json();
 };
 
-export const logout = async (): Promise<unknown> => {
+export const logout = async () => {
   const options = createRequestOptions('GET');
-  const response = await fetch(`${API_URL}/api/user/logout`, options);
-
-  return await response.json();
+  try {
+    await fetch(`${API_URL}/api/user/logout`, options);
+  } catch (err) {
+    console.error('Not logged in');
+  }
 };
