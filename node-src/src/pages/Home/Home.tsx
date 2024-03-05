@@ -1,4 +1,4 @@
-import { useAuth } from '../../context';
+import { useAuth } from '@ui/hooks';
 import { ItemCarousel } from '..';
 
 export const Home = () => {

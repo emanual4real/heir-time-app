@@ -1,8 +1,9 @@
-import { ReactElement, createContext, useContext, useState } from 'react';
+import { ReactElement, createContext, useState } from 'react';
+import { User } from '@ui/types';
 
 export interface AuthState {
   loggedIn: boolean;
-  user: object | null;
+  user: User | null;
 }
 
 export interface AuthContext {
@@ -22,10 +23,4 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const value = { auth, setAuth };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = () => {
-  const { auth, setAuth } = useContext(AuthContext);
-
-  return { auth, setAuth };
 };

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
-import { login } from '../../services/userService';
-import { useAuth } from '../../context';
 import { useNavigate } from '@tanstack/react-router';
+import { login } from '@ui/services';
+import { useAuth } from '@ui/hooks';
 
 export const Login = () => {
   const navigate = useNavigate({ from: '/login' });
@@ -12,8 +12,8 @@ export const Login = () => {
   const { setAuth } = useAuth();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
-    const user = await login(email, password);
-    setAuth({ loggedIn: true, user });
+    const res = await login(email, password);
+    setAuth({ loggedIn: true, user: res.user });
     navigate({ to: '/' });
     e.preventDefault();
   };

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { EditItemDialog } from '.';
+import { ItemStatus } from '@ui/types';
 
 const meta = {
   title: 'Components/EditDialog',
@@ -19,8 +20,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    handleEdit: () => {
-      console.log('Edit clicked');
+    item: {
+      id: 'abacsdf34243',
+      title: 'test',
+      releaseDate: 'string',
+      itemStatus: ItemStatus.Decided,
+      statusName: 'string',
+      description: 'string',
+      location: 'string',
+      imagePath: 'string',
+      recipient: 'string'
     }
   }
 };

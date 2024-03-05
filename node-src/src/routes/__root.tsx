@@ -1,8 +1,9 @@
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { NavBar } from '../components';
 import { Container } from '@mui/material';
-import { AuthState, useAuth } from '../context';
+import { NavBar } from '@ui/components';
+import { AuthState } from '@ui/context';
+import { useAuth } from '@ui/hooks';
 
 interface RouteContext {
   auth: AuthState;
@@ -13,7 +14,7 @@ const RootComponent = () => {
 
   return (
     <>
-      <NavBar loggedIn={auth.loggedIn} />
+      <NavBar loggedIn={auth.loggedIn} isAdmin={auth.user?.isAdmin} />
       <Container>
         <Outlet />
       </Container>

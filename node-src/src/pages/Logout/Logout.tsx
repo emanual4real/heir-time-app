@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
-import { logout } from '../../services';
-import { useAuth } from '../../context';
 import { useNavigate } from '@tanstack/react-router';
+import { useAuth } from '@ui/hooks';
+import { logout } from '@ui/services';
 
 export const Logout = () => {
   const { auth, setAuth } = useAuth();

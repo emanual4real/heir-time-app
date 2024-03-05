@@ -2,7 +2,8 @@ import './App.css';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
 import { RouterProvider } from '@tanstack/react-router';
-import { AuthProvider, useAuth } from './context';
+import { AuthProvider } from '@ui/context';
+import { useAuth } from '@ui/hooks';
 import { router } from './router';
 
 // Register the router instance for type safety

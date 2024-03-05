@@ -4,10 +4,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ItemForm } from '..';
-import { Item } from '../../models';
-import { ItemStatus } from '../../types/enums/ItemStatus';
 import { format } from 'date-fns';
+import { ItemForm } from '..';
+import { Item, ItemStatus } from '@ui/types';
 
 export interface NewItemDialogProps {
   onSubmit: (item: Partial<Item>) => void;

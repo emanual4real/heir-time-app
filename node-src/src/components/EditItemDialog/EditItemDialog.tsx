@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ItemForm } from '..';
-import { Item } from '../../models';
+import { Item } from '@ui/types';
 
 export interface EditItemDialogProps {
   item: Item;

@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, TextField } from '@mui/material';
 import { ChangeEvent } from 'react';
-import { Item } from '../../models';
 import { format, parseISO } from 'date-fns';
+import { Item } from '@ui/types';
 
 export interface ItemFormProps {
   item: Partial<Item>;

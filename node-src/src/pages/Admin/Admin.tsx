@@ -1,8 +1,8 @@
 import { Box, Button } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
-import { NewItemDialog } from '../../components';
-import { postItem } from '../../services';
-import { Item } from '../../models';
+import { NewItemDialog } from '@ui/components';
+import { postItem } from '@ui/services';
+import { Item } from '@ui/types';
 
 export const Admin = () => {
   const navigate = useNavigate({ from: '/admin' });

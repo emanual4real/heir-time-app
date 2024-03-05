@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { deleteItem, updateItem, fetchItems } from '../../services';
-import { Item } from '../../models';
-import { Carousel, ItemComponent } from '../../components';
+import { deleteItem, updateItem, fetchItems } from '@ui/services';
+import { Item } from '@ui/types';
+import { Carousel, ItemComponent } from '@ui/components';
 import './ItemCarousel.css';
 
 export interface ItemCarouselProps {

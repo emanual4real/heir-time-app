@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { NewItemDialog } from '.';
-import { Item } from '../../models';
+import { Item } from '@ui/types';
 
 const meta = {
   title: 'Components/NewItemDialog',

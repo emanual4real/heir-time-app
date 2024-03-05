@@ -20,6 +20,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     itemCount: 1,
-    children: <h1>Item 1</h1>
+    itemsPerPage: 2,
+    children: [<h1 key="1">Item 1</h1>, <h2 key="2">Item 2</h2>]
   }
 };

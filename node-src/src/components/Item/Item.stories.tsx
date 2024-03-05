@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ItemStatus } from '../../types/enums/ItemStatus';
+import { ItemStatus } from '@ui/types';
 import { ItemComponent } from '.';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -29,7 +29,8 @@ export const Undecided: Story = {
       imagePath: '/couch.jpg',
       releaseDate: '1/1/2025',
       location: 'Madison County, N.C.',
-      itemStatus: ItemStatus.Undecided
+      itemStatus: ItemStatus.Undecided,
+      statusName: 'Undecided'
     }
   }
 };
@@ -45,7 +46,8 @@ export const Decided: Story = {
       releaseDate: '1/1/2025',
       location: 'Madison County, N.C.',
       itemStatus: ItemStatus.Decided,
-      recipient: 'Emanual'
+      recipient: 'Emanual',
+      statusName: 'Decided'
     }
   }
 };
@@ -60,7 +62,8 @@ export const Goodwill: Story = {
       imagePath: '/couch.jpg',
       releaseDate: '1/1/2025',
       location: 'Madison County, N.C.',
-      itemStatus: ItemStatus.Goodwill
+      itemStatus: ItemStatus.Goodwill,
+      statusName: 'Goodwill'
     }
   }
 };

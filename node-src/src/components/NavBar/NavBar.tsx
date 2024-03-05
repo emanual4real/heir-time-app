@@ -4,6 +4,7 @@ import './NavBar.css';
 
 export interface NavBarProps {
   loggedIn?: boolean;
+  isAdmin?: boolean;
 }
 
 export const NavBar = (props: NavBarProps) => {
@@ -40,11 +41,14 @@ export const NavBar = (props: NavBarProps) => {
               justifyContent: 'flex-end',
               flexGrow: 1
             }}>
-            <Link to="/admin" className="nav-link">
-              <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
-                Admin
-              </Typography>
-            </Link>
+            {props.isAdmin && (
+              <Link to="/admin" className="nav-link">
+                <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
+                  Admin
+                </Typography>
+              </Link>
+            )}
+
             {!props.loggedIn ? (
               <Link to="/login" className="nav-link">
                 <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>

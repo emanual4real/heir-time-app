@@ -1,4 +1,4 @@
-import { ItemStatus } from '../types/enums/ItemStatus';
+import { ItemStatus } from '../enums/ItemStatus';
 
 export interface Item {
   id: string;

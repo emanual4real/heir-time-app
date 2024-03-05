@@ -1,4 +1,4 @@
-import { Item } from '../models/Item.model';
+import { Item } from '@ui/types';
 import { createRequestOptions } from './fetchOptions';
 
 const API_URL = import.meta.env.VITE_API_URL;

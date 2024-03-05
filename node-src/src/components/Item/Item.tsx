@@ -4,10 +4,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { ItemStatus } from '../../types/enums/ItemStatus';
-import { Item } from '../../models/Item.model';
-import { DeleteDialog, EditItemDialog } from '..';
 import { format, parseISO } from 'date-fns';
+import { Item, ItemStatus } from '@ui/types';
+import { DeleteDialog, EditItemDialog } from '..';
 
 export interface ItemProps {
   item: Item;
