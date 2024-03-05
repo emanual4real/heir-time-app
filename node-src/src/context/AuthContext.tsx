@@ -1,4 +1,4 @@
-import { ReactElement, createContext, useState } from 'react';
+import { ReactElement, createContext, useContext, useState } from 'react';
 
 export interface AuthState {
   loggedIn: boolean;
@@ -22,4 +22,10 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const value = { auth, setAuth };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const { auth, setAuth } = useContext(AuthContext);
+
+  return { auth, setAuth };
 };
