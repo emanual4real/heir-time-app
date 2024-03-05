@@ -19,7 +19,15 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "paths": {
+      "@ui/context": ["./src/context"],
+      "@ui/hooks": ["./src/hooks"],
+      "@ui/types": ["./src/types"],
+      "@ui/services": ["./src/services"],
+      "@ui/pages": ["./src/pages"],
+      "@ui/components": ["./src/components"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

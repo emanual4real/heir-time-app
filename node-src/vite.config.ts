@@ -8,5 +8,10 @@ export default defineConfig({
   server: {
     host: true
   },
+  resolve: {
+    alias: {
+      '@ui': '/src'
+    }
+  },
   envDir: 'environments'
 });
