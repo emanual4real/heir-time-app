@@ -1,18 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { login } from '../../services/userService';
-import { AuthContext } from '../../context';
+import { useAuth } from '../../context';
+import { useNavigate } from '@tanstack/react-router';
 
 export const Login = () => {
+  const navigate = useNavigate({ from: '/login' });
   const [email, setEmail] = useState('emanual4real@hotmail.com');
   const [password, setPassword] = useState('Password123');
 
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     const user = await login(email, password);
     setAuth({ loggedIn: true, user });
-
+    navigate({ to: '/' });
     e.preventDefault();
   };
 

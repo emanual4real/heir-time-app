@@ -2,7 +2,11 @@ import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 import { Link } from '@tanstack/react-router';
 import './NavBar.css';
 
-export const NavBar = () => {
+export interface NavBarProps {
+  loggedIn?: boolean;
+}
+
+export const NavBar = (props: NavBarProps) => {
   return (
     <Box sx={{ flexGrow: 1, marginBottom: '30px' }}>
       <AppBar position="static">
@@ -41,16 +45,19 @@ export const NavBar = () => {
                 Admin
               </Typography>
             </Link>
-            <Link to="/login" className="nav-link">
-              <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
-                Login
-              </Typography>
-            </Link>
-            <Link to="/logout" className="nav-link">
-              <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
-                Logout
-              </Typography>
-            </Link>
+            {!props.loggedIn ? (
+              <Link to="/login" className="nav-link">
+                <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
+                  Login
+                </Typography>
+              </Link>
+            ) : (
+              <Link to="/logout" className="nav-link">
+                <Typography variant="h6" component="div" sx={{ marginLeft: '10px' }}>
+                  Logout
+                </Typography>
+              </Link>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
