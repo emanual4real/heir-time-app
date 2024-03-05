@@ -20,6 +20,9 @@ public class User
     [BsonElement("password")]
     public string? Password { get; set; }
 
+    [BsonElement("isAdmin")]
+    public bool? IsAdmin { get; set; }
+
     [BsonElement("ownedProjects")]
     public string[]? OwnedProjects { get; set; }
 
