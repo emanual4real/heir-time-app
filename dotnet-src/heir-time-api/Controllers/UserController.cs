@@ -73,30 +73,35 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("logout")]
-    public async Task<ActionResult> Logout() {
-        try {
+    public async Task<ActionResult> Logout()
+    {
+        try
+        {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            
+
             return Ok();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             return StatusCode(500);
         }
     }
 
 
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("register")]
+    public async Task<User?> CreateUser([FromBody] User user)
+    {
+        var newUser = await _userService.CreateUser(user);
 
-    // [HttpPost]
-    // public async Task<User?> CreateUser([FromBody] User user)
-    // {
-    //     var newUser = await _repository.CreateUser(user);
+        if (newUser == null)
+        {
+            throw new Exception("User already exists");
+        }
 
-    //     if (newUser == null)
-    //     {
-    //         throw new Exception("User already exists");
-    //     }
-
-    //     return newUser;
-    // }
+        return newUser;
+    }
 
     // [HttpPut]
     // public async Task<User?> UpdateUser([FromBody] User user)

@@ -69,9 +69,18 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetUserByEmailAndPassword(string email, string password)
     {
-        var user = await _collection.Find(x => x.EmailAddress == email && x.Password == password).FirstOrDefaultAsync();
+        var user = await _collection.Find(x => x.EmailAddress == email).FirstOrDefaultAsync();
 
-        return StripPassword(user);
+        bool verified = BC.Verify(password, user.Password);
+
+        if (verified)
+        {
+            return StripPassword(user);
+        }
+
+        return null;
+
+
     }
 
     public async Task<User?> UpdateUser(User user)

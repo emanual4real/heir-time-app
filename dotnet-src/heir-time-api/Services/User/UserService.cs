@@ -20,6 +20,15 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
+    public async Task<Models.User> CreateUser(Models.User user)
+    {
+        string passwordHash = BC.HashPassword(user.Password);
+        user.Password = passwordHash;
+        var newUser = await _userRepository.CreateUser(user);
+
+        return newUser;
+    }
+
     public async Task<string> Authenticate(string email, string password)
     {
         var user = await _userRepository.GetUserByEmailAndPassword(email, password);

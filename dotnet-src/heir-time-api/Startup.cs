@@ -66,6 +66,7 @@ public class Startup
             options.Cookie.Name = "Heir-Time-Cookie";
             options.Cookie.Path = "/";
             // TODO: localhost doesn't work in postman
+            // options.Cookie.Domain = "127.0.0.1";
             options.Cookie.Domain = ".localhost";
             options.ExpireTimeSpan = TimeSpan.FromHours(1);
             options.SlidingExpiration = true;
