@@ -48,4 +48,32 @@ public class ItemRepository : IItemRepository
 
         return await _collection.Find(x => x.Id == item.Id).FirstOrDefaultAsync();
     }
+
+    public async Task<Item> AddBid(string itemId, Bid bid)
+    {
+        var item = await _collection.Find(x => x.Id == itemId).FirstOrDefaultAsync();
+
+        if (item == null)
+        {
+            return null;
+        }
+
+        if (item.Bids == null)
+        {
+            item.Bids = new List<Bid>();
+        }
+
+        bool bidExists = item.Bids.Exists(x => x.User == bid.User);
+
+        if (bidExists)
+        {
+            item.Bids.RemoveAll(x => x.User == bid.User);
+        }
+
+        item.Bids.Add(bid);
+
+        await _collection.ReplaceOneAsync(x => x.Id == itemId, item);
+
+        return item;
+    }
 }

@@ -1,5 +1,6 @@
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
+using heir_time_api.Services.Bid;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,24 +11,27 @@ namespace heir_time_api.Controllers;
 public class ItemController : ControllerBase
 {
     readonly IItemRepository _repository;
+    readonly IBidService _bidService;
 
-    public ItemController(IItemRepository repository)
+    public ItemController(IItemRepository repository, IBidService bidService)
     {
         _repository = repository;
+        _bidService = bidService;
     }
 
-    // GET api/item
+    // GET api/item/{id}
+    [HttpGet("{id}")]
+    public async Task<Item?> GetItem(string id)
+    {
+        return await _repository.GetItemById(id);
+    }
+
+    // GET api/item/items
+    [Route("items")]
     [HttpGet]
     public async Task<IEnumerable<Item>> GetItems()
     {
         return await _repository.GetItems();
-    }
-
-    // GET api/item/id
-    [HttpGet("{id}")]
-    public async Task<Item?> Get(string id)
-    {
-        return await _repository.GetItemById(id);
     }
 
     // POST api/item
@@ -50,4 +54,24 @@ public class ItemController : ControllerBase
     {
         return await _repository.DeleteItem(id);
     }
+
+    // PUT api/item/bid/{id}
+    [Route("bid/{itemId}")]
+    [HttpPut]
+    public async Task<Item?> SetBid([FromBody] Bid bid, string itemId)
+    {
+        return await _bidService.AddBid(itemId, bid);
+    }
+
+    // PUT api/item/winner/{id}
+    [Route("winner/{itemId}")]
+    [HttpPut]
+    public async Task<Item?> SetWinner([FromBody] string userId, string itemId)
+    {
+        return await _bidService.SetWinner(itemId, userId);
+    }
+
+
+
+
 }

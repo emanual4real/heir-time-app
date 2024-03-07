@@ -10,4 +10,5 @@ public interface IItemRepository
     Task<Item?> InsertItem(Item item);
     Task<string?> DeleteItem(string itemId);
     Task<Item?> UpdateItem(Item item);
+    Task<Item> AddBid(string itemId, Bid bid);
 }
