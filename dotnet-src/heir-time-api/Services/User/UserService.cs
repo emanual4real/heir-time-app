@@ -1,26 +1,22 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using heir_time_api.Repositories.Users;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace heir_time_api.Services.User;
 
 public class UserService : IUserService
 {
 
-    private readonly string? key;
     private readonly IUserRepository _userRepository;
 
     public UserService(
-        IConfiguration configuration,
         IUserRepository userRepository)
     {
-        key = configuration.GetSection("JwtKey").ToString();
         _userRepository = userRepository;
     }
 
-    public async Task<Models.User> CreateUser(Models.User user)
+    public async Task<Models.User?> CreateUser(Models.User user)
     {
         string passwordHash = BC.HashPassword(user.Password);
         user.Password = passwordHash;
@@ -29,34 +25,37 @@ public class UserService : IUserService
         return newUser;
     }
 
-    public async Task<string> Authenticate(string email, string password)
+    public async Task<(ClaimsIdentity?, AuthenticationProperties?, Models.User?)> Authenticate(string email, string password)
     {
         var user = await _userRepository.GetUserByEmailAndPassword(email, password);
 
         if (user == null)
         {
-            return null;
+            return (null, null, null);
         }
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var tokenKey = Encoding.ASCII.GetBytes(key);
-
-        var tokenDescriptor = new SecurityTokenDescriptor()
+        var claims = new List<Claim>
         {
-
-            Subject = new ClaimsIdentity(new Claim[]{
-                new Claim(ClaimTypes.Email, email),
-            }),
-
-            Expires = DateTime.UtcNow.AddHours(1),
-
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+            new("UserId", user.Id),
+            new("Admin", user.IsAdmin.ToString()),
+            new(ClaimTypes.Email, user.EmailAddress),
+            new("FirstName", user.FirstName),
+            new("LastName", user.LastName)
         };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        return tokenHandler.WriteToken(token);
+        var authProperties = new AuthenticationProperties
+        {
+            AllowRefresh = true,
+            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1),
+            IsPersistent = false,
+            IssuedUtc = DateTimeOffset.Now,
+        };
+
+        return (claimsIdentity, authProperties, user);
+
+
     }
 
     public Task<Models.User> GetUser(string email)

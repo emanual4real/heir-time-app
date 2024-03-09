@@ -65,7 +65,7 @@ public class Startup
         {
             options.Cookie.SameSite = SameSiteMode.None;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.Name = "Heir-Time-Cookie";
+            options.Cookie.Name = "Heir-Time";
             options.Cookie.Path = "/";
             // TODO: localhost doesn't work in postman
             // options.Cookie.Domain = "127.0.0.1";
@@ -99,14 +99,6 @@ public class Startup
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-
-        // var cookiePolicyOptions = new CookiePolicyOptions
-        // {
-        //     MinimumSameSitePolicy = SameSiteMode.None,
-        //     CheckConsentNeeded = context => true,
-        // };
-
-        app.UseCookiePolicy();
 
         ConfigureCors(app);
 

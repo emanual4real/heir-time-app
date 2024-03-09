@@ -13,6 +13,7 @@ public class ItemController : ControllerBase
     readonly IItemRepository _repository;
     readonly IBidService _bidService;
 
+
     public ItemController(IItemRepository repository, IBidService bidService)
     {
         _repository = repository;
@@ -36,23 +37,44 @@ public class ItemController : ControllerBase
 
     // POST api/item
     [HttpPost]
-    public async Task<Item?> Post([FromBody] Item item)
+    public async Task<ActionResult<Item?>> Post([FromBody] Item item)
     {
-        return await _repository.InsertItem(item);
+        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+
+        if (isAdmin)
+        {
+            return await _repository.InsertItem(item);
+        }
+
+        return Unauthorized();
     }
 
     // PUT api/item
     [HttpPut]
-    public async Task<Item?> Update([FromBody] Item item)
+    public async Task<ActionResult<Item?>> Update([FromBody] Item item)
     {
-        return await _repository.UpdateItem(item);
+        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+
+        if (isAdmin)
+        {
+            return await _repository.UpdateItem(item);
+        }
+
+        return Unauthorized();
+
     }
 
     // DELETE api/item/id
     [HttpDelete("{id}")]
-    public async Task<string?> Delete(string id)
+    public async Task<ActionResult<string?>> Delete(string id)
     {
-        return await _repository.DeleteItem(id);
+        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+        if (isAdmin)
+        {
+            return await _repository.DeleteItem(id);
+        }
+
+        return Unauthorized();
     }
 
     // PUT api/item/bid/{id}

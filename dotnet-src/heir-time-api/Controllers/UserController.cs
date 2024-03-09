@@ -39,36 +39,17 @@ public class UserController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Login([FromBody] Login login)
     {
-        var token = await _userService.Authenticate(login.EmailAddress, login.Password);
+        var (claimsIdentity, authProperties, user) = await _userService.Authenticate(login.EmailAddress, login.Password);
 
-        if (token == null)
+        if (user == null)
         {
             return Unauthorized();
         }
 
-        var user = await _userService.GetUser(login.EmailAddress);
-
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.Name, user.EmailAddress),
-            new("FirstName", user.FirstName),
-            new("LastName", user.LastName)
-        };
-
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-        var authProperties = new AuthenticationProperties
-        {
-            AllowRefresh = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1),
-            IsPersistent = false,
-            IssuedUtc = DateTimeOffset.Now,
-        };
-
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
 
-        return Ok(new { token, user });
+        return Ok(user);
     }
 
     [HttpGet]
