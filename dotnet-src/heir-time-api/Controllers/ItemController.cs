@@ -1,3 +1,4 @@
+using heir_time_api.Controllers.InputModels;
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Services.Bid;
@@ -77,20 +78,40 @@ public class ItemController : ControllerBase
         return Unauthorized();
     }
 
-    // PUT api/item/bid/{id}
-    [Route("bid/{itemId}")]
+    // PUT api/item/bid
+    [Route("bid")]
     [HttpPut]
-    public async Task<Item?> SetBid([FromBody] Bid bid, string itemId)
+    public async Task<Item?> SetBid([FromBody] BidInput bid)
     {
-        return await _bidService.AddBid(itemId, bid);
+        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+
+        if (userId == null)
+        {
+            return null;
+        }
+
+        var newBid = new Bid()
+        {
+            User = userId,
+            Value = bid.Value,
+            CreatedAt = DateTime.Now,
+        };
+        return await _bidService.AddBid(bid.ItemId, newBid);
     }
 
-    // PUT api/item/winner/{id}
-    [Route("winner/{itemId}")]
+    // PUT api/item/winner
+    [Route("winner")]
     [HttpPut]
-    public async Task<Item?> SetWinner([FromBody] string userId, string itemId)
+    public async Task<Item?> SetWinner([FromBody] WinnerInput input)
     {
-        return await _bidService.SetWinner(itemId, userId);
+        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+
+        if (isAdmin)
+        {
+            return await _bidService.SetWinner(input.ItemId, input.UserId);
+        }
+
+        return null;
     }
 
 

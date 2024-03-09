@@ -1,4 +1,5 @@
 
+using heir_time_api.Enums;
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Repositories.Users;
@@ -16,12 +17,13 @@ public class BidService : IBidService
         _userRepository = userRepository;
     }
 
-    public async Task<Item> AddBid(string itemId, Models.Bid bid)
+    public async Task<Item?> AddBid(string itemId, Models.Bid bid)
     {
+
         return await _itemRepository.AddBid(itemId, bid);
     }
 
-    public async Task<Item> SetWinner(string itemId, string userId)
+    public async Task<Item?> SetWinner(string itemId, string userId)
     {
         // TODO: find out who the current user is and make sure they own the project or are admin for now
         var user = await _userRepository.GetUserById(userId);
@@ -41,6 +43,7 @@ public class BidService : IBidService
         }
 
         item.Recipient = userId;
+        item.ItemStatus = Status.Decided;
 
         await _itemRepository.UpdateItem(item);
 
