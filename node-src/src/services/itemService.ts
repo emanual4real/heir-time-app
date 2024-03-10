@@ -1,7 +1,6 @@
 import { Item } from '@ui/types';
 import { createRequestOptions } from './fetchOptions';
 import { BidPayload } from '../types/models/Bid.model';
-import { dateStringToFormat } from '@ui/utils';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/item`;
 

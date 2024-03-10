@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { dateStringToFormat } from '.';
 
 const validDateString = '2025-01-01T00:00:00Z';
-const invalidDateString = '2024-03-05T00:00:00Za';
+const invalidDateString = '2024-33-05T00:00:00Z';
 
 test('dateStringToFormat should fail to parse date string', () => {
   // arrange
