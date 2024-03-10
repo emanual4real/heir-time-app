@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { NewItemDialog } from '.';
-import { Item } from '@ui/types';
-
 const meta = {
   title: 'Components/NewItemDialog',
   component: NewItemDialog,
@@ -20,8 +18,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    onSubmit: (form: Partial<Item>) => {
-      console.log(form);
+    onSubmit: () => {
+      // TODO:
     }
   }
 };

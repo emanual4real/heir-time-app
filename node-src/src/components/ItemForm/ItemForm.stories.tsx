@@ -32,8 +32,8 @@ export const NewItem: Story = {
       itemStatus: 0,
       statusName: ItemStatus[ItemStatus.Undecided]
     },
-    onChange: (form) => {
-      console.log(form);
+    onChange: () => {
+      // TODO:
     }
   }
 };
@@ -49,8 +49,8 @@ export const EditItem: Story = {
       itemStatus: 1,
       statusName: ItemStatus[ItemStatus.Decided]
     },
-    onChange: (form) => {
-      console.log(form);
+    onChange: () => {
+      // TODO:
     }
   }
 };

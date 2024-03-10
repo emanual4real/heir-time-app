@@ -1,4 +1,4 @@
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
+import { rootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Container } from '@mui/material';
 import { NavBar } from '@ui/components';
@@ -23,6 +23,6 @@ const RootComponent = () => {
   );
 };
 
-export const Route = createRootRouteWithContext<RouteContext>()({
+export const Route = rootRouteWithContext<RouteContext>()({
   component: () => <RootComponent />
 });
