@@ -43,8 +43,8 @@ export const ItemComponent = (props: ItemProps) => {
   };
 
   return (
-    <Card sx={{ width: 400 }}>
-      <CardMedia sx={{ height: 300 }} image={props.item.imagePath} title="item" />
+    <Card sx={{ width: 400, minHeight: 700 }}>
+      <CardMedia sx={{ height: 250 }} image={props.item.imagePath} title="item" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.item.title}
@@ -65,6 +65,20 @@ export const ItemComponent = (props: ItemProps) => {
             <li>Status: {props.item.statusName}</li>
           )}
         </ul>
+        {props.item.itemStatus === ItemStatus.Undecided && (
+          <div>
+            Bids:
+            <ul>
+              {props.item.bids
+                ?.sort((a, b) => (a.value > b.value ? -1 : 1))
+                .map((row) => (
+                  <li key={row.user}>
+                    {row.value} - {row.user}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
       </CardContent>
       <CardActions>
         {props.item.itemStatus === ItemStatus.Undecided ? (

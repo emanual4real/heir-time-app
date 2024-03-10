@@ -27,10 +27,30 @@ export const Undecided: Story = {
       description:
         'This couch has been used by a lot of people.  It gets around a lot.  I mean a lot!',
       imagePath: '/couch.jpg',
-      releaseDate: '1/1/2025',
+      releaseDate: '2025-01-01T00:00:00Z',
       location: 'Madison County, N.C.',
       itemStatus: ItemStatus.Undecided,
-      statusName: 'Undecided'
+      statusName: 'Undecided',
+      bids: [
+        {
+          value: 10,
+          receivingDate: '2025-01-01T00:00:00Z',
+          user: 'Emanual Henry',
+          createdAt: Date.now().toString()
+        },
+        {
+          value: 1,
+          receivingDate: '2025-01-01T00:00:00Z',
+          user: 'Danaan Henry',
+          createdAt: Date.now().toString()
+        },
+        {
+          value: 5,
+          receivingDate: '2025-01-01T00:00:00Z',
+          user: 'Cady Henry',
+          createdAt: Date.now().toString()
+        }
+      ]
     }
   }
 };
@@ -43,7 +63,7 @@ export const Decided: Story = {
       description:
         'This couch has been used by a lot of people.  It gets around a lot.  I mean a lot!',
       imagePath: '/couch.jpg',
-      releaseDate: '1/1/2025',
+      releaseDate: '2025-01-01T00:00:00Z',
       location: 'Madison County, N.C.',
       itemStatus: ItemStatus.Decided,
       recipient: 'Emanual',
@@ -60,7 +80,7 @@ export const Goodwill: Story = {
       description:
         'This couch has been used by a lot of people.  It gets around a lot.  I mean a lot!',
       imagePath: '/couch.jpg',
-      releaseDate: '1/1/2025',
+      releaseDate: '2025-01-01T00:00:00Z',
       location: 'Madison County, N.C.',
       itemStatus: ItemStatus.Goodwill,
       statusName: 'Goodwill'
