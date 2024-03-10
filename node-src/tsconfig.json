@@ -26,7 +26,8 @@
       "@ui/types": ["./src/types"],
       "@ui/services": ["./src/services"],
       "@ui/pages": ["./src/pages"],
-      "@ui/components": ["./src/components"]
+      "@ui/components": ["./src/components"],
+      "@ui/utils": ["./src/utils"]
     }
   },
   "include": ["src"],
