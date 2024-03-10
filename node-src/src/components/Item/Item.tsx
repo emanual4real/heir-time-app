@@ -2,18 +2,19 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
-import { Item, ItemStatus } from '@ui/types';
-import { DeleteDialog, EditItemDialog } from '..';
+import { Bid, BidPayload, Item, ItemStatus } from '@ui/types';
+import { BidDialog, DeleteDialog, EditItemDialog } from '..';
 
 export interface ItemProps {
   item: Item;
   isAdmin?: boolean;
   handleDelete: (id: string) => void;
   handleEdit: (item: Item) => void;
+  handleSubmitBid: (bid: BidPayload) => void;
 }
+
 export const ItemComponent = (props: ItemProps) => {
   const releaseDate = (): string => {
     if (props.item.releaseDate) {
@@ -31,6 +32,14 @@ export const ItemComponent = (props: ItemProps) => {
 
   const onEditClick = (item: Item) => {
     props.handleEdit(item);
+  };
+
+  const onBidClick = (bid: Bid) => {
+    props.handleSubmitBid({
+      value: bid.value,
+      receivingDate: bid.receivingDate,
+      itemId: props.item.id
+    });
   };
 
   return (
@@ -59,9 +68,7 @@ export const ItemComponent = (props: ItemProps) => {
       </CardContent>
       <CardActions>
         {props.item.itemStatus === ItemStatus.Undecided ? (
-          <>
-            <Button size="small">Bid Now</Button>
-          </>
+          <BidDialog item={props.item} onSubmit={onBidClick} />
         ) : null}
         {props.isAdmin ? <DeleteDialog handleDelete={onDeleteClick} /> : null}
         {props.isAdmin ? <EditItemDialog item={props.item} onSubmit={onEditClick} /> : null}

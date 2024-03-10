@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { deleteItem, updateItem, fetchItems } from '@ui/services';
-import { Item } from '@ui/types';
+import { deleteItem, updateItem, fetchItems, submitBid } from '@ui/services';
+import { BidPayload, Item } from '@ui/types';
 import { Carousel, ItemComponent } from '@ui/components';
 import './ItemCarousel.css';
 
@@ -13,14 +13,16 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    const getItems = async () => {
-      const data = await fetchItems();
+    if (items.length === 0) {
+      const getItems = async () => {
+        const data = await fetchItems();
 
-      setItems(data);
-    };
+        setItems(data);
+      };
 
-    getItems();
-  }, []);
+      getItems();
+    }
+  }, [items]);
 
   const handleDelete = async (id: string) => {
     const deletedId = await deleteItem(id);
@@ -42,6 +44,16 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
     }
   };
 
+  const handleSubmitBid = async (payload: BidPayload) => {
+    const response = await submitBid(payload);
+    const itemIndex = items.findIndex((row) => row.id === response.id);
+
+    const updatedItems = items;
+    updatedItems[itemIndex] = response;
+
+    setItems(updatedItems);
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
       <Carousel itemCount={items.length} itemsPerPage={2}>
@@ -52,6 +64,7 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
             isAdmin={props.isAdmin}
             handleDelete={handleDelete}
             handleEdit={handleEdit}
+            handleSubmitBid={handleSubmitBid}
           />
         ))}
       </Carousel>

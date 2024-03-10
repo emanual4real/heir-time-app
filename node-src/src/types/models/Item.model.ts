@@ -1,4 +1,5 @@
 import { ItemStatus } from '../enums/ItemStatus';
+import { Bid } from './Bid.model';
 
 export interface Item {
   id: string;
@@ -10,4 +11,5 @@ export interface Item {
   location?: string;
   imagePath?: string;
   recipient?: string;
+  bids?: Bid[];
 }
