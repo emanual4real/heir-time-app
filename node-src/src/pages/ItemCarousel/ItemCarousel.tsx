@@ -13,16 +13,14 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    if (items.length === 0) {
-      const getItems = async () => {
-        const data = await fetchItems();
+    const getItems = async () => {
+      const data = await fetchItems();
 
-        setItems(data);
-      };
+      setItems(data);
+    };
 
-      getItems();
-    }
-  }, [items]);
+    getItems();
+  }, []);
 
   const handleDelete = async (id: string) => {
     const deletedId = await deleteItem(id);
@@ -48,7 +46,7 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
     const response = await submitBid(payload);
     const itemIndex = items.findIndex((row) => row.id === response.id);
 
-    const updatedItems = items;
+    const updatedItems = [...items];
     updatedItems[itemIndex] = response;
 
     setItems(updatedItems);

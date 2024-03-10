@@ -7,6 +7,7 @@ import {
   TextField
 } from '@mui/material';
 import { Bid } from '@ui/types';
+import { dateStringToFormat } from '../../utils/date';
 
 interface BiddingFormProps {
   bid?: Bid;
@@ -60,7 +61,7 @@ export const BiddingForm = (props: BiddingFormProps) => {
               <TextField
                 name="receivingDate"
                 type="date"
-                value={props.bid?.receivingDate}
+                value={dateStringToFormat(props.bid?.receivingDate ?? '', 'yyyy-MM-dd')}
                 sx={{ marginLeft: '5px' }}
               />
             }

@@ -25,17 +25,7 @@ export const fetchItems = async (): Promise<Item[]> => {
   const options = createRequestOptions('GET');
   const response = await fetch(`${API_URL}/items`, options);
 
-  const rawItems: Item[] = await response.json();
-
-  const modifiedItems = rawItems.map((item) => ({
-    ...item,
-    bids: item.bids?.map((bid) => ({
-      ...bid,
-      receivingDate: dateStringToFormat(bid.receivingDate, 'yyyy-MM-dd')
-    }))
-  }));
-
-  return modifiedItems;
+  return await response.json();
 };
 
 export const submitBid = async (bid: BidPayload): Promise<Item> => {

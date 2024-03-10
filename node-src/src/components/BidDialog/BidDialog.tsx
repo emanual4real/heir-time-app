@@ -30,6 +30,7 @@ export const BidDialog = (props: BidDialogProps) => {
 
   const handleDiscard = () => {
     setBid(userBid ?? defaultBid);
+
     handleClose();
   };
 
