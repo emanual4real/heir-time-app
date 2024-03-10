@@ -5,6 +5,7 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), TanStackRouterVite()],
+  base: './',
   server: {
     host: true
   },
@@ -12,6 +13,9 @@ export default defineConfig({
     alias: {
       '@ui': '/src'
     }
+  },
+  preview: {
+    port: 5173
   },
   envDir: 'environments'
 });
