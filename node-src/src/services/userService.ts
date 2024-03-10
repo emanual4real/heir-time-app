@@ -8,10 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL;
  * @param id item id
  * @returns one item
  */
-export const login = async (
-  emailAddress: string,
-  password: string
-): Promise<{ token: string; user: User }> => {
+export const login = async (emailAddress: string, password: string): Promise<User> => {
   const options = createRequestOptions('POST', { emailAddress, password });
   const response = await fetch(`${API_URL}/api/user/login`, options);
 

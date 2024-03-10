@@ -13,7 +13,8 @@ export const Login = () => {
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     const res = await login(email, password);
-    setAuth({ loggedIn: true, user: res.user });
+
+    setAuth({ loggedIn: true, user: res });
     navigate({ to: '/' });
     e.preventDefault();
   };
