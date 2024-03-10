@@ -12,6 +12,8 @@ public interface IUserService
 
     public Task<Models.User> GetUser(string email);
 
+    public Task<Models.User> GetUserById(string userId);
+
     public Task<List<Models.User>> GetAllUsers();
 
 }

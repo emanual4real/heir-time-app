@@ -67,4 +67,9 @@ public class UserService : IUserService
     {
         return _userRepository.GetAllUsers();
     }
+
+    public Task<Models.User> GetUserById(string userId)
+    {
+        return _userRepository.GetUserById(userId);
+    }
 }

@@ -21,6 +21,20 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
+    [Route("me")]
+    [HttpGet]
+    public async Task<ActionResult<User>> GetMe()
+    {
+        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+
+        return await _userService.GetUserById(userId);
+    }
+
     [HttpGet("{email}")]
     public async Task<User> GetUser(string email)
     {
