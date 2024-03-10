@@ -1,3 +1,4 @@
+using System.Globalization;
 using heir_time_api.Controllers.InputModels;
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
@@ -89,11 +90,12 @@ public class ItemController : ControllerBase
         {
             return null;
         }
-
+        var cultureInfo = new CultureInfo("en-US");
         var newBid = new Bid()
         {
             User = userId,
             Value = bid.Value,
+            ReceivingDate = DateTime.Parse(bid.ReceivingDate, cultureInfo),
             CreatedAt = DateTime.Now,
         };
         return await _bidService.AddBid(bid.ItemId, newBid);

@@ -11,6 +11,8 @@ public class Bid
 
     [BsonElement("value")]
     public required int Value { get; set; }
+    [BsonElement("receivingDate")]
+    public required DateTime ReceivingDate { get; set; }
     [BsonElement("user")]
     public required string User { get; set; }
     [BsonElement("createdAt")]
