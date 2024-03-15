@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Net;
 using heir_time_api.Services.Bid;
+using heir_time_api.Services.Item;
 
 namespace heir_time_api;
 
@@ -45,6 +46,7 @@ public class Startup
 
     private void RegisterServices(IServiceCollection services)
     {
+        services.AddScoped<IItemService, ItemService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBidService, BidService>();
     }

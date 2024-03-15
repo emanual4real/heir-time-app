@@ -3,6 +3,7 @@ using heir_time_api.Controllers.InputModels;
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Services.Bid;
+using heir_time_api.Services.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +14,14 @@ namespace heir_time_api.Controllers;
 public class ItemController : ControllerBase
 {
     readonly IItemRepository _repository;
+    readonly IItemService _itemService;
     readonly IBidService _bidService;
 
 
-    public ItemController(IItemRepository repository, IBidService bidService)
+    public ItemController(IItemRepository repository, IItemService itemService, IBidService bidService)
     {
         _repository = repository;
+        _itemService = itemService;
         _bidService = bidService;
     }
 
@@ -34,7 +37,7 @@ public class ItemController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<Item>> GetItems()
     {
-        return await _repository.GetItems();
+        return await _itemService.GetAllItems();
     }
 
     // POST api/item
