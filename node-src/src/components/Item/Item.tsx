@@ -17,6 +17,7 @@ export interface ItemProps {
 }
 
 export const ItemComponent = (props: ItemProps) => {
+  const image = props.item.fileUrls;
   const releaseDate = (): string => {
     if (props.item.releaseDate) {
       const date = parseISO(props.item.releaseDate);
@@ -28,7 +29,9 @@ export const ItemComponent = (props: ItemProps) => {
   };
 
   const onDeleteClick = () => {
-    props.handleDelete(props.item.id);
+    if (props.item.id) {
+      props.handleDelete(props.item.id);
+    }
   };
 
   const onEditClick = (item: Item) => {

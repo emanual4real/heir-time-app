@@ -12,6 +12,8 @@
     "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "test": "vitest",
     "preview": "vite preview --mode prod",
+    "openapi": "npx openapi-typescript src/types/schema/schema.yaml -o src/types/schema/schema.d.ts",
+    "openapi-server": "openapi-typescript http://localhost:8080/swagger/v1/swagger.yaml -o src/types/schema/schema.d.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -50,6 +52,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-storybook": "^0.6.15",
+    "openapi-typescript": "^6.7.5",
     "prettier": "^3.2.2",
     "storybook": "^7.6.10",
     "typescript": "^5.2.2",
