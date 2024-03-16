@@ -1,12 +1,9 @@
-export interface BidPayload {
-  value: number;
-  itemId: string;
-  receivingDate: string;
-}
+import { components, paths } from '..';
 
-export interface Bid {
-  value: number;
-  receivingDate: string;
-  user?: string;
-  createdAt?: string;
-}
+export type BidPayload = components['schemas']['BidInput'];
+
+export type Bid = components['schemas']['Bid'];
+
+export type WinnerPayload = components['schemas']['WinnerInput'];
+
+export type BidPutRequestBody = paths['/api/Item/bid']['put']['requestBody'];

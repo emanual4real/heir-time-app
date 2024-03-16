@@ -16,6 +16,7 @@ export interface ItemProps {
 }
 
 export const ItemComponent = (props: ItemProps) => {
+  const image = props.item.fileUrls;
   const releaseDate = (): string => {
     if (props.item.releaseDate) {
       const date = parseISO(props.item.releaseDate);
@@ -27,7 +28,9 @@ export const ItemComponent = (props: ItemProps) => {
   };
 
   const onDeleteClick = () => {
-    props.handleDelete(props.item.id);
+    if (props.item.id) {
+      props.handleDelete(props.item.id);
+    }
   };
 
   const onEditClick = (item: Item) => {
@@ -44,7 +47,7 @@ export const ItemComponent = (props: ItemProps) => {
 
   return (
     <Card sx={{ width: 400, minHeight: 700 }}>
-      <CardMedia sx={{ height: 250 }} image={props.item.imagePath} title="item" />
+      <CardMedia sx={{ height: 250 }} image={image} title="item" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.item.title}

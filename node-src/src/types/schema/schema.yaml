@@ -1,0 +1,458 @@
+openapi: 3.0.1
+info:
+  title: heir-time-api
+  version: '1.0'
+paths:
+  '/api/Item/{id}':
+    get:
+      tags:
+        - Item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Item'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    delete:
+      tags:
+        - Item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+  /api/Item/items:
+    get:
+      tags:
+        - Item
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+  /api/Item:
+    post:
+      tags:
+        - Item
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                itemJson:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              itemJson:
+                style: form
+              file:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Item'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+        - Item
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                itemJson:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              itemJson:
+                style: form
+              file:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Item'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /api/Item/bid:
+    put:
+      tags:
+        - Item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidInput'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/BidInput'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/BidInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Item'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /api/Item/winner:
+    put:
+      tags:
+        - Item
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WinnerInput'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WinnerInput'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WinnerInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Item'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+  /api/User/me:
+    get:
+      tags:
+        - User
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  '/api/User/{email}':
+    get:
+      tags:
+        - User
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/User:
+    get:
+      tags:
+        - User
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /api/User/login:
+    post:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: Success
+  /api/User/logout:
+    get:
+      tags:
+        - User
+      responses:
+        '200':
+          description: Success
+  /api/User/register:
+    post:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    Bid:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+        receivingDate:
+          type: string
+          format: date-time
+        user:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    BidInput:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+        itemId:
+          type: string
+          nullable: true
+        receivingDate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Item:
+      required:
+        - bids
+        - fileKeys
+        - fileUrls
+        - itemStatus
+        - releaseDate
+        - title
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        title:
+          minLength: 1
+          type: string
+        releaseDate:
+          type: string
+          format: date-time
+        itemStatus:
+          $ref: '#/components/schemas/Status'
+        statusName:
+          type: string
+          nullable: true
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        fileUrls:
+          type: array
+          items:
+            type: string
+        fileKeys:
+          type: array
+          items:
+            type: string
+        recipient:
+          type: string
+          nullable: true
+        bids:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bid'
+        imagePath:
+          type: string
+          nullable: true
+          deprecated: true
+      additionalProperties: false
+    Login:
+      type: object
+      properties:
+        emailAddress:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Status:
+      enum:
+        - 0
+        - 1
+        - 2
+      type: integer
+      format: int32
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        emailAddress:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        isAdmin:
+          type: boolean
+          nullable: true
+        ownedProjects:
+          type: array
+          items:
+            type: string
+          nullable: true
+        endowmentProjects:
+          type: array
+          items:
+            type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WinnerInput:
+      type: object
+      properties:
+        userId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+      additionalProperties: false
