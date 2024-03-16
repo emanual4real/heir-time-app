@@ -29,7 +29,10 @@ export const Primary: Story = {
       description: 'string',
       location: 'string',
       imagePath: 'string',
-      recipient: 'string'
+      recipient: 'string',
+      bids: [],
+      fileKeys: [],
+      fileUrls: []
     }
   }
 };

@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
 import { Bid, BidPayload, Item, ItemStatus } from '@ui/types';
 import { BidDialog, DeleteDialog, EditItemDialog } from '..';
+import NoImage from '@ui/assets/no-image.jpg';
 
 export interface ItemProps {
   item: Item;
@@ -44,7 +45,7 @@ export const ItemComponent = (props: ItemProps) => {
 
   return (
     <Card sx={{ width: 400, minHeight: 700 }}>
-      <CardMedia sx={{ height: 250 }} image={props.item.imagePath} title="item" />
+      <CardMedia sx={{ height: 250 }} image={props.item.fileUrls[0] ?? NoImage} title="item" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.item.title}

@@ -27,7 +27,8 @@
       "@ui/services": ["./src/services"],
       "@ui/pages": ["./src/pages"],
       "@ui/components": ["./src/components"],
-      "@ui/utils": ["./src/utils"]
+      "@ui/utils": ["./src/utils"],
+      "@ui/assets": ["./assets"]
     }
   },
   "include": ["src"],

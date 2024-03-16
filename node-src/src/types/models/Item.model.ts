@@ -11,5 +11,7 @@ export interface Item {
   location?: string;
   imagePath?: string;
   recipient?: string;
-  bids?: Bid[];
+  bids: Bid[];
+  fileKeys: string[];
+  fileUrls: string[];
 }

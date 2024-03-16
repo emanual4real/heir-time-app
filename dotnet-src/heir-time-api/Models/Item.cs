@@ -24,9 +24,7 @@ public class Item
   public string? Description { get; set; }
   [BsonElement("location")]
   public string? Location { get; set; }
-  [Obsolete("Delete this once UI is updated")]
-  [BsonElement("imagePath")]
-  public string? ImagePath { get; set; } = "https://media.istockphoto.com/id/1352945762/vector/no-image-available-like-missing-picture.jpg?s=612x612&w=0&k=20&c=4X-znbt02a8EIdxwDFaxfmKvUhTnLvLMv1i1f3bToog=";
+
   [BsonElement("fileUrls")]
   public List<string> FileUrls { get; set; } = [];
   [BsonElement("fileKeys")]

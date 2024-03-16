@@ -50,7 +50,9 @@ export const Undecided: Story = {
           user: 'Cady Henry',
           createdAt: Date.now().toString()
         }
-      ]
+      ],
+      fileKeys: [],
+      fileUrls: []
     }
   }
 };
@@ -67,7 +69,10 @@ export const Decided: Story = {
       location: 'Madison County, N.C.',
       itemStatus: ItemStatus.Decided,
       recipient: 'Emanual',
-      statusName: 'Decided'
+      statusName: 'Decided',
+      bids: [],
+      fileKeys: [],
+      fileUrls: []
     }
   }
 };
@@ -83,7 +88,10 @@ export const Goodwill: Story = {
       releaseDate: '2025-01-01T00:00:00Z',
       location: 'Madison County, N.C.',
       itemStatus: ItemStatus.Goodwill,
-      statusName: 'Goodwill'
+      statusName: 'Goodwill',
+      bids: [],
+      fileKeys: [],
+      fileUrls: []
     }
   }
 };
