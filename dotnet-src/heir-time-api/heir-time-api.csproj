@@ -10,6 +10,8 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.306.2" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNet.Cors" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
@@ -23,6 +25,6 @@
   </ItemGroup>
       <ItemGroup>
         <!-- emits global using BcryptNet = global::BCrypt.Net.BCrypt; -->
-        <Using Include="BCrypt.Net.BCrypt" Alias="BC"/>
+        <Using Include="BCrypt.Net.BCrypt" Alias="BC" />
     </ItemGroup>
 </Project>

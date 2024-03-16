@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Net;
 using heir_time_api.Services.Bid;
 using heir_time_api.Services.Item;
+using Amazon.S3;
 
 namespace heir_time_api;
 
@@ -80,6 +81,10 @@ public class Startup
 
         RegisterRepositories(services);
         RegisterServices(services);
+
+        // aws stuff
+        services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+        services.AddAWSService<IAmazonS3>();
 
         services.AddSwaggerGen();
         services.AddCors();
