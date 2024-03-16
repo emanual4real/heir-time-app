@@ -1,14 +1,16 @@
 ﻿using MongoDB.Driver;
-using heir_time_api.Repositories.Items;
+using Amazon.S3;
+using System.Net;
 using System.Text.Json;
-using heir_time_api.Repositories.Users;
-using heir_time_api.Services.User;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using System.Net;
 using heir_time_api.Services.Bid;
 using heir_time_api.Services.Item;
-using Amazon.S3;
+using heir_time_api.Repositories.Items;
+using heir_time_api.Repositories.Users;
+using heir_time_api.Services.User;
+
+using heir_time_api.Services.S3;
 
 namespace heir_time_api;
 
@@ -50,6 +52,7 @@ public class Startup
         services.AddScoped<IItemService, ItemService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IBidService, BidService>();
+        services.AddScoped<IS3Service, S3Service>();
     }
 
     private void ConfigureCors(IApplicationBuilder app)

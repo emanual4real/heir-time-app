@@ -21,20 +21,6 @@ public class S3Service : IS3Service
         return await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
     }
 
-    public async Task<string?> DeleteFile(string bucketName, string key)
-    {
-        var bucketExists = await DoesBucketExist(bucketName);
-
-        if (!bucketExists)
-        {
-            return null;
-        }
-
-        await _s3Client.DeleteObjectAsync(bucketName, key);
-
-        return key;
-    }
-
     public async Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string bucketName, string? prefix)
     {
         var bucketExists = await DoesBucketExist(bucketName);
@@ -69,7 +55,7 @@ public class S3Service : IS3Service
         return s3Objects;
     }
 
-    public async Task<GetObjectResponse?> GetFile(string bucketName, string key)
+    public async Task<GetObjectResponse?> GetFile(string bucketName, string prefix, string key)
     {
         var bucketExists = await DoesBucketExist(bucketName);
 
@@ -100,5 +86,46 @@ public class S3Service : IS3Service
         await _s3Client.PutObjectAsync(request);
 
         return $"{prefix}/{file.FileName}";
+    }
+
+    public async Task<string?> DeleteFile(string bucketName, string prefix, string key)
+    {
+        var bucketExists = await DoesBucketExist(bucketName);
+
+        if (!bucketExists)
+        {
+            return null;
+        }
+
+        await _s3Client.DeleteObjectAsync(bucketName, $"{prefix}/{key}");
+
+        return key;
+    }
+
+    public async Task<List<string>?> DeleteFiles(string bucketName, string prefix, List<string> keys)
+    {
+        KeyVersion makeKeyVersion(string key) => new()
+        {
+            Key = $"{prefix}/${key}"
+        };
+
+        var bucketExists = await DoesBucketExist(bucketName);
+
+        if (!bucketExists)
+        {
+            return null;
+        }
+
+        var keyList = keys.Select(x => makeKeyVersion(x)).ToList();
+
+        var deleteMultipleRequest = new DeleteObjectsRequest()
+        {
+            BucketName = bucketName,
+            Objects = keyList,
+        };
+
+        await _s3Client.DeleteObjectsAsync(deleteMultipleRequest);
+
+        return keys;
     }
 }

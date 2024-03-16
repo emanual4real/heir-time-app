@@ -4,8 +4,10 @@ using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Services.Bid;
 using heir_time_api.Services.Item;
+using heir_time_api.Services.S3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace heir_time_api.Controllers;
 
@@ -13,42 +15,139 @@ namespace heir_time_api.Controllers;
 [Route("api/[controller]")]
 public class ItemController : ControllerBase
 {
-    readonly IItemRepository _repository;
+    readonly IConfiguration _configuration;
+    readonly IItemRepository _itemRepository;
     readonly IItemService _itemService;
+    readonly IS3Service _s3Service;
     readonly IBidService _bidService;
 
-
-    public ItemController(IItemRepository repository, IItemService itemService, IBidService bidService)
+    public ItemController(IConfiguration configuration, IItemRepository repository, IItemService itemService, IBidService bidService, IS3Service s3Service)
     {
-        _repository = repository;
+        _configuration = configuration;
+        _itemRepository = repository;
         _itemService = itemService;
         _bidService = bidService;
+        _s3Service = s3Service;
+    }
+
+    private static Item AddFileUrls(Item item, string prefix, IEnumerable<S3ObjectDto> files)
+    {
+        if (files.Any())
+        {
+            var fileKeys = item.FileKeys.Select(y => $"{prefix}/{y}");
+
+            if (fileKeys.Any())
+            {
+                var fileUrls = files.Where(y => fileKeys.Contains(y.Name)).Select(y => y.PresignedUrl);
+
+                item.FileUrls = fileUrls.ToList();
+
+            }
+
+        }
+
+        return item;
+    }
+
+    private static IEnumerable<Item> AddFileUrls(IEnumerable<Item> items, string prefix, IEnumerable<S3ObjectDto> files)
+    {
+        if (files.Any())
+        {
+            return items.Select(x =>
+            {
+                var fileKeys = x.FileKeys.Select(y => $"{prefix}/{y}");
+
+                if (fileKeys.Any())
+                {
+                    var fileUrls = files.Where(y => fileKeys.Contains(y.Name)).Select(y => y.PresignedUrl);
+
+                    x.FileUrls = fileUrls.ToList();
+
+                }
+
+                return x;
+            });
+        }
+
+        return items;
+    }
+
+    private string GetBucketName()
+    {
+        var bucketName = _configuration.GetSection("AWS").GetValue<string>("BucketName") ?? throw new Exception("BucketName is missing from configuration");
+        return bucketName;
+    }
+
+    private async Task<Item> SaveFileToS3(Item item, IFormFile? file, string prefix)
+    {
+        var _bucketName = GetBucketName();
+        if (file != null)
+        {
+            await _s3Service.SaveFile(file, _bucketName, prefix);
+
+            if (item.FileKeys != null)
+            {
+                item.FileKeys.Add(file.FileName);
+            }
+            else
+            {
+                item.FileKeys = [file.FileName];
+            }
+        }
+
+        return item;
     }
 
     // GET api/item/{id}
     [HttpGet("{id}")]
-    public async Task<Item?> GetItem(string id)
+    public async Task<ActionResult<Item?>> GetItem(string id)
     {
-        return await _repository.GetItemById(id);
+        var _bucketName = GetBucketName();
+        var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+        var files = await _s3Service.GetAllFiles(_bucketName, prefix);
+        var item = await _itemRepository.GetItemById(id);
+
+        if (files != null && item != null && prefix != null)
+        {
+            return Ok(AddFileUrls(item, prefix, files));
+        }
+        return Ok(item);
     }
 
     // GET api/item/items
     [Route("items")]
     [HttpGet]
-    public async Task<IEnumerable<Item>> GetItems()
+    public async Task<ActionResult<IEnumerable<Item>>> GetItems()
     {
-        return await _itemService.GetAllItems();
+        var _bucketName = GetBucketName();
+        var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+        var files = await _s3Service.GetAllFiles(_bucketName, prefix);
+
+        var items = await _itemService.GetAllItems();
+
+        if (files != null && items.Any() && prefix != null)
+        {
+            return Ok(AddFileUrls(items, prefix, files));
+        }
+        return Ok(items);
+
+
     }
 
     // POST api/item
     [HttpPost]
-    public async Task<ActionResult<Item?>> Post([FromBody] Item item)
+    public async Task<ActionResult<Item?>> Post([FromForm] string itemJson, IFormFile? file)
     {
+        Item item = JsonConvert.DeserializeObject<Item>(itemJson);
         var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
 
-        if (isAdmin)
+        if (isAdmin && userId != null)
         {
-            return await _repository.InsertItem(item);
+            var prefix = userId;
+            var newItem = await SaveFileToS3(item, file, prefix);
+
+            return await _itemRepository.InsertItem(newItem);
         }
 
         return Unauthorized();
@@ -56,27 +155,43 @@ public class ItemController : ControllerBase
 
     // PUT api/item
     [HttpPut]
-    public async Task<ActionResult<Item?>> Update([FromBody] Item item)
+    public async Task<ActionResult<Item?>> Update([FromForm] string itemJson, IFormFile? file)
     {
+        Item item = JsonConvert.DeserializeObject<Item>(itemJson);
         var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
 
-        if (isAdmin)
+        if (isAdmin && userId != null)
         {
-            return await _repository.UpdateItem(item);
+            var prefix = userId;
+            var newItem = await SaveFileToS3(item, file, prefix);
+
+            return await _itemRepository.UpdateItem(newItem);
         }
 
         return Unauthorized();
-
     }
 
     // DELETE api/item/id
     [HttpDelete("{id}")]
     public async Task<ActionResult<string?>> Delete(string id)
     {
+        var _bucketName = GetBucketName();
         var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
-        if (isAdmin)
+        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+
+        if (isAdmin && userId != null)
         {
-            return await _repository.DeleteItem(id);
+            var item = await _itemRepository.GetItemById(id);
+
+            if (item != null && item.FileKeys != null)
+            {
+                var filePrefix = userId;
+                var fileKeys = item.FileKeys;
+                await _s3Service.DeleteFiles(_bucketName, filePrefix, fileKeys);
+            }
+
+            return await _itemRepository.DeleteItem(id);
         }
 
         return Unauthorized();
@@ -118,8 +233,4 @@ public class ItemController : ControllerBase
 
         return null;
     }
-
-
-
-
 }
