@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  dotnet-api:
+  api-prod:
     build: 
       context: ../dotnet-src
       dockerfile: dockerfile
@@ -14,16 +14,16 @@ services:
     networks:
       - app-network
 
-  node-app:
+  ui-prod:
     build: 
       context: ../node-src
       dockerfile: dockerfile
     ports:
       - "80:5173"
     depends_on:
-     - dotnet-api
+     -  api-prod
     links:
-      - dotnet-api
+      -  api-prod
     networks:
       - app-network
     volumes:
