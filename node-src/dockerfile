@@ -1,20 +1,22 @@
-FROM node:20
+# docker build -t nginx .
+# docker run -p 80:80 nginx
+FROM node:20 AS node_build
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
+COPY nginx.conf ./nginx.conf
+RUN corepack enable pnpm
+RUN pnpm install
 
-RUN npm ci --omit=dev
-
-RUN npm i vite
 
 COPY . .
+RUN npm run build
 
-EXPOSE 5173
+FROM nginx:latest
 
-CMD ["npm", "run", "dev"]
+COPY --from=node_build /app/build /usr/share/nginx/html
+COPY --from=node_build /app/nginx.conf /etc/nginx/conf.d/default.conf
 
-# BUILD Command
-# docker build -t node-heir-time .
-# RUN Command
-# docker run -p 5173:5173 node-heir-time
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
