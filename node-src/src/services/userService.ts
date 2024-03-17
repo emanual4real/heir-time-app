@@ -1,5 +1,5 @@
 import { User } from '../types/models';
-import { createRequestOptions } from './fetchOptions';
+import { createDefaultRequestOptions } from './fetchOptions';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,7 +9,7 @@ const API_URL = import.meta.env.VITE_API_URL;
  */
 export const getSelf = async (): Promise<User | null> => {
   try {
-    const options = createRequestOptions('GET');
+    const options = createDefaultRequestOptions('GET');
     const response = await fetch(`${API_URL}/api/user/me`, options);
 
     if (response.status === 401) {
@@ -28,14 +28,14 @@ export const getSelf = async (): Promise<User | null> => {
  * @returns one item
  */
 export const login = async (emailAddress: string, password: string): Promise<User> => {
-  const options = createRequestOptions('POST', { emailAddress, password });
+  const options = createDefaultRequestOptions('POST', { emailAddress, password });
   const response = await fetch(`${API_URL}/api/user/login`, options);
 
   return await response.json();
 };
 
 export const logout = async () => {
-  const options = createRequestOptions('GET');
+  const options = createDefaultRequestOptions('GET');
   try {
     await fetch(`${API_URL}/api/user/logout`, options);
   } catch (err) {

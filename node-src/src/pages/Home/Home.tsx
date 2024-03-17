@@ -9,7 +9,6 @@ export const Home = () => {
   useEffect(() => {
     const autoLogin = async () => {
       if (!auth.loggedIn) {
-        console.log('getSelf');
         const user = await getSelf();
 
         if (user !== null) {

@@ -23,7 +23,7 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
   };
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<Partial<Item>>(defaultState);
+  const [form, setForm] = useState<Partial<Item & { files: FileList }>>(defaultState);
 
   const disabled = form.title === '' || form.description === '' || form.location === '';
 

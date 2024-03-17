@@ -155,7 +155,7 @@ public class ItemController : ControllerBase
 
     // PUT api/item
     [HttpPut]
-    public async Task<ActionResult<Item?>> Update([FromForm] string itemJson, IFormFile? file)
+    public async Task<ActionResult<Item?>> Update([FromForm] IFormFile? file, string itemJson)
     {
         Item item = JsonConvert.DeserializeObject<Item>(itemJson);
         var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
