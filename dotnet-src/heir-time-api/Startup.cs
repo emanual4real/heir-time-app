@@ -72,6 +72,7 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container
     public void ConfigureServices(IServiceCollection services)
     {
+        var cookieDomain = Configuration.GetSection("Cookie").GetValue<string>("Domain");
         services.AddMvcCore().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddSingleton<IMongoClient>(sp => ConfigureMongoDb());
@@ -84,7 +85,8 @@ public class Startup
             options.Cookie.Path = "/";
             // TODO: localhost doesn't work in postman
             // options.Cookie.Domain = "127.0.0.1";
-            options.Cookie.Domain = ".localhost";
+            // options.Cookie.Domain = ".localhost";
+            options.Cookie.Domain = cookieDomain;
             options.ExpireTimeSpan = TimeSpan.FromHours(1);
             options.SlidingExpiration = true;
             options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;

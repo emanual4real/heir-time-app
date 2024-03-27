@@ -16,7 +16,7 @@
         "ms-dotnettools.vscodeintellicode-csharp",
         "dbaeumer.vscode-eslint",
         "SonarSource.sonarlint-vscode",
-        "wayou.vscode-todo-highlight"
+        "wayou.vscode-todo-highlight",
       ],
       "settings": {
         "sonarlint.rules": {

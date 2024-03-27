@@ -1,10 +1,19 @@
 {
   "profiles": {
-    "heir-time-api": {
+    "heir-time-api-dev": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "MONGODB_URI": "mongodb://root:example@mongo:27017"
+      },
+      "applicationUrl": "http://localhost:8080"
+    },
+    "heir-time-api-prod": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
         "MONGODB_URI": "mongodb://root:example@mongo:27017"
       },
       "applicationUrl": "http://localhost:8080"
