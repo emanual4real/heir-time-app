@@ -1,9 +1,6 @@
 ﻿using MongoDB.Driver;
 using Amazon.S3;
-using System.Net;
 using System.Text.Json;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using heir_time_api.Services.Bid;
 using heir_time_api.Services.Item;
 using heir_time_api.Repositories.Items;
@@ -22,12 +19,6 @@ public class Startup
     }
 
     public IConfiguration Configuration { get; }
-
-    private Task UnAuthorizedResponse(RedirectContext<CookieAuthenticationOptions> context)
-    {
-        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-        return Task.CompletedTask;
-    }
 
     private MongoClient ConfigureMongoDb()
     {
@@ -72,26 +63,12 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container
     public void ConfigureServices(IServiceCollection services)
     {
-        var cookieDomain = Configuration.GetSection("Cookie").GetValue<string>("Domain");
         services.AddMvcCore().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddSingleton<IMongoClient>(sp => ConfigureMongoDb());
 
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-        {
-            options.Cookie.SameSite = SameSiteMode.None;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.Name = "Heir-Time";
-            options.Cookie.Path = "/";
-            // TODO: localhost doesn't work in postman
-            // options.Cookie.Domain = "127.0.0.1";
-            // options.Cookie.Domain = ".localhost";
-            options.Cookie.Domain = cookieDomain;
-            options.ExpireTimeSpan = TimeSpan.FromHours(1);
-            options.SlidingExpiration = true;
-            options.Events.OnRedirectToAccessDenied = UnAuthorizedResponse;
-            options.Events.OnRedirectToLogin = UnAuthorizedResponse;
-        });
+        var cookieDomain = Configuration.GetSection("Cookie").GetValue<string>("Domain");
+        Cookie.AddCookie(services, cookieDomain);
 
         RegisterRepositories(services);
         RegisterServices(services);
