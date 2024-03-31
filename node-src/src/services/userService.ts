@@ -1,7 +1,7 @@
 import { User } from '../types/models';
 import { createDefaultRequestOptions } from './fetchOptions';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/user`;
 
 /**
  * Used to log in if cookie is already present
@@ -10,7 +10,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const getSelf = async (): Promise<User | null> => {
   try {
     const options = createDefaultRequestOptions('GET');
-    const response = await fetch(`${API_URL}/api/user/me`, options);
+    const response = await fetch(`${API_URL}/me`, options);
 
     if (response.status === 401) {
       return null;
@@ -29,7 +29,7 @@ export const getSelf = async (): Promise<User | null> => {
  */
 export const login = async (emailAddress: string, password: string): Promise<User> => {
   const options = createDefaultRequestOptions('POST', { emailAddress, password });
-  const response = await fetch(`${API_URL}/api/user/login`, options);
+  const response = await fetch(`${API_URL}/login`, options);
 
   return await response.json();
 };
@@ -37,7 +37,7 @@ export const login = async (emailAddress: string, password: string): Promise<Use
 export const logout = async () => {
   const options = createDefaultRequestOptions('GET');
   try {
-    await fetch(`${API_URL}/api/user/logout`, options);
+    await fetch(`${API_URL}/logout`, options);
   } catch (err) {
     console.error('Not logged in');
   }

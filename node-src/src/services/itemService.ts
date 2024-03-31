@@ -2,7 +2,7 @@ import { Item } from '@ui/types';
 import { createDefaultRequestOptions } from './fetchOptions';
 import { BidPayload } from '../types/models/Bid.model';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/item`;
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/item`;
 
 /**
  * Fetch specific item
@@ -37,7 +37,7 @@ export const submitBid = async (bid: BidPayload): Promise<Item> => {
 // ADMIN ONLY below here
 export const postItem = async (item: Partial<Item>): Promise<Item> => {
   const options = createDefaultRequestOptions('POST', item);
-  const response = await fetch(`${API_URL}`, options);
+  const response = await fetch(API_URL, options);
 
   return await response.json();
 };
@@ -61,7 +61,7 @@ export const postItemWithFile = async (item: Partial<Item>, files?: FileList): P
     credentials: 'include'
   };
 
-  const response = await fetch('http://localhost:8080/api/Item', requestOptions);
+  const response = await fetch(API_URL, requestOptions);
 
   return await response.json();
 };
