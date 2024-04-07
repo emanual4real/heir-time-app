@@ -1,44 +1,53 @@
 version: "3"
 
 services:
-  dotnet-api:
+  api-prod:
     build: 
       context: ../dotnet-src
       dockerfile: dockerfile
     ports:
       - "8080:8080"
+    env_file:
+      - ../.aws-credentials
+      - ../.env
     links:
       - mongo
     depends_on:
      - mongo
     networks:
       - app-network
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
 
-  node-app:
+  ui-prod:
     build: 
       context: ../node-src
       dockerfile: dockerfile
     ports:
       - "80:5173"
+    env_file:
+      - ../.env
     depends_on:
-     - dotnet-api
+      - api-prod
     links:
-      - dotnet-api
+      - api-prod
     networks:
       - app-network
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    environment:
-      ASPNETCORE_ENVIRONMENT: Production
 
   mongo:
     image: mongo
     restart: always
     ports:
       - "27017:27017"
+    # volumes:
+      # - db-data:/etc/data
     volumes:
-      - db-data:/etc/data
+      - type: bind
+        source: ../db
+        target: /data/db
     networks:
       - app-network
     environment:
