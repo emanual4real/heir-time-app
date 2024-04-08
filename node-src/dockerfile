@@ -1,20 +1,21 @@
-FROM node:20
+# docker build -t nginx .
+# docker run -p 80:80 nginx
+FROM node:20 AS node_build
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm ci --omit=dev
-
-RUN npm i vite
+COPY package.json package-lock.json ./
+RUN npm ci
 
 COPY . .
+RUN npm run build:prod
 
-EXPOSE 5173
+COPY nginx.conf ./nginx.conf
 
-CMD ["npm", "run", "dev"]
+FROM nginx:latest
 
-# BUILD Command
-# docker build -t node-heir-time .
-# RUN Command
-# docker run -p 5173:5173 node-heir-time
+COPY --from=node_build /app/build /usr/share/nginx/html
+COPY --from=node_build /app/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
