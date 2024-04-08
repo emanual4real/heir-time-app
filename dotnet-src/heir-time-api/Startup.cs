@@ -48,13 +48,15 @@ public class Startup
 
     private void ConfigureCors(IApplicationBuilder app)
     {
-        var corsUrls = Configuration.GetSection("Cors").GetValue<string>("AllowedUrls");
+        var corsUrlsConfig = Configuration.GetSection("Cors").GetValue<string>("AllowedUrls");
+        var corsUrlEnv = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
         var allowedLocalUrls = new List<string>
         {
             "http://127.0.0.1:5173",
             "http://localhost:5173",
             "http://localhost",
-            corsUrls
+            corsUrlsConfig,
+            corsUrlEnv
         };
 
 
@@ -68,8 +70,9 @@ public class Startup
         services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
         services.AddSingleton<IMongoClient>(sp => ConfigureMongoDb());
 
-        var cookieDomain = Configuration.GetSection("Cookie").GetValue<string>("Domain");
-        Cookie.AddCookie(services, cookieDomain);
+        var cookieDomainConfig = Configuration.GetSection("Cookie").GetValue<string>("Domain");
+        var cookieDomainEnv = Environment.GetEnvironmentVariable("COOKIE_DOMAIN");
+        Cookie.AddCookie(services, cookieDomainEnv ?? cookieDomainConfig);
 
         RegisterRepositories(services);
         RegisterServices(services);
@@ -85,7 +88,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-
+        Console.WriteLine(Environment.GetEnvironmentVariable("***************************************"));
+        Console.WriteLine(Environment.GetEnvironmentVariable("CORS_URL"));
+        Console.WriteLine(Environment.GetEnvironmentVariable("COOKIE_DOMAIN"));
+        Console.WriteLine(Environment.GetEnvironmentVariable("VITE_API_BASE_URL"));
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

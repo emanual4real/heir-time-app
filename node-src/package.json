@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "local": "tsc --noEmit && vite",
-    "dev": "vite --mode dev",
-    "build": "tsc && vite build",
+    "dev": "tsc --noEmit && vite --mode dev",
+    "prod": "vite --mode prod",
+    "build:dev": "tsc && vite build --mode dev",
+    "build:prod": "tsc && vite build --mode prod",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "test": "vitest",
-    "preview": "vite preview --mode dev",
+    "preview": "vite preview --mode prod",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

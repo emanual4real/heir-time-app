@@ -5,13 +5,12 @@ FROM node:20 AS node_build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY nginx.conf ./nginx.conf
-RUN corepack enable pnpm
-RUN pnpm install
-
+RUN npm ci
 
 COPY . .
-RUN npm run build
+RUN npm run build:prod
+
+COPY nginx.conf ./nginx.conf
 
 FROM nginx:latest
 
