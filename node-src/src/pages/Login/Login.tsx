@@ -6,8 +6,8 @@ import { useAuth } from '@ui/hooks';
 
 export const Login = () => {
   const navigate = useNavigate({ from: '/login' });
-  const [email, setEmail] = useState('emanual4real@hotmail.com');
-  const [password, setPassword] = useState('Password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const { setAuth } = useAuth();
 

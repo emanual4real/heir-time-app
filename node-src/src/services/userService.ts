@@ -1,8 +1,8 @@
 import { User } from '../types/models';
 import { createDefaultRequestOptions } from './fetchOptions';
 
-// const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/user`;
-const API_URL = `/api/user`;
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/user`;
+// const API_URL = `/api/user`;
 /**
  * Used to log in if cookie is already present
  * @returns User

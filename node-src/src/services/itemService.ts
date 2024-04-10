@@ -2,8 +2,8 @@ import { Item } from '@ui/types';
 import { createDefaultRequestOptions } from './fetchOptions';
 import { BidPayload } from '../types/models/Bid.model';
 
-// const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/item`;
-const API_URL = `/api/item`;
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/item`;
+// const API_URL = `/api/item`;
 /**
  * Fetch specific item
  * @param id item id
