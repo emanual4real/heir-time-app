@@ -8,7 +8,6 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - ../.aws-credentials
       - ../.env
     links:
       - mongo

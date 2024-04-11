@@ -6,8 +6,8 @@ using heir_time_api.Services.Item;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Repositories.Users;
 using heir_time_api.Services.User;
-
 using heir_time_api.Services.S3;
+using Amazon.Extensions.NETCore.Setup;
 
 namespace heir_time_api;
 
@@ -49,14 +49,12 @@ public class Startup
     private void ConfigureCors(IApplicationBuilder app)
     {
         var corsUrlsConfig = Configuration.GetSection("Cors").GetValue<string>("AllowedUrls");
-        var corsUrlEnv = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
         var allowedLocalUrls = new List<string>
         {
             "http://127.0.0.1:5173",
             "http://localhost:5173",
             "http://localhost",
             corsUrlsConfig,
-            corsUrlEnv
         };
 
 
@@ -78,7 +76,8 @@ public class Startup
         RegisterServices(services);
 
         // aws stuff
-        services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+        AWSOptions awsOptions = Configuration.GetAWSOptions();
+        services.AddDefaultAWSOptions(awsOptions);
         services.AddAWSService<IAmazonS3>();
 
         services.AddSwaggerGen();
