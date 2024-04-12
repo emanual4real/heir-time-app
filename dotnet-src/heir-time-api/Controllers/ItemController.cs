@@ -72,18 +72,11 @@ public class ItemController : ControllerBase
         return items;
     }
 
-    private string GetBucketName()
-    {
-        var bucketName = _configuration.GetSection("AWS").GetValue<string>("BucketName") ?? throw new Exception("BucketName is missing from configuration");
-        return bucketName;
-    }
-
     private async Task<Item> SaveFileToS3(Item item, IFormFile? file, string prefix)
     {
-        var _bucketName = GetBucketName();
         if (file != null)
         {
-            await _s3Service.SaveFile(file, _bucketName, prefix);
+            await _s3Service.SaveFile(file, prefix);
 
             if (item.FileKeys != null)
             {
@@ -102,9 +95,8 @@ public class ItemController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Item?>> GetItem(string id)
     {
-        var _bucketName = GetBucketName();
         var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
-        var files = await _s3Service.GetAllFiles(_bucketName, prefix);
+        var files = await _s3Service.GetAllFiles(prefix);
         var item = await _itemRepository.GetItemById(id);
 
         if (files != null && item != null && prefix != null)
@@ -119,9 +111,8 @@ public class ItemController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Item>>> GetItems()
     {
-        var _bucketName = GetBucketName();
         var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
-        var files = await _s3Service.GetAllFiles(_bucketName, prefix);
+        var files = await _s3Service.GetAllFiles(prefix);
 
         var items = await _itemService.GetAllItems();
 
@@ -176,7 +167,6 @@ public class ItemController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<string?>> Delete(string id)
     {
-        var _bucketName = GetBucketName();
         var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
         var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
 
@@ -184,11 +174,11 @@ public class ItemController : ControllerBase
         {
             var item = await _itemRepository.GetItemById(id);
 
-            if (item != null && item.FileKeys != null)
+            if (item != null && item.FileKeys != null && item.FileKeys.Count > 0)
             {
                 var filePrefix = userId;
                 var fileKeys = item.FileKeys;
-                await _s3Service.DeleteFiles(_bucketName, filePrefix, fileKeys);
+                await _s3Service.DeleteFiles(filePrefix, fileKeys);
             }
 
             return await _itemRepository.DeleteItem(id);

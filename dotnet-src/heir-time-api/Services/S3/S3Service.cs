@@ -8,22 +8,34 @@ namespace heir_time_api.Services.S3;
 public class S3Service : IS3Service
 {
     private readonly IAmazonS3 _s3Client;
+    private readonly IConfiguration _configuration;
+    private readonly string _bucketName;
+
 
     public S3Service(
-        IAmazonS3 s3Client
+        IAmazonS3 s3Client,
+        IConfiguration configuration
     )
     {
         _s3Client = s3Client;
+        _configuration = configuration;
+        _bucketName = GetBucketName();
     }
 
-    private async Task<bool> DoesBucketExist(string bucketName)
+    private string GetBucketName()
     {
-        return await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
+        var bucketName = _configuration.GetSection("AWS").GetValue<string>("BucketName") ?? throw new Exception("BucketName is missing from configuration");
+        return bucketName;
     }
 
-    public async Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string bucketName, string? prefix)
+    private async Task<bool> DoesBucketExist()
     {
-        var bucketExists = await DoesBucketExist(bucketName);
+        return await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName);
+    }
+
+    public async Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string? prefix)
+    {
+        var bucketExists = await DoesBucketExist();
 
         if (!bucketExists)
         {
@@ -32,7 +44,7 @@ public class S3Service : IS3Service
 
         var request = new ListObjectsV2Request()
         {
-            BucketName = bucketName,
+            BucketName = _bucketName,
             Prefix = prefix
         };
 
@@ -41,7 +53,7 @@ public class S3Service : IS3Service
         {
             var urlRequest = new GetPreSignedUrlRequest()
             {
-                BucketName = bucketName,
+                BucketName = _bucketName,
                 Key = s.Key,
                 Expires = DateTime.UtcNow.AddMinutes(1)
             };
@@ -55,21 +67,21 @@ public class S3Service : IS3Service
         return s3Objects;
     }
 
-    public async Task<GetObjectResponse?> GetFile(string bucketName, string prefix, string key)
+    public async Task<GetObjectResponse?> GetFile(string prefix, string key)
     {
-        var bucketExists = await DoesBucketExist(bucketName);
+        var bucketExists = await DoesBucketExist();
 
         if (!bucketExists)
         {
             return null;
         }
 
-        return await _s3Client.GetObjectAsync(bucketName, key);
+        return await _s3Client.GetObjectAsync(_bucketName, key);
     }
 
-    public async Task<string?> SaveFile(IFormFile file, string bucketName, string? prefix)
+    public async Task<string?> SaveFile(IFormFile file, string? prefix)
     {
-        var bucketExists = await DoesBucketExist(bucketName);
+        var bucketExists = await DoesBucketExist();
 
         if (!bucketExists)
         {
@@ -78,7 +90,7 @@ public class S3Service : IS3Service
 
         var request = new PutObjectRequest()
         {
-            BucketName = bucketName,
+            BucketName = _bucketName,
             Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
             InputStream = file.OpenReadStream()
         };
@@ -88,28 +100,28 @@ public class S3Service : IS3Service
         return $"{prefix}/{file.FileName}";
     }
 
-    public async Task<string?> DeleteFile(string bucketName, string prefix, string key)
+    public async Task<string?> DeleteFile(string prefix, string key)
     {
-        var bucketExists = await DoesBucketExist(bucketName);
+        var bucketExists = await DoesBucketExist();
 
         if (!bucketExists)
         {
             return null;
         }
 
-        await _s3Client.DeleteObjectAsync(bucketName, $"{prefix}/{key}");
+        await _s3Client.DeleteObjectAsync(_bucketName, $"{prefix}/{key}");
 
         return key;
     }
 
-    public async Task<List<string>?> DeleteFiles(string bucketName, string prefix, List<string> keys)
+    public async Task<List<string>?> DeleteFiles(string prefix, List<string> keys)
     {
         KeyVersion makeKeyVersion(string key) => new()
         {
             Key = $"{prefix}/${key}"
         };
 
-        var bucketExists = await DoesBucketExist(bucketName);
+        var bucketExists = await DoesBucketExist();
 
         if (!bucketExists)
         {
@@ -120,7 +132,7 @@ public class S3Service : IS3Service
 
         var deleteMultipleRequest = new DeleteObjectsRequest()
         {
-            BucketName = bucketName,
+            BucketName = _bucketName,
             Objects = keyList,
         };
 

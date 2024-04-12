@@ -87,10 +87,6 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        Console.WriteLine(Environment.GetEnvironmentVariable("***************************************"));
-        Console.WriteLine(Environment.GetEnvironmentVariable("CORS_URL"));
-        Console.WriteLine(Environment.GetEnvironmentVariable("COOKIE_DOMAIN"));
-        Console.WriteLine(Environment.GetEnvironmentVariable("VITE_API_BASE_URL"));
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
