@@ -6,6 +6,11 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/heir-time-api/heir-time-api.csproj"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
         }
     ]
 }
