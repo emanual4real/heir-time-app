@@ -1,7 +1,8 @@
+using heir_time_api.Enums;
+using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
-using heir_time_api.Repositories.Users;
 using heir_time_api.Services.Item;
-using MongoDB.Driver;
+using heir_time_api.Services.S3;
 using Moq;
 using NUnit.Framework;
 
@@ -10,48 +11,73 @@ namespace test.heir_time_api.Services;
 [TestFixture]
 class ItemServiceTest
 {
-    private IItemService _itemService;
-    // private Mock<MongoClient> _clientMock;
+
     private Mock<IItemRepository> _itemRepositoryMock;
-    private Mock<IUserRepository> _userRepositoryMock;
+    private Mock<IS3Service> _s3ServiceMock;
+    private IItemService _itemService;
+
+    private string _userId = "d9f87adsl234sdfa";
+    private string _itemId = "abasd98234lasdf98234";
+
+
+
 
     [SetUp]
     public void Setup()
     {
-        // _clientMock = new Mock<MongoClient>("connection-string");
         _itemRepositoryMock = new Mock<IItemRepository>();
-        _userRepositoryMock = new Mock<IUserRepository>();
-
-        _itemService = new ItemService(_itemRepositoryMock.Object, _userRepositoryMock.Object);
-
+        _s3ServiceMock = new Mock<IS3Service>();
+        _itemService = new ItemService(_itemRepositoryMock.Object, _s3ServiceMock.Object);
     }
 
     [Test]
     public async Task Should_Return_ItemId_Async()
     {
         // arrange
-        var itemId = "abasd98234lasdf98234";
-        _itemRepositoryMock.Setup(x => x.DeleteItem(itemId)).ReturnsAsync(itemId);
+        _itemRepositoryMock.Setup(x => x.DeleteItem(_itemId)).ReturnsAsync(_itemId);
 
         // act
-        var response = await _itemService.DeleteItem(itemId);
+        var response = await _itemService.DeleteItem(_itemId, _userId);
 
         // assert
-        Assert.That(response, Is.EqualTo(itemId));
+        Assert.That(response, Is.EqualTo(_itemId));
     }
 
     [Test]
     public async Task Should_Call_ItemRepository_DeleteItem_Async()
     {
         // arrange
-        var itemId = "abasd98234lasdf98234";
-        _itemRepositoryMock.Setup(x => x.DeleteItem(itemId)).ReturnsAsync(itemId);
+        _itemRepositoryMock.Setup(x => x.DeleteItem(_itemId)).ReturnsAsync(_itemId);
 
         // act
-        await _itemService.DeleteItem(itemId);
+        await _itemService.DeleteItem(_itemId, _userId);
 
         // assert
-        _itemRepositoryMock.Verify(x => x.DeleteItem(itemId));
+        _itemRepositoryMock.Verify(x => x.DeleteItem(_itemId));
+    }
+
+    [Test]
+    public async Task Should_Call_S3Service_DeleteFiles_Async()
+    {
+        // arrange
+        var bucketName = "heir-time";
+        var item = new Item()
+        {
+            Title = "Some random item",
+            Recipient = "some dude",
+            ReleaseDate = DateTime.Now,
+            ItemStatus = Status.Goodwill,
+            FileKeys = new List<string> { "image.jpg" }
+        };
+
+        _s3ServiceMock.Setup(x => x.DeleteFiles(bucketName, _userId, item.FileKeys));
+        _itemRepositoryMock.Setup(x => x.GetItemById(_itemId)).ReturnsAsync(item);
+
+        // act
+        await _itemService.DeleteItem(_itemId, _userId);
+
+        // assert
+        _s3ServiceMock.Verify(x => x.DeleteFiles(bucketName, _userId, item.FileKeys));
     }
 
 }
