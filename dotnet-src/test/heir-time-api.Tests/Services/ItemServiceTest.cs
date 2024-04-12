@@ -11,14 +11,14 @@ namespace test.heir_time_api.Services;
 class ItemServiceTest
 {
     private IItemService _itemService;
-    private Mock<MongoClient> _clientMock;
+    // private Mock<MongoClient> _clientMock;
     private Mock<IItemRepository> _itemRepositoryMock;
     private Mock<IUserRepository> _userRepositoryMock;
 
     [SetUp]
     public void Setup()
     {
-        _clientMock = new Mock<MongoClient>("connection-string");
+        // _clientMock = new Mock<MongoClient>("connection-string");
         _itemRepositoryMock = new Mock<IItemRepository>();
         _userRepositoryMock = new Mock<IUserRepository>();
 
@@ -27,7 +27,7 @@ class ItemServiceTest
     }
 
     [Test]
-    public async Task Should_Call_Item_Repository_DeleteAsync()
+    public async Task Should_Return_ItemId_Async()
     {
         // arrange
         var itemId = "abasd98234lasdf98234";
@@ -39,4 +39,19 @@ class ItemServiceTest
         // assert
         Assert.That(response, Is.EqualTo(itemId));
     }
+
+    [Test]
+    public async Task Should_Call_ItemRepository_DeleteItem_Async()
+    {
+        // arrange
+        var itemId = "abasd98234lasdf98234";
+        _itemRepositoryMock.Setup(x => x.DeleteItem(itemId)).ReturnsAsync(itemId);
+
+        // act
+        await _itemService.DeleteItem(itemId);
+
+        // assert
+        _itemRepositoryMock.Verify(x => x.DeleteItem(itemId));
+    }
+
 }
