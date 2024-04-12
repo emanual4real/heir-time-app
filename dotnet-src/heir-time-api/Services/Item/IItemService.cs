@@ -6,4 +6,10 @@ public interface IItemService
 
     public Task<List<Models.Item>> GetAllItems();
 
+    public Task<string?> DeleteItem(string itemId);
+
+    public Task<string> DeleteAllItems(string userId);
+
+    public Task<Models.Item> AddItem(Models.Item item);
+
 }

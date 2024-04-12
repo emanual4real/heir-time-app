@@ -12,6 +12,11 @@ public class ItemService : IItemService
         _itemRepository = itemRepository;
     }
 
+    public Task<Models.Item> GetItem(string itemId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<Models.Item>> GetAllItems()
     {
         var items = await _itemRepository.GetItems();
@@ -21,8 +26,20 @@ public class ItemService : IItemService
         return items.ToList();
     }
 
-    public Task<Models.Item> GetItem(string itemId)
+    public Task<Models.Item> AddItem(Models.Item item)
     {
         throw new NotImplementedException();
     }
+
+    public Task<string> DeleteAllItems(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<string?> DeleteItem(string itemId)
+    {
+        return await _itemRepository.DeleteItem(itemId);
+    }
+
+
 }
