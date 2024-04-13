@@ -16,8 +16,8 @@ class ItemServiceTest
     private Mock<IS3Service> _s3ServiceMock;
     private IItemService _itemService;
 
-    private string _userId = "d9f87adsl234sdfa";
-    private string _itemId = "abasd98234lasdf98234";
+    readonly private string _userId = "d9f87adsl234sdfa";
+    readonly private string _itemId = "abasd98234lasdf98234";
 
 
 
@@ -60,7 +60,6 @@ class ItemServiceTest
     public async Task Should_Call_S3Service_DeleteFiles_Async()
     {
         // arrange
-        var bucketName = "heir-time";
         var item = new Item()
         {
             Title = "Some random item",
@@ -70,14 +69,14 @@ class ItemServiceTest
             FileKeys = new List<string> { "image.jpg" }
         };
 
-        _s3ServiceMock.Setup(x => x.DeleteFiles(bucketName, _userId, item.FileKeys));
+        _s3ServiceMock.Setup(x => x.DeleteFiles(_userId, item.FileKeys));
         _itemRepositoryMock.Setup(x => x.GetItemById(_itemId)).ReturnsAsync(item);
 
         // act
         await _itemService.DeleteItem(_itemId, _userId);
 
         // assert
-        _s3ServiceMock.Verify(x => x.DeleteFiles(bucketName, _userId, item.FileKeys));
+        _s3ServiceMock.Verify(x => x.DeleteFiles(_userId, item.FileKeys));
     }
 
 }
