@@ -10,6 +10,8 @@ using heir_time_api.Services.S3;
 using Amazon.Extensions.NETCore.Setup;
 using heir_time_api.Repositories.Projects;
 using heir_time_api.Services.Projects;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace heir_time_api;
 
@@ -84,7 +86,18 @@ public class Startup
         services.AddDefaultAWSOptions(awsOptions);
         services.AddAWSService<IAmazonS3>();
 
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Heir-Time Api",
+                Description = "An ASP.NET Core Web API for managing inheritance"
+            });
+            // using System.Reflection;
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
         services.AddCors();
     }
 
@@ -95,7 +108,10 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            });
         }
 
         app.UseHttpsRedirection();
