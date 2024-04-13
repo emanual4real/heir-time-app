@@ -8,6 +8,7 @@ using heir_time_api.Repositories.Users;
 using heir_time_api.Services.User;
 using heir_time_api.Services.S3;
 using Amazon.Extensions.NETCore.Setup;
+using heir_time_api.Repositories.Projects;
 
 namespace heir_time_api;
 
@@ -36,6 +37,7 @@ public class Startup
     {
         services.AddSingleton<IItemRepository, ItemRepository>();
         services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<IProjectRepository, ProjectRepository>();
     }
 
     private void RegisterServices(IServiceCollection services)
