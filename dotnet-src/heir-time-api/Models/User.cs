@@ -24,10 +24,10 @@ public class User
     public bool? IsAdmin { get; set; }
 
     [BsonElement("ownedProjects")]
-    public string[]? OwnedProjects { get; set; }
+    public List<string>? OwnedProjects { get; set; } = [];
 
-    [BsonElement("endowmentProjects")]
-    public string[]? EndowmentProjects { get; set; }
+    [BsonElement("projects")]
+    public List<string>? Projects { get; set; } = [];
 
     [BsonElement("phoneNumber")]
     public string? PhoneNumber { get; set; }

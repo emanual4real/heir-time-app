@@ -16,15 +16,6 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<Models.User?> CreateUser(Models.User user)
-    {
-        string passwordHash = BC.HashPassword(user.Password);
-        user.Password = passwordHash;
-        var newUser = await _userRepository.CreateUser(user);
-
-        return newUser;
-    }
-
     public async Task<(ClaimsIdentity?, AuthenticationProperties?, Models.User?)> Authenticate(string email, string password)
     {
         var user = await _userRepository.GetUserByEmailAndPassword(email, password);
@@ -71,5 +62,25 @@ public class UserService : IUserService
     public Task<Models.User> GetUserById(string userId)
     {
         return _userRepository.GetUserById(userId);
+    }
+
+    public async Task<Models.User?> CreateUser(Models.User user)
+    {
+        string passwordHash = BC.HashPassword(user.Password);
+        user.Password = passwordHash;
+        var newUser = await _userRepository.CreateUser(user);
+
+        return newUser;
+    }
+
+    public async Task<Models.User?> UpdateUser(Models.User user)
+    {
+        user.Password = null;
+        return await _userRepository.UpdateUser(user);
+    }
+
+    public Task<string> UpdatePassword(string newPassword)
+    {
+        throw new NotImplementedException();
     }
 }

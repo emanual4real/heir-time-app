@@ -85,6 +85,10 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> UpdateUser(User user)
     {
+        var oldUser = await _collection.Find(x => x.Id == user.Id).FirstOrDefaultAsync();
+
+        // Don't update password
+        user.Password = oldUser.Password;
         await _collection.ReplaceOneAsync(x => x.Id == user.Id, user);
 
         var updatedUser = await _collection.Find(x => x.Id == user.Id).FirstOrDefaultAsync();

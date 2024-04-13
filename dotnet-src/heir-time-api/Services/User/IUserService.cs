@@ -8,6 +8,10 @@ public interface IUserService
 
     public Task<Models.User?> CreateUser(Models.User user);
 
+    public Task<Models.User?> UpdateUser(Models.User user);
+
+    public Task<string> UpdatePassword(string newPassword);
+
     public Task<(ClaimsIdentity?, AuthenticationProperties?, Models.User?)> Authenticate(string email, string password);
 
     public Task<Models.User> GetUser(string email);
