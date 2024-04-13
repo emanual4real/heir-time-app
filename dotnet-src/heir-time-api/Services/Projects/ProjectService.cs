@@ -50,9 +50,16 @@ public class ProjectService : IProjectService
         return await _projectRepository.GetProjectById(projectId);
     }
 
-    public Task<List<Project>> GetProjectsByUser(Models.User user)
+    public async Task<List<Project>> GetProjectsByUser(Models.User user)
     {
-        throw new NotImplementedException();
+        var projectIds = new List<string>().Concat(user.Projects).Concat(user.OwnedProjects).ToList();
+
+        if (projectIds.Count > 0)
+        {
+            return await _projectRepository.GetProjects(projectIds);
+        }
+
+        return new List<Project>();
     }
 
     public async Task<Project?> UpdateProject(Project project, Models.User user)

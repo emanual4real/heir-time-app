@@ -19,9 +19,16 @@ public class ProjectRepository : IProjectRepository
         return await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
     }
 
-    public Task<List<Project>> GetProjects(List<string> projectIds)
+    public async Task<List<Project>> GetProjects(List<string> projectIds)
     {
-        throw new NotImplementedException();
+        var projects = await _collection.Find(x => projectIds.Contains(x.Id)).ToListAsync();
+
+        if (projects == null)
+        {
+            return new List<Project>();
+        }
+
+        return projects;
     }
 
     public async Task<Project> CreateProject(Project project)
