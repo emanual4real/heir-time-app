@@ -17,6 +17,8 @@
         "dbaeumer.vscode-eslint",
         "SonarSource.sonarlint-vscode",
         "wayou.vscode-todo-highlight",
+        "k--kato.docomment",
+        "eamodio.gitlens"
       ],
       "settings": {
         "sonarlint.rules": {
