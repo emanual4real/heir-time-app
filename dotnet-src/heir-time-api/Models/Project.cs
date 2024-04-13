@@ -9,18 +9,18 @@ public class Project
     public string? Id { get; set; }
 
     [BsonElement("projectName")]
-    public string ProjectName { get; set; }
+    public required string ProjectName { get; set; }
 
     [BsonElement("owner")]
-    public string Owner { get; set; }
+    public string? Owner { get; set; }
 
     [BsonElement("admins")]
-    public List<string> Admins { get; set; }
+    public List<string>? Admins { get; set; } = [];
 
     [BsonElement("users")]
-    public List<string> Users { get; set; }
+    public List<string>? Users { get; set; } = [];
 
     [BsonElement("items")]
-    public List<Item> Items { get; set; }
+    public List<Item>? Items { get; set; } = [];
 
 }
