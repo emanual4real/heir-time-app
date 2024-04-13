@@ -1,7 +1,7 @@
 using heir_time_api.Repositories.Items;
 using heir_time_api.Services.S3;
 
-namespace heir_time_api.Services.Item;
+namespace heir_time_api.Services.Items;
 
 public class ItemService : IItemService
 {

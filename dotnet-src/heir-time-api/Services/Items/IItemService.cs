@@ -1,4 +1,4 @@
-namespace heir_time_api.Services.Item;
+namespace heir_time_api.Services.Items;
 
 public interface IItemService
 {

@@ -3,7 +3,7 @@ using heir_time_api.Controllers.InputModels;
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Services.Bid;
-using heir_time_api.Services.Item;
+using heir_time_api.Services.Items;
 using heir_time_api.Services.S3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

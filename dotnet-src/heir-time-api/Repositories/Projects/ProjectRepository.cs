@@ -19,10 +19,11 @@ public class ProjectRepository : IProjectRepository
         return await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
     }
 
-    public Task<List<Project>> GetProjectsByUser(string userId)
+    public Task<List<Project>> GetProjects(List<string> projectIds)
     {
         throw new NotImplementedException();
     }
+
     public async Task<Project> CreateProject(Project project)
     {
         await _collection.InsertOneAsync(project);

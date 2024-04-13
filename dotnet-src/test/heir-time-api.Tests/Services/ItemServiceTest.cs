@@ -1,7 +1,7 @@
 using heir_time_api.Enums;
 using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
-using heir_time_api.Services.Item;
+using heir_time_api.Services.Items;
 using heir_time_api.Services.S3;
 using Moq;
 using NUnit.Framework;

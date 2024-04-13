@@ -2,13 +2,14 @@
 using Amazon.S3;
 using System.Text.Json;
 using heir_time_api.Services.Bid;
-using heir_time_api.Services.Item;
+using heir_time_api.Services.Items;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Repositories.Users;
 using heir_time_api.Services.User;
 using heir_time_api.Services.S3;
 using Amazon.Extensions.NETCore.Setup;
 using heir_time_api.Repositories.Projects;
+using heir_time_api.Services.Projects;
 
 namespace heir_time_api;
 
@@ -44,6 +45,7 @@ public class Startup
     {
         services.AddScoped<IItemService, ItemService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IBidService, BidService>();
         services.AddScoped<IS3Service, S3Service>();
     }
