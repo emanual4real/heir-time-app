@@ -40,7 +40,7 @@ public class ItemController : ControllerBase
 
     // GET api/item/{id}?projectId={projectId}
     /// <summary>
-    /// Fetch and item
+    /// Get an item
     /// </summary>
     /// <param name="id"></param>
     /// <param name="projectId"></param>
@@ -77,19 +77,25 @@ public class ItemController : ControllerBase
         return NoContent();
     }
 
-    // POST api/item?projectId={projectId}
+    // POST api/item
     /// <summary>
-    /// Create a new item with file upload
+    /// Create a new item with file
     /// </summary>
-    /// <param name="itemJson"></param>
+    /// <param name="itemWithFileInput"></param>
     /// <param name="file"></param>
-    /// <param name="projectId"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<Item?>> CreateItem([FromForm] string itemJson, IFormFile? file, [FromQuery] string projectId)
+    public async Task<ActionResult<Item?>> CreateItem([FromForm] string itemWithFileInput, IFormFile? file)
     {
         var user = await GetUser();
-        Item? item = JsonConvert.DeserializeObject<Item>(itemJson);
+        ItemWithFileInput? form = JsonConvert.DeserializeObject<ItemWithFileInput>(itemWithFileInput);
+        var item = new Item()
+        {
+            Title = form.Title,
+            ReleaseDate = form.ReleaseDate,
+            ItemStatus = form.ItemStatus,
+        };
+        var projectId = form.ProjectId;
 
         if (item == null)
         {
