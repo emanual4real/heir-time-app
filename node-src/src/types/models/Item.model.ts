@@ -3,22 +3,31 @@ import { components, paths } from '..';
 // Models
 export type Item = components['schemas']['Item'];
 
-// Api request body
-export type ItemPostRequestBody = paths['/api/Item']['post']['requestBody'];
+// GET /api/Item/{id}
+export type ItemGetQueryParameters = paths['/api/Item']['get']['parameters']['query'];
+
+export type ItemGetResponse =
+  paths['/api/Item']['get']['responses'][200]['content']['application/json'];
+
+// PUT /api/Item/{id}
+export type ItemPutQueryParameters = paths['/api/Item']['put']['parameters']['query'];
+
+export type ItemPutResponse =
+  paths['/api/Item']['put']['responses'][200]['content']['application/json'];
 
 export type ItemPutRequestBody = paths['/api/Item']['put']['requestBody'];
 
-// Api responses
-export type ItemPostResponseBody =
+// POST /api/Item/{id}
+export type ItemPostResponse =
   paths['/api/Item']['post']['responses'][200]['content']['application/json'];
 
-export type ItemPutResponseBody =
-  paths['/api/Item']['put']['responses'][200]['content']['application/json'];
+export type ItemPostRequestBody = paths['/api/Item']['post']['requestBody'];
 
-export type ItemGetResponseBody =
+// DELETE /api/Item/{id}
+export type ItemDeleteByIdQueryParameters =
+  paths['/api/Item/{id}']['delete']['parameters']['query'];
+
+export type ItemDeleteByIdPathParameters = paths['/api/Item/{id}']['delete']['parameters']['path'];
+
+export type ItemDeleteByIdResponse =
   paths['/api/Item/{id}']['get']['responses'][200]['content']['application/json'];
-
-export type ItemDeleteResponseBody =
-  paths['/api/Item/{id}']['delete']['responses'][200]['content']['application/json'];
-
-export type ItemGetParameters = paths['/api/Item/{id}']['get']['parameters'];

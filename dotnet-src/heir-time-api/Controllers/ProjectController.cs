@@ -44,7 +44,9 @@ public class ProjectController : ControllerBase
     {
         var user = await GetUser();
 
-        return await _projectService.GetProjectsByUser(user);
+        var projects = await _projectService.GetProjectsByUser(user);
+
+        return Ok(projects);
     }
 
     // GET api/project/{projectId}
@@ -56,7 +58,9 @@ public class ProjectController : ControllerBase
     [HttpGet("{projectId}")]
     public async Task<ActionResult<Project?>> GetProjectById(string projectId)
     {
-        return await _projectService.GetProjectById(projectId);
+        var project = await _projectService.GetProjectById(projectId);
+
+        return Ok(project);
     }
 
     // POST api/project
@@ -77,7 +81,7 @@ public class ProjectController : ControllerBase
         {
             await _userService.AddOwnedProject(user, newProject.Id);
 
-            return newProject;
+            return Ok(newProject);
         }
 
         return BadRequest("Unable to create project");
@@ -100,7 +104,7 @@ public class ProjectController : ControllerBase
         {
             await _userService.RemoveOwnedProject(user, deletedProjectId);
 
-            return deletedProjectId;
+            return Ok(deletedProjectId);
         }
 
         return BadRequest("Unable to delete project");
