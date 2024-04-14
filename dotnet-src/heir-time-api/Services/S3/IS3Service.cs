@@ -5,9 +5,9 @@ namespace heir_time_api.Services.S3;
 
 public interface IS3Service
 {
-    public Task<string?> SaveFile(IFormFile file, string? prefix);
-    public Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string? prefix);
-    public Task<GetObjectResponse?> GetFile(string prefix, string key);
-    public Task<string?> DeleteFile(string prefix, string key);
-    public Task<List<string>?> DeleteFiles(string prefix, List<string> keys);
+    public Task<string?> SaveFile(IFormFile file, string? projectId);
+    public Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string? projectId, List<string> keys);
+    public Task<GetObjectResponse?> GetFile(string projectId, string key);
+    public Task<string?> DeleteFile(string projectId, string key);
+    public Task<List<string>?> DeleteFiles(string projectId, List<string> keys);
 }

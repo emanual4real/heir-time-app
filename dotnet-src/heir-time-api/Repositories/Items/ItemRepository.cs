@@ -6,60 +6,182 @@ namespace heir_time_api.Repositories.Items;
 public class ItemRepository : IItemRepository
 {
     readonly string databaseName = "heir-time";
-    readonly string collectionName = "items";
-    readonly IMongoCollection<Item> _collection;
-
-
+    readonly string collectionName = "projects";
+    readonly IMongoCollection<Project> _collection;
 
     public ItemRepository(IMongoClient client)
     {
-        _collection = client.GetDatabase(databaseName).GetCollection<Item>(collectionName);
+        _collection = client.GetDatabase(databaseName).GetCollection<Project>(collectionName);
     }
 
-    public async Task<IEnumerable<Item>> GetItems()
+    private async Task<int> GetNextId(string projectId)
     {
-        return await _collection.Find(x => true).ToListAsync();
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+
+        var maxId = project.Items.Select(x => x.Id).Max();
+
+        if (maxId != null)
+        {
+            return (int)(maxId + 1);
+        }
+
+        return 0;
     }
 
-    public async Task<Item?> GetItemById(int itemId)
+    private async Task<Project> GetProjectFromProjectId(string projectId)
     {
-        return await _collection.Find(x => x.Id == itemId).FirstOrDefaultAsync();
+        return await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
     }
 
-    public async Task<Item?> InsertItem(Item item)
+    public async Task<List<Item>> GetItemsByProjectId(string projectId)
     {
-        await _collection.InsertOneAsync(item);
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
 
-        return await _collection.Find(x => x.Id == item.Id).FirstOrDefaultAsync();
+        if (project != null && project.Items != null)
+        {
+            return project.Items;
+        }
+
+        return [];
+    }
+
+
+    public async Task<Item?> GetItemById(string projectId, int itemId)
+    {
+        var project = await GetProjectFromProjectId(projectId);
+
+        if (project == null || project.Items == null)
+        {
+            throw new Exception("Missing project or item");
+        }
+
+        return project.Items.Find(x => x.Id == itemId);
 
     }
 
-    public async Task<int?> DeleteItem(int itemId)
+    public async Task<Item?> CreateItem(string projectId, Item item)
     {
-        await _collection.DeleteOneAsync(a => a.Id == itemId);
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+        var existingItem = project.Items.Find(x => x.Id == item.Id);
+        var nextId = await GetNextId(projectId);
 
-        return itemId;
+        if (existingItem != null)
+        {
+            throw new Exception("Item already exists");
+        }
+
+        // increment Id
+        item.Id = nextId;
+        var newItemList = new List<Item>()
+        {
+            item,
+        }.Concat(project.Items);
+
+        var filter = Builders<Project>.Filter.Eq(p => p.Id, projectId);
+        var update = Builders<Project>.Update.Set(i => i.Items, newItemList);
+
+        var result = await _collection.UpdateOneAsync(filter, update);
+
+        // nothing updated
+        if (result.MatchedCount > 0)
+        {
+            return item;
+        }
+
+        return null;
     }
 
-    public async Task<Item?> UpdateItem(Item item)
+    public async Task<string> DeleteAllItems(string projectId)
     {
-        await _collection.ReplaceOneAsync(x => x.Id == item.Id, item);
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync() ?? throw new Exception("No project found");
 
-        return await _collection.Find(x => x.Id == item.Id).FirstOrDefaultAsync();
+        List<Item> newItems = new List<Item>();
+        var filter = Builders<Project>.Filter.Eq(p => p.Id, projectId);
+        var update = Builders<Project>.Update.Set(i => i.Items, newItems);
+
+        var result = await _collection.UpdateOneAsync(filter, update);
+
+        // nothing updated
+        if (result.MatchedCount > 0)
+        {
+            return "All items deleted";
+        }
+
+        return null;
     }
 
-    public async Task<Item> AddBid(int itemId, Bid bid)
+    public async Task<int?> DeleteItem(string projectId, int itemId)
     {
-        var item = await _collection.Find(x => x.Id == itemId).FirstOrDefaultAsync();
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+
+        // project not found / no items
+        if (project == null || project.Items == null)
+        {
+            throw new Exception("No project/no items");
+        }
+
+        var existingItem = project.Items.Find(x => x.Id == itemId);
+
+        // item not found
+        if (existingItem == null)
+        {
+            throw new Exception("Item does not exist");
+        }
+
+        var newItems = project.Items.Where(x => x.Id != itemId).ToList();
+
+        var filter = Builders<Project>.Filter.Eq(p => p.Id, projectId);
+        var update = Builders<Project>.Update.Set(i => i.Items, newItems);
+
+        var result = await _collection.UpdateOneAsync(filter, update);
+
+        // nothing updated
+        if (result.MatchedCount > 0)
+        {
+            return itemId;
+        }
+
+        return null;
+    }
+
+    public async Task<Item?> UpdateItem(string projectId, Item item)
+    {
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+
+        var existingItem = project.Items.Find(x => x.Id == item.Id);
+        if (existingItem == null)
+        {
+            throw new Exception("Item does not exist");
+        }
+
+        var otherItems = project.Items.Where(x => x.Id != item.Id).ToList();
+        var newItemList = new List<Item>()
+        {
+            item,
+        }.Concat(otherItems);
+
+        var filter = Builders<Project>.Filter.Eq(p => p.Id, projectId);
+        var update = Builders<Project>.Update.Set(i => i.Items, newItemList);
+
+        var result = await _collection.UpdateOneAsync(filter, update);
+
+        // nothing updated
+        if (result.MatchedCount > 0)
+        {
+            return item;
+        }
+
+        return null;
+    }
+
+    public async Task<Item?> AddBid(string projectId, int itemId, Bid bid)
+    {
+        var project = await GetProjectFromProjectId(projectId);
+        var item = project.Items.Find(x => x.Id == itemId);
 
         if (item == null)
         {
-            return null;
-        }
-
-        if (item.Bids == null)
-        {
-            item.Bids = new List<Bid>();
+            throw new Exception("Missing items");
         }
 
         bool bidExists = item.Bids.Exists(x => x.User == bid.User);
@@ -71,8 +193,8 @@ public class ItemRepository : IItemRepository
 
         item.Bids.Add(bid);
 
-        await _collection.ReplaceOneAsync(x => x.Id == itemId, item);
+        var newItem = await UpdateItem(projectId, item);
 
-        return item;
+        return newItem;
     }
 }

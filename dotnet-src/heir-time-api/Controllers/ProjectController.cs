@@ -11,18 +11,14 @@ namespace heir_time_api.Controllers;
 [Route("api/[controller]")]
 public class ProjectController : ControllerBase
 {
-    readonly IConfiguration _configuration;
-    readonly IItemService _itemService;
     readonly IProjectService _projectService;
     readonly IUserService _userService;
 
-    public ProjectController(IConfiguration configuration,
-    IItemService itemService,
+    public ProjectController(
     IProjectService projectService,
     IUserService userService)
     {
-        _configuration = configuration;
-        _itemService = itemService;
+
         _projectService = projectService;
         _userService = userService;
     }
@@ -61,18 +57,6 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult<Project?>> GetProjectById(string projectId)
     {
         return await _projectService.GetProjectById(projectId);
-    }
-
-    // GET api/project/{projectId}/items
-    /// <summary>
-    /// Get all items for a project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <returns>List of Items</returns>
-    [HttpGet("{projectId}/items")]
-    public async Task<ActionResult<List<Item>>> GetItemsByProject(string projectId)
-    {
-        return await _projectService.GetItemsByProject(projectId);
     }
 
     // POST api/project
@@ -122,48 +106,9 @@ public class ProjectController : ControllerBase
         return BadRequest("Unable to delete project");
     }
 
-    // POST api/project/{projectId}/item
-    /// <summary>
-    /// Create an item in a project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="item"></param>
-    /// <returns>Item</returns>
-    [HttpPost("{projectId}/item")]
-    public async Task<ActionResult<Item?>> CreateItem(string projectId, [FromBody] Item item)
-    {
-        var user = await GetUser();
 
-        return await _projectService.AddItemToProject(projectId, item, user);
-    }
 
-    // DELETE api/project/{projectId}/item/{itemId}
-    /// <summary>
-    /// Delete an item in project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="itemId"></param>
-    /// <returns>ItemId</returns>
-    [HttpDelete("{projectId}/item/{itemId}")]
-    public async Task<ActionResult<int?>> DeleteItem(string projectId, int itemId)
-    {
-        var user = await GetUser();
 
-        return await _projectService.RemoveItemFromProject(projectId, itemId, user);
-    }
 
-    // PUT api/project/{projectId}/item
-    /// <summary>
-    /// Update an item in project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="item"></param>
-    /// <returns>Item</returns>
-    [HttpPut("{projectId}/item")]
-    public async Task<ActionResult<Item?>> UpdateItem(string projectId, [FromBody] Item item)
-    {
-        var user = await GetUser();
 
-        return await _projectService.UpdateItemInProject(projectId, item, user);
-    }
 }

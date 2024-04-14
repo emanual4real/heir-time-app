@@ -24,11 +24,11 @@ public class Item
   public string? Location { get; set; }
 
   [BsonElement("fileUrls")]
-  public List<string> FileUrls { get; set; } = [];
+  public List<string> FileUrls { get; set; } = new List<string>();
   [BsonElement("fileKeys")]
-  public List<string> FileKeys { get; set; } = [];
+  public List<string> FileKeys { get; set; } = new List<string>();
   [BsonElement("recipient")]
   public string? Recipient { get; set; }
   [BsonElement("bids")]
-  public List<Bid>? Bids { get; set; }
+  public List<Bid>? Bids { get; set; } = new List<Bid>();
 }

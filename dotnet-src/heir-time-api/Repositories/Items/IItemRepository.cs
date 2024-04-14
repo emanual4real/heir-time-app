@@ -5,10 +5,11 @@ namespace heir_time_api.Repositories.Items;
 
 public interface IItemRepository
 {
-    Task<IEnumerable<Item>> GetItems();
-    Task<Item?> GetItemById(int itemId);
-    Task<Item?> InsertItem(Item item);
-    Task<int?> DeleteItem(int itemId);
-    Task<Item?> UpdateItem(Item item);
-    Task<Item> AddBid(int itemId, Bid bid);
+    Task<List<Item>> GetItemsByProjectId(string projectId);
+    Task<Item?> GetItemById(string projectId, int itemId);
+    Task<Item?> CreateItem(string projectId, Item item);
+    Task<int?> DeleteItem(string projectId, int itemId);
+    Task<string?> DeleteAllItems(string projectId);
+    Task<Item?> UpdateItem(string projectId, Item item);
+    Task<Item?> AddBid(string projectId, int itemId, Bid bid);
 }
