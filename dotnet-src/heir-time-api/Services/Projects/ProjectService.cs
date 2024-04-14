@@ -113,4 +113,18 @@ public class ProjectService : IProjectService
             throw new Exception("Unauthorized");
         }
     }
+
+    public async Task<Item?> UpdateItemInProject(string projectId, Item item, Models.User user)
+    {
+        var project = await _projectRepository.GetProjectById(projectId);
+        // Must be owner to edit project
+        if (project.Owner == user.Id)
+        {
+            return await _projectRepository.UpdateItem(projectId, item);
+        }
+        else
+        {
+            throw new Exception("Unauthorized");
+        }
+    }
 }

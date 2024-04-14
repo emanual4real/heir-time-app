@@ -160,8 +160,10 @@ public class ProjectController : ControllerBase
     /// <param name="item"></param>
     /// <returns>Item</returns>
     [HttpPut("{projectId}/item")]
-    public Task<ActionResult<Item?>> UpdateItem(string projectId, [FromBody] Item item)
+    public async Task<ActionResult<Item?>> UpdateItem(string projectId, [FromBody] Item item)
     {
-        throw new NotImplementedException();
+        var user = await GetUser();
+
+        return await _projectService.UpdateItemInProject(projectId, item, user);
     }
 }

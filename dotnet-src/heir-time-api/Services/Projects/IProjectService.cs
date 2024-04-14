@@ -13,5 +13,6 @@ public interface IProjectService
     Task<List<Item>> GetItemsByProject(string projectId);
     Task<Item?> AddItemToProject(string projectId, Item item, Models.User user);
     Task<int?> RemoveItemFromProject(string projectId, int itemId, Models.User user);
+    Task<Item?> UpdateItemInProject(string projectId, Item item, Models.User user);
 
 }

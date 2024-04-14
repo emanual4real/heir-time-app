@@ -116,12 +116,15 @@ public class ProjectRepository : IProjectRepository
     {
         var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
         var existingItem = project.Items.Find(x => x.Id == item.Id);
+        var nextId = await GetNextId(projectId);
 
         if (existingItem != null)
         {
             throw new Exception("Item already exists");
         }
 
+        // increment Id
+        item.Id = nextId;
         var newItemList = new List<Item>()
         {
             item,
