@@ -79,7 +79,7 @@ public class S3Service : IS3Service
         return await _s3Client.GetObjectAsync(_bucketName, key);
     }
 
-    public async Task<string?> SaveFile(IFormFile file, string? projectId)
+    public async Task<string?> SaveFile(IFormFile file, string projectId)
     {
         var bucketExists = await DoesBucketExist();
 
@@ -91,7 +91,7 @@ public class S3Service : IS3Service
         var request = new PutObjectRequest()
         {
             BucketName = _bucketName,
-            Key = string.IsNullOrEmpty(projectId) ? file.FileName : $"{projectId?.TrimEnd('/')}/{file.FileName}",
+            Key = $"{projectId}/{file.FileName}",
             InputStream = file.OpenReadStream()
         };
         request.Metadata.Add("Content-Type", file.ContentType);
@@ -118,7 +118,7 @@ public class S3Service : IS3Service
     {
         KeyVersion makeKeyVersion(string key) => new()
         {
-            Key = $"{projectId}/${key}"
+            Key = $"{projectId}/{key}"
         };
 
         var bucketExists = await DoesBucketExist();

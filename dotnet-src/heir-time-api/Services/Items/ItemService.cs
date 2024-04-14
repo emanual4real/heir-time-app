@@ -128,7 +128,7 @@ public class ItemService : IItemService
         return items;
     }
 
-    public async Task<Item?> AddItem(string projectId, IFormFile? file, Item item, Models.User user)
+    public async Task<Item?> AddItem(string projectId, Item item, Models.User user, IFormFile? file)
     {
         var project = await GetProject(projectId);
 
@@ -144,9 +144,20 @@ public class ItemService : IItemService
         }
     }
 
-    public Task<Item> UpdateItem(string projectId, IFormFile? file, Item item, Models.User user)
+    public async Task<Item?> UpdateItem(string projectId, Item item, Models.User user, IFormFile? file)
     {
-        throw new NotImplementedException();
+        var project = await GetProject(projectId);
+
+        if (project.Owner == user.Id)
+        {
+            var newItem = await SaveFileToS3(item, file, projectId);
+
+            return await _itemRepository.UpdateItem(projectId, newItem);
+        }
+        else
+        {
+            throw new Exception("Unauthorized");
+        }
     }
 
     public async Task<string?> DeleteAllItems(string projectId, Models.User user)

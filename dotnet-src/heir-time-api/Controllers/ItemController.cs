@@ -97,12 +97,7 @@ public class ItemController : ControllerBase
         };
         var projectId = form.ProjectId;
 
-        if (item == null)
-        {
-            return BadRequest();
-        }
-
-        var newItem = await _itemService.AddItem(projectId, file, item, user);
+        var newItem = await _itemService.AddItem(projectId, item, user, file);
 
         if (newItem == null)
         {
@@ -131,7 +126,7 @@ public class ItemController : ControllerBase
             return BadRequest();
         }
 
-        var newItem = await _itemService.AddItem(projectId, file, item, user);
+        var newItem = await _itemService.UpdateItem(projectId, item, user, file);
 
         if (newItem == null)
         {
