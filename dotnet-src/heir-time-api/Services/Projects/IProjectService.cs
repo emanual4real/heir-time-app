@@ -10,5 +10,8 @@ public interface IProjectService
     Task<Project> CreateProject(Project project, Models.User user);
     Task<Project?> UpdateProject(Project project, Models.User user);
     Task<string?> DeleteProject(string projectId, Models.User user);
+    Task<List<Item>> GetItemsByProject(string projectId);
+    Task<Item?> AddItemToProject(string projectId, Item item, Models.User user);
+    Task<int?> RemoveItemFromProject(string projectId, int itemId, Models.User user);
 
 }

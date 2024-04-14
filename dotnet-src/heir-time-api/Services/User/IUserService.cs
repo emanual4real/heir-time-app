@@ -20,4 +20,12 @@ public interface IUserService
 
     public Task<List<Models.User>> GetAllUsers();
 
+    public Task<Models.User?> AddOwnedProject(Models.User user, string projectId);
+
+    public Task<Models.User?> RemoveOwnedProject(Models.User user, string projectId);
+
+    public Task<Models.User?> AddProject(Models.User user, string projectId);
+
+    public Task<Models.User?> RemoveProject(Models.User user, string projectId);
+
 }

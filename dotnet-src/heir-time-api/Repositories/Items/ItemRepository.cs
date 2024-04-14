@@ -21,7 +21,7 @@ public class ItemRepository : IItemRepository
         return await _collection.Find(x => true).ToListAsync();
     }
 
-    public async Task<Item?> GetItemById(string itemId)
+    public async Task<Item?> GetItemById(int itemId)
     {
         return await _collection.Find(x => x.Id == itemId).FirstOrDefaultAsync();
     }
@@ -34,7 +34,7 @@ public class ItemRepository : IItemRepository
 
     }
 
-    public async Task<string?> DeleteItem(string itemId)
+    public async Task<int?> DeleteItem(int itemId)
     {
         await _collection.DeleteOneAsync(a => a.Id == itemId);
 
@@ -48,7 +48,7 @@ public class ItemRepository : IItemRepository
         return await _collection.Find(x => x.Id == item.Id).FirstOrDefaultAsync();
     }
 
-    public async Task<Item> AddBid(string itemId, Bid bid)
+    public async Task<Item> AddBid(int itemId, Bid bid)
     {
         var item = await _collection.Find(x => x.Id == itemId).FirstOrDefaultAsync();
 

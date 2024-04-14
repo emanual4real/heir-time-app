@@ -63,8 +63,6 @@ public class ProjectController : ControllerBase
         return await _projectService.GetProjectById(projectId);
     }
 
-
-
     // GET api/project/{projectId}/items
     /// <summary>
     /// Get all items for a project
@@ -72,9 +70,9 @@ public class ProjectController : ControllerBase
     /// <param name="projectId"></param>
     /// <returns>List of Items</returns>
     [HttpGet("{projectId}/items")]
-    public Task<ActionResult<List<Item?>>> GetItemsByProject(string projectId)
+    public async Task<ActionResult<List<Item>>> GetItemsByProject(string projectId)
     {
-        throw new NotImplementedException();
+        return await _projectService.GetItemsByProject(projectId);
     }
 
     // POST api/project
@@ -91,43 +89,14 @@ public class ProjectController : ControllerBase
         // create new project
         var newProject = await _projectService.CreateProject(project, user);
 
-        if (newProject is not null)
+        if (newProject != null)
         {
-            // save project to user
-            user.OwnedProjects.Add(newProject.Id);
-            await _userService.UpdateUser(user);
+            await _userService.AddOwnedProject(user, newProject.Id);
 
             return newProject;
         }
 
-
         return BadRequest("Unable to create project");
-    }
-
-    // POST api/project/{projectId}/item
-    /// <summary>
-    /// Create an item in a project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="item"></param>
-    /// <returns>Item</returns>
-    [HttpPost("{projectId}/item")]
-    public Task<ActionResult<Item?>> CreateItem(string projectId, [FromBody] Item item)
-    {
-        throw new NotImplementedException();
-    }
-
-    // PUT api/project/{projectId}/item
-    /// <summary>
-    /// Update an item in project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="item"></param>
-    /// <returns>Item</returns>
-    [HttpPut("{projectId}/item")]
-    public Task<ActionResult<Item?>> UpdateItem(string projectId, [FromBody] Item item)
-    {
-        throw new NotImplementedException();
     }
 
     // DELETE api/project/{projectId}
@@ -141,7 +110,31 @@ public class ProjectController : ControllerBase
     {
         var user = await GetUser();
 
-        return await _projectService.DeleteProject(projectId, user);
+        var deletedProjectId = await _projectService.DeleteProject(projectId, user);
+
+        if (deletedProjectId != null)
+        {
+            await _userService.RemoveOwnedProject(user, deletedProjectId);
+
+            return deletedProjectId;
+        }
+
+        return BadRequest("Unable to delete project");
+    }
+
+    // POST api/project/{projectId}/item
+    /// <summary>
+    /// Create an item in a project
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <param name="item"></param>
+    /// <returns>Item</returns>
+    [HttpPost("{projectId}/item")]
+    public async Task<ActionResult<Item?>> CreateItem(string projectId, [FromBody] Item item)
+    {
+        var user = await GetUser();
+
+        return await _projectService.AddItemToProject(projectId, item, user);
     }
 
     // DELETE api/project/{projectId}/item/{itemId}
@@ -152,7 +145,22 @@ public class ProjectController : ControllerBase
     /// <param name="itemId"></param>
     /// <returns>ItemId</returns>
     [HttpDelete("{projectId}/item/{itemId}")]
-    public Task<ActionResult<List<Item?>>> DeleteItem(string projectId, string itemId)
+    public async Task<ActionResult<int?>> DeleteItem(string projectId, int itemId)
+    {
+        var user = await GetUser();
+
+        return await _projectService.RemoveItemFromProject(projectId, itemId, user);
+    }
+
+    // PUT api/project/{projectId}/item
+    /// <summary>
+    /// Update an item in project
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <param name="item"></param>
+    /// <returns>Item</returns>
+    [HttpPut("{projectId}/item")]
+    public Task<ActionResult<Item?>> UpdateItem(string projectId, [FromBody] Item item)
     {
         throw new NotImplementedException();
     }

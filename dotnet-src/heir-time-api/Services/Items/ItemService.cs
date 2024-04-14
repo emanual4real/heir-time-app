@@ -1,3 +1,4 @@
+using heir_time_api.Models;
 using heir_time_api.Repositories.Items;
 using heir_time_api.Services.S3;
 
@@ -14,7 +15,7 @@ public class ItemService : IItemService
         _s3Service = s3Service;
     }
 
-    public Task<Models.Item> GetItem(string itemId)
+    public Task<Models.Item> GetItem(int itemId)
     {
         throw new NotImplementedException();
     }
@@ -39,7 +40,7 @@ public class ItemService : IItemService
         throw new NotImplementedException();
     }
 
-    public async Task<string?> DeleteItem(string itemId, string userId)
+    public async Task<int?> DeleteItem(int itemId, string userId)
     {
         var item = await _itemRepository.GetItemById(itemId);
 
@@ -51,6 +52,4 @@ public class ItemService : IItemService
 
         return await _itemRepository.DeleteItem(itemId);
     }
-
-
 }

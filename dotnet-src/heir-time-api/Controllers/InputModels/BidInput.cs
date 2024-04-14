@@ -8,6 +8,6 @@ public class BidInput
     }
 
     public required int Value { get; set; }
-    public required string ItemId { get; set; }
+    public required int ItemId { get; set; }
     public required string ReceivingDate { get; set; }
 }

@@ -10,4 +10,8 @@ public interface IProjectRepository
     Task<Project> CreateProject(Project project);
     Task<Project> UpdateProject(Project project);
     Task<string> DeleteProject(string projectId);
+    Task<List<Item>> GetItems(string projectId);
+    Task<int?> DeleteItem(string projectId, int itemId);
+    Task<Item?> CreateItem(string projectId, Item item);
+    Task<Item?> UpdateItem(string projectId, Item item);
 }

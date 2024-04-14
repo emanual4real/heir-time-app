@@ -16,13 +16,13 @@ public class BidService : IBidService
         _userRepository = userRepository;
     }
 
-    public async Task<Models.Item?> AddBid(string itemId, Models.Bid bid)
+    public async Task<Models.Item?> AddBid(int itemId, Models.Bid bid)
     {
 
         return await _itemRepository.AddBid(itemId, bid);
     }
 
-    public async Task<Models.Item?> SetWinner(string itemId, string userId)
+    public async Task<Models.Item?> SetWinner(int itemId, string userId)
     {
         // TODO: find out who the current user is and make sure they own the project or are admin for now
         var user = await _userRepository.GetUserById(userId);

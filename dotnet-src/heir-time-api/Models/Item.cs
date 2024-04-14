@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using heir_time_api.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -9,9 +8,8 @@ namespace heir_time_api.Models;
 /// </summary>
 public class Item
 {
-  [BsonId]
-  [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-  public string? Id { get; set; }
+  [BsonElement("id")]
+  public int? Id { get; set; }
   [BsonElement("title")]
   public required string Title { get; set; }
   [BsonElement("releaseDate")]

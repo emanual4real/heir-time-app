@@ -16,7 +16,12 @@ public class ProjectService : IProjectService
 
     public async Task<Project> CreateProject(Project project, Models.User user)
     {
-        // TODO: check for duplicate project names
+        var existingProject = await _projectRepository.GetProjectById(project.Id);
+
+        if (existingProject != null)
+        {
+            throw new Exception("Project already exists");
+        }
         var newProject = new Project
         {
             ProjectName = project.ProjectName,
@@ -32,16 +37,16 @@ public class ProjectService : IProjectService
 
     public async Task<string?> DeleteProject(string projectId, Models.User user)
     {
-        var project = await _projectRepository.GetProjectById(projectId);
+        var project = await _projectRepository.GetProjectById(projectId) ?? throw new Exception("Project does not exist");
 
         // Must be owner to delete project
-        if (project != null && project.Owner == user.Id)
+        if (project.Owner == user.Id)
         {
             return await _projectRepository.DeleteProject(projectId);
         }
         else
         {
-            return null;
+            throw new Exception("Unauthorized");
         }
     }
 
@@ -52,11 +57,12 @@ public class ProjectService : IProjectService
 
     public async Task<List<Project>> GetProjectsByUser(Models.User user)
     {
-        var projectIds = new List<string>().Concat(user.Projects).Concat(user.OwnedProjects).ToList();
+        List<string> projectList = [.. user.Projects, .. user.OwnedProjects];
 
-        if (projectIds.Count > 0)
+
+        if (projectList.Count > 0)
         {
-            return await _projectRepository.GetProjects(projectIds);
+            return await _projectRepository.GetProjects(projectList);
         }
 
         return new List<Project>();
@@ -64,24 +70,47 @@ public class ProjectService : IProjectService
 
     public async Task<Project?> UpdateProject(Project project, Models.User user)
     {
-        var projectId = project.Id;
-
-        // no projectId
-        if (project.Id == null)
-        {
-            return null;
-        }
-
-        var currentProject = await _projectRepository.GetProjectById(projectId);
-
         // Must be owner to edit project
-        if (currentProject != null && project.Owner == user.Id)
+        if (project.Owner == user.Id)
         {
             return await _projectRepository.UpdateProject(project);
         }
         else
         {
-            return null;
+            throw new Exception("Unauthorized");
+        }
+    }
+
+    public async Task<List<Item>> GetItemsByProject(string projectId)
+    {
+        return await _projectRepository.GetItems(projectId);
+    }
+
+    public async Task<Item?> AddItemToProject(string projectId, Item item, Models.User user)
+    {
+        var project = await _projectRepository.GetProjectById(projectId);
+        // Must be owner to edit project
+        if (project.Owner == user.Id)
+        {
+            return await _projectRepository.CreateItem(projectId, item);
+        }
+        else
+        {
+            throw new Exception("Unauthorized");
+        }
+    }
+
+    public async Task<int?> RemoveItemFromProject(string projectId, int itemId, Models.User user)
+    {
+        var project = await _projectRepository.GetProjectById(projectId);
+        // Must be owner to edit project
+        if (project.Owner == user.Id)
+        {
+            return await _projectRepository.DeleteItem(projectId, itemId);
+        }
+        else
+        {
+            throw new Exception("Unauthorized");
         }
     }
 }

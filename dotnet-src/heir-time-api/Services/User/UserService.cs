@@ -83,4 +83,42 @@ public class UserService : IUserService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<Models.User?> AddOwnedProject(Models.User user, string projectId)
+    {
+        var ownedProjectList = user.OwnedProjects;
+
+        List<string> newOwnedProjectList = [.. ownedProjectList, projectId];
+        user.OwnedProjects = newOwnedProjectList;
+
+        return await _userRepository.UpdateUser(user);
+    }
+
+    public async Task<Models.User?> AddProject(Models.User user, string projectId)
+    {
+        var projectList = user.Projects;
+
+        List<string> newProjectList = [.. projectList, projectId];
+        user.OwnedProjects = newProjectList;
+
+        return await _userRepository.UpdateUser(user);
+    }
+
+    public async Task<Models.User?> RemoveOwnedProject(Models.User user, string projectId)
+    {
+        var ownedProjectList = user.OwnedProjects.Where(p => p != projectId).ToList();
+
+        user.OwnedProjects = ownedProjectList;
+
+        return await _userRepository.UpdateUser(user);
+    }
+
+    public async Task<Models.User?> RemoveProject(Models.User user, string projectId)
+    {
+        var projectList = user.Projects.Where(p => p != projectId).ToList();
+
+        user.Projects = projectList;
+
+        return await _userRepository.UpdateUser(user);
+    }
 }

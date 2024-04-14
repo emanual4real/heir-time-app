@@ -93,7 +93,7 @@ public class ItemController : ControllerBase
 
     // GET api/item/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult<Item?>> GetItem(string id)
+    public async Task<ActionResult<Item?>> GetItem(int id)
     {
         var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
         var files = await _s3Service.GetAllFiles(prefix);
@@ -165,7 +165,7 @@ public class ItemController : ControllerBase
 
     // DELETE api/item/id
     [HttpDelete("{id}")]
-    public async Task<ActionResult<string?>> Delete(string id)
+    public async Task<ActionResult<int?>> Delete(int id)
     {
         var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
         var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");

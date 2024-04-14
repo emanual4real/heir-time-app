@@ -15,12 +15,12 @@ public class Project
     public string? Owner { get; set; }
 
     [BsonElement("admins")]
-    public List<string>? Admins { get; set; } = [];
+    public List<string> Admins { get; set; } = new List<string>();
 
     [BsonElement("users")]
-    public List<string>? Users { get; set; } = [];
+    public List<string> Users { get; set; } = new List<string>();
 
     [BsonElement("items")]
-    public List<Item>? Items { get; set; } = [];
+    public List<Item>? Items { get; set; } = new List<Item>();
 
 }
