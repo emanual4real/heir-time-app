@@ -23,7 +23,7 @@
     "paths": {
       "@ui/context": ["./src/context"],
       "@ui/hooks": ["./src/hooks"],
-      "@ui/types": ["./src/types"],
+      "@ui/types": ["./src/types/old"],
       "@ui/services": ["./src/services"],
       "@ui/pages": ["./src/pages"],
       "@ui/components": ["./src/components"],
