@@ -1,4 +1,4 @@
-import { User } from '../types/models';
+import { User } from '@ui/types';
 import { createDefaultRequestOptions } from './fetchOptions';
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/user`;
@@ -28,7 +28,6 @@ export const getSelf = async (): Promise<User | null> => {
  * @returns one item
  */
 export const login = async (emailAddress: string, password: string): Promise<User> => {
-  console.log('VITE_API_BASE_URL', import.meta.env.VITE_API_BASE_URL);
   const options = createDefaultRequestOptions('POST', { emailAddress, password });
   const response = await fetch(`${API_URL}/login`, options);
 

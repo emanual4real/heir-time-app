@@ -2,19 +2,22 @@ import { rootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Container } from '@mui/material';
 import { NavBar } from '@ui/components';
-import { AuthState } from '@ui/context';
-import { useAuth } from '@ui/hooks';
+import { User } from '@ui/types';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface RouteContext {
-  auth: AuthState;
+  user: User | null;
+  loggedIn: boolean;
 }
 
 const RootComponent = () => {
-  const { auth } = useAuth();
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData<User>(['me']);
+  const loggedIn = user !== undefined;
 
   return (
     <>
-      <NavBar loggedIn={auth.loggedIn} isAdmin={auth.user?.isAdmin} />
+      <NavBar loggedIn={loggedIn} isAdmin={user?.isAdmin} />
       <Container>
         <Outlet />
       </Container>

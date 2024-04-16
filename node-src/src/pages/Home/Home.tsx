@@ -1,27 +1,14 @@
-import { useAuth } from '@ui/hooks';
 import { ItemCarousel } from '..';
-import { useEffect } from 'react';
-import { getSelf } from '../../services/userService';
+import { useQueryClient } from '@tanstack/react-query';
+import { User } from '@ui/types';
 
 export const Home = () => {
-  const { auth, setAuth } = useAuth();
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData<User>(['me']);
 
-  useEffect(() => {
-    const autoLogin = async () => {
-      if (!auth.loggedIn) {
-        const user = await getSelf();
-
-        if (user !== null) {
-          setAuth({ loggedIn: true, user });
-        }
-      }
-    };
-
-    autoLogin();
-  }, [auth.loggedIn, setAuth]);
-
-  if (auth.loggedIn) {
+  if (user) {
     return <ItemCarousel isAdmin={false} />;
   }
+
   return <div>Home Page in Progress</div>;
 };

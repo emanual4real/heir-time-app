@@ -2,9 +2,10 @@ import './App.css';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
 import { RouterProvider } from '@tanstack/react-router';
-import { AuthProvider } from '@ui/context';
-import { useAuth } from '@ui/hooks';
 import { router } from './router';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { getSelf } from './services';
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -13,19 +14,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const RouterApp = () => {
-  const { auth } = useAuth();
+const queryClient = new QueryClient();
 
-  return <RouterProvider router={router} context={{ auth }} />;
+const RouterApp = () => {
+  const { data, isSuccess } = useQuery({
+    queryKey: ['me'],
+    queryFn: getSelf,
+    staleTime: 60 * 60 * 1000
+  });
+
+  return <RouterProvider router={router} context={{ user: data, loggedIn: isSuccess }} />;
 };
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
         <RouterApp />
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 

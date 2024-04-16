@@ -2,19 +2,25 @@ import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import { login } from '@ui/services';
-import { useAuth } from '@ui/hooks';
+import { useMutation } from '@tanstack/react-query';
 
+interface LoginInfo {
+  email: string;
+  password: string;
+}
 export const Login = () => {
-  const navigate = useNavigate({ from: '/login' });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const { setAuth } = useAuth();
+  const mutation = useMutation({
+    mutationFn: (loginInfo: LoginInfo) => {
+      return login(loginInfo.email, loginInfo.password);
+    }
+  });
+  const navigate = useNavigate({ from: '/login' });
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
-    const res = await login(email, password);
+    mutation.mutate({ email, password });
 
-    setAuth({ loggedIn: true, user: res });
     navigate({ to: '/' });
     e.preventDefault();
   };

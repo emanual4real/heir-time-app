@@ -5,9 +5,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { format } from 'date-fns';
-import { Bid, Item } from '@ui/types';
-import { useAuth } from '@ui/hooks';
+import { Bid, Item, User } from '@ui/types';
 import { BiddingForm } from '..';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface BidDialogProps {
   item: Item;
@@ -15,9 +15,10 @@ export interface BidDialogProps {
 }
 
 export const BidDialog = (props: BidDialogProps) => {
-  const { auth } = useAuth();
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData<User>(['me']);
 
-  const userId = auth?.user?.id;
+  const userId = data?.id;
   const userBid = props.item.bids?.find((bid) => bid.user === userId);
   const defaultDate = format(Date.now(), 'yyyy-MM-dd');
   const defaultBid: Bid = {
