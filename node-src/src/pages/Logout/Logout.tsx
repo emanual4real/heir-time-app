@@ -1,22 +1,24 @@
 import { Button } from '@mui/material';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { getSelf, logout } from '@ui/services';
+import { logout } from '@ui/services';
 import { User } from '@ui/types';
-import { useState } from 'react';
 
 export const Logout = () => {
   const queryClient = useQueryClient();
   // hooks
-  const [enabled, setEnabled] = useState<boolean>(false);
   const navigate = useNavigate({ from: '/logout' });
   const user = queryClient.getQueryData<User>(['me']);
-  useQuery({ queryKey: ['logout'], queryFn: logout, enabled });
-  useQuery({ queryKey: ['me'], queryFn: getSelf, enabled });
+
+  const logoutMutation = useMutation({
+    mutationFn: () => logout(),
+    onSettled: async () => {
+      queryClient.setQueryData(['me'], () => null);
+    }
+  });
 
   const handleOnClick = async () => {
-    setEnabled(false);
-    queryClient.setQueryData(['me'], null);
+    logoutMutation.mutate();
     navigate({ to: '/' });
   };
 
