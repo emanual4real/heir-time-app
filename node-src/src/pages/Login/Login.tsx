@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import { login } from '@ui/services';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface LoginInfo {
   email: string;
@@ -11,9 +11,13 @@ interface LoginInfo {
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (loginInfo: LoginInfo) => {
       return login(loginInfo.email, loginInfo.password);
+    },
+    onSettled: async (login) => {
+      queryClient.setQueryData(['me'], () => login);
     }
   });
   const navigate = useNavigate({ from: '/login' });

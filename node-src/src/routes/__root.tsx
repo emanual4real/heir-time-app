@@ -13,7 +13,7 @@ interface RouteContext {
 const RootComponent = () => {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>(['me']);
-  const loggedIn = user !== undefined;
+  const loggedIn = user ? true : false;
 
   return (
     <>
