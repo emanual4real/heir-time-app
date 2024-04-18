@@ -11,7 +11,7 @@ interface CarouselProps {
 }
 
 export const Carousel = (props: CarouselProps) => {
-  const [page, setPage] = useState<number>(props.itemCount / props.itemsPerPage);
+  const [page, setPage] = useState<number>(0);
 
   const firstItemIndex = page * props.itemsPerPage;
   const lastItemIndex = props.itemsPerPage * (page + 1);

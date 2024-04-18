@@ -9,9 +9,10 @@ import { BidDialog, DeleteDialog, EditItemDialog } from '..';
 import NoImage from '@ui/assets/no-image.jpg';
 
 export interface ItemProps {
+  projectId: string;
   item: Item;
   isAdmin?: boolean;
-  handleDelete: (id: string) => void;
+  handleDelete: (id: number) => void;
   handleEdit: (item: Item) => void;
   handleSubmitBid: (bid: BidPayload) => void;
 }
@@ -37,9 +38,10 @@ export const ItemComponent = (props: ItemProps) => {
 
   const onBidClick = (bid: Bid) => {
     props.handleSubmitBid({
+      projectId: props.projectId,
+      itemId: props.item.id,
       value: bid.value,
-      receivingDate: bid.receivingDate,
-      itemId: props.item.id
+      receivingDate: bid.receivingDate
     });
   };
 

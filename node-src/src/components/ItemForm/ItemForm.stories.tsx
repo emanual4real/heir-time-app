@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 export const NewItem: Story = {
   args: {
     item: {
-      id: '',
+      id: 1,
       title: '',
       description: '',
       releaseDate: format(new Date(), 'yyyy-MM-dd'),
@@ -41,7 +41,7 @@ export const NewItem: Story = {
 export const EditItem: Story = {
   args: {
     item: {
-      id: 'abcde12039123',
+      id: 0,
       title: 'Existing item with title',
       description: 'Existing item description',
       releaseDate: '2025-01-01',

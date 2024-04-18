@@ -16,12 +16,13 @@ export const fetchItemById = async (id: string): Promise<Item> => {
 };
 
 /**
- * Fetch all items
- * @returns List of Items
+ * Fetches all items from a project
+ * @param projectId string
+ * @returns list of items
  */
-export const fetchItems = async (): Promise<Item[]> => {
+export const fetchItemsByProjectId = async (projectId: string): Promise<Item[]> => {
   const options = createDefaultRequestOptions('GET');
-  const response = await fetch(`${API_URL}/items`, options);
+  const response = await fetch(`${API_URL}?projectId=${projectId}`, options);
 
   return await response.json();
 };
@@ -65,9 +66,9 @@ export const postItemWithFile = async (item: Partial<Item>, files?: FileList): P
   return await response.json();
 };
 
-export const deleteItem = async (id: string): Promise<string> => {
+export const deleteItem = async (id: number, projectId: string): Promise<number> => {
   const options = createDefaultRequestOptions('DELETE');
-  const response = await fetch(`${API_URL}/${id}`, options);
+  const response = await fetch(`${API_URL}/${id}?projectId=${projectId}`, options);
 
   if ([200, 202].includes(response.status)) {
     return id;
@@ -76,8 +77,8 @@ export const deleteItem = async (id: string): Promise<string> => {
   }
 };
 
-export const updateItem = async (item: Item): Promise<Item> => {
-  const options = createDefaultRequestOptions('PUT', item);
+export const updateItem = async (item: Item, projectId: string): Promise<Item> => {
+  const options = createDefaultRequestOptions('PUT', { ...item, projectId });
   const response = await fetch(`${API_URL}`, options);
 
   if ([200].includes(response.status)) {

@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     item: {
-      id: 'abacsdf34243',
+      id: 0,
       title: 'test',
       releaseDate: 'string',
       itemStatus: ItemStatus.Decided,

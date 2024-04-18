@@ -1,6 +1,7 @@
 export interface BidPayload {
+  projectId: string;
+  itemId: number;
   value: number;
-  itemId: string;
   receivingDate: string;
 }
 

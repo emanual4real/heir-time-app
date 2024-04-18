@@ -1,8 +1,17 @@
 import { ItemStatus } from '../enums/ItemStatus';
 import { Bid } from './Bid.model';
 
+export interface DeleteMutationProps {
+  itemId: number;
+  projectId: string;
+}
+
+export interface EditMutationProps {
+  item: Item;
+  projectId: string;
+}
 export interface Item {
-  id: string;
+  id: number;
   title: string;
   releaseDate: string;
   itemStatus: ItemStatus;

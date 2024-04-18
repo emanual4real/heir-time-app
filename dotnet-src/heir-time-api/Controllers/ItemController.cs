@@ -163,11 +163,10 @@ public class ItemController : ControllerBase
     /// Update bit on item
     /// </summary>
     /// <param name="bid"></param>
-    /// <param name="projectId"></param>
     /// <returns>Item</returns>
     [Route("bid")]
     [HttpPut]
-    public async Task<ActionResult<Item?>> SetBid([FromBody] BidInput bid, [FromQuery] string projectId)
+    public async Task<ActionResult<Item?>> SetBid([FromBody] BidInput bid)
     {
         var user = await GetUser();
 
@@ -180,7 +179,7 @@ public class ItemController : ControllerBase
             CreatedAt = DateTime.Now,
         };
 
-        var item = await _bidService.AddBid(projectId, bid.ItemId, newBid);
+        var item = await _bidService.AddBid(bid.ProjectId, bid.ItemId, newBid);
 
         if (item == null)
         {

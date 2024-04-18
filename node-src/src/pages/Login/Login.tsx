@@ -3,17 +3,14 @@ import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import { login } from '@ui/services';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { LoginMutationProps } from '../../types/models';
 
-interface LoginInfo {
-  email: string;
-  password: string;
-}
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (loginInfo: LoginInfo) => {
+    mutationFn: (loginInfo: LoginMutationProps) => {
       return login(loginInfo.email, loginInfo.password);
     },
     onSettled: async (login) => {
