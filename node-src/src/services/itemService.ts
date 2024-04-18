@@ -1,4 +1,4 @@
-import { Item, BidPayload } from '@ui/types';
+import { Item, BidPayload, AddItemMutationProps } from '@ui/types';
 import { createDefaultRequestOptions } from './fetchOptions';
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/item`;
@@ -42,7 +42,10 @@ export const postItem = async (item: Partial<Item>): Promise<Item> => {
   return await response.json();
 };
 
-export const postItemWithFile = async (item: Partial<Item>, files?: FileList): Promise<Item> => {
+export const postItemWithFile = async (
+  item: AddItemMutationProps,
+  files?: FileList
+): Promise<Item> => {
   const myHeaders = new Headers();
   myHeaders.append('accept', 'text/plain');
 

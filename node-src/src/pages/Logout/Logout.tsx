@@ -14,6 +14,8 @@ export const Logout = () => {
     mutationFn: () => logout(),
     onSettled: async () => {
       queryClient.setQueryData(['me'], () => null);
+      queryClient.setQueryData(['project'], () => null);
+      queryClient.setQueryData(['items'], () => []);
     }
   });
 

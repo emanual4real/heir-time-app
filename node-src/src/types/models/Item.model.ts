@@ -1,12 +1,14 @@
 import { ItemStatus } from '../enums/ItemStatus';
 import { Bid } from './Bid.model';
 
-export interface DeleteMutationProps {
+export type AddItemMutationProps = Item & { projectId: string };
+
+export interface DeleteItemMutationProps {
   itemId: number;
   projectId: string;
 }
 
-export interface EditMutationProps {
+export interface EditItemMutationProps {
   item: Item;
   projectId: string;
 }

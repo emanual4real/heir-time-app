@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { deleteItem, fetchItemsByProjectId, submitBid, updateItem } from '@ui/services';
-import { BidPayload, DeleteMutationProps, EditMutationProps, Item } from '@ui/types';
+import { BidPayload, DeleteItemMutationProps, EditItemMutationProps, Item } from '@ui/types';
 import { Carousel, ItemComponent } from '@ui/components';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import './ItemCarousel.css';
@@ -19,7 +19,7 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (deleteProps: DeleteMutationProps) => {
+    mutationFn: (deleteProps: DeleteItemMutationProps) => {
       return deleteItem(deleteProps.itemId, deleteProps.projectId);
     },
     onSettled: async () => {
@@ -30,7 +30,7 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
   });
 
   const editMutation = useMutation({
-    mutationFn: (editProps: EditMutationProps) => {
+    mutationFn: (editProps: EditItemMutationProps) => {
       return updateItem(editProps.item, editProps.projectId);
     },
     onSettled: async () => {
@@ -61,12 +61,6 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
 
   const handleSubmitBid = async (payload: BidPayload) => {
     bidMutation.mutate(payload);
-    // TODO: bid on items
-    // const response = await submitBid(payload);
-    // const itemIndex = items.findIndex((row) => row.id === response.id);
-    // const updatedItems = [...items];
-    // updatedItems[itemIndex] = response;
-    // setItems(updatedItems);
   };
 
   if (isLoading) {
