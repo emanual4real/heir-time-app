@@ -1,31 +1,15 @@
 import { Box, Button } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { NewItemDialog } from '@ui/components';
-import { postItemWithFile } from '@ui/services';
-import { AddItemMutationProps, Item } from '@ui/types';
+import { PostPutItemMutationProps } from '@ui/types';
+import { usePostItemMutation } from '../../services/api';
 
 export const Admin = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate({ from: '/admin' });
+  const [addItem] = usePostItemMutation();
 
-  const addItemMutation = useMutation({
-    mutationFn: (item: AddItemMutationProps) => {
-      return postItemWithFile(item);
-    },
-    onSettled: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['items']
-      });
-    }
-  });
-
-  const onSubmit = (item: Partial<Item & { files: FileList }>) => {
-    const newItem = { ...item };
-    delete newItem.files;
-    const { files } = item;
-
-    postItemWithFile(newItem, files);
+  const onSubmit = (newItem: PostPutItemMutationProps) => {
+    addItem(newItem);
   };
 
   return (

@@ -1,26 +1,17 @@
 import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
-import { login } from '@ui/services';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LoginMutationProps } from '../../types/models';
+import { useLoginMutation } from '../../services/api';
 
 export const Login = () => {
-  const [email, setEmail] = useState('');
+  const [emailAddress, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (loginInfo: LoginMutationProps) => {
-      return login(loginInfo.email, loginInfo.password);
-    },
-    onSettled: async (login) => {
-      queryClient.setQueryData(['me'], () => login);
-    }
-  });
+  const [login] = useLoginMutation();
+
   const navigate = useNavigate({ from: '/login' });
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
-    mutation.mutate({ email, password });
+    login({ emailAddress, password });
 
     navigate({ to: '/' });
     e.preventDefault();
@@ -34,7 +25,7 @@ export const Login = () => {
             id="email"
             name="email"
             label="Email"
-            value={email}
+            value={emailAddress}
             helperText="Email address used to sign up"
             variant="filled"
             required

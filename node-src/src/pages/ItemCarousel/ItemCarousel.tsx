@@ -1,8 +1,12 @@
 import { Box } from '@mui/material';
-import { deleteItem, fetchItemsByProjectId, submitBid, updateItem } from '@ui/services';
-import { BidPayload, DeleteItemMutationProps, EditItemMutationProps, Item } from '@ui/types';
+import { BidPayload, Item } from '@ui/types';
 import { Carousel, ItemComponent } from '@ui/components';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useDeleteItemMutation,
+  useGetItemsByProjectIdQuery,
+  useSubmitItemBidMutation,
+  useUpdateItemMutation
+} from '../../services/api';
 import './ItemCarousel.css';
 export interface ItemCarouselProps {
   projectId: string;
@@ -10,57 +14,22 @@ export interface ItemCarouselProps {
 }
 
 export const ItemCarousel = (props: ItemCarouselProps) => {
-  const queryClient = useQueryClient();
+  const { data, isSuccess, isLoading } = useGetItemsByProjectIdQuery(props.projectId);
 
-  const { data, isSuccess, isLoading } = useQuery({
-    queryKey: ['items'],
-    queryFn: () => fetchItemsByProjectId(props.projectId),
-    staleTime: 60 * 60 * 1000
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (deleteProps: DeleteItemMutationProps) => {
-      return deleteItem(deleteProps.itemId, deleteProps.projectId);
-    },
-    onSettled: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['items']
-      });
-    }
-  });
-
-  const editMutation = useMutation({
-    mutationFn: (editProps: EditItemMutationProps) => {
-      return updateItem(editProps.item, editProps.projectId);
-    },
-    onSettled: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['items']
-      });
-    }
-  });
-
-  const bidMutation = useMutation({
-    mutationFn: (bid: BidPayload) => {
-      return submitBid(bid);
-    },
-    onSettled: async () => {
-      queryClient.invalidateQueries({
-        queryKey: ['items']
-      });
-    }
-  });
+  const [deleteItem] = useDeleteItemMutation();
+  const [updateItem] = useUpdateItemMutation();
+  const [submitBid] = useSubmitItemBidMutation();
 
   const handleDelete = async (id: number) => {
-    deleteMutation.mutate({ itemId: id, projectId: props.projectId });
+    deleteItem({ itemId: id, projectId: props.projectId });
   };
 
   const handleEdit = async (item: Item) => {
-    editMutation.mutate({ item, projectId: props.projectId });
+    updateItem({ ...item, projectId: props.projectId });
   };
 
   const handleSubmitBid = async (payload: BidPayload) => {
-    bidMutation.mutate(payload);
+    submitBid(payload);
   };
 
   if (isLoading) {

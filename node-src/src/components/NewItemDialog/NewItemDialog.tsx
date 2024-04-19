@@ -6,14 +6,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { format } from 'date-fns';
 import { ItemForm } from '..';
-import { Item, ItemStatus } from '@ui/types';
+import { ItemStatus, PostPutItemMutationProps } from '@ui/types';
+import { useSelector } from 'react-redux';
+import { selectCurrentProject } from '../../state';
 
 export interface NewItemDialogProps {
-  onSubmit: (item: Partial<Item>) => void;
+  onSubmit: (newItem: PostPutItemMutationProps) => void;
 }
 
 export const NewItemDialog = (props: NewItemDialogProps) => {
-  const defaultState: Partial<Item> = {
+  const currentProject = useSelector(selectCurrentProject);
+
+  const defaultState: PostPutItemMutationProps = {
+    projectId: currentProject ?? '',
     title: '',
     description: '',
     releaseDate: format(new Date(), 'yyyy-MM-dd'),
@@ -23,7 +28,7 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
   };
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<Partial<Item & { files: FileList }>>(defaultState);
+  const [form, setForm] = useState<PostPutItemMutationProps>(defaultState);
 
   const disabled = form.title === '' || form.description === '' || form.location === '';
 

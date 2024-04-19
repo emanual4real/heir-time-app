@@ -3,7 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Container } from '@mui/material';
 import { NavBar } from '@ui/components';
 import { User } from '@ui/types';
-import { useQueryClient } from '@tanstack/react-query';
+import { useGetSelfQuery } from '../services/api';
 
 interface RouteContext {
   user: User | null;
@@ -11,13 +11,11 @@ interface RouteContext {
 }
 
 const RootComponent = () => {
-  const queryClient = useQueryClient();
-  const user = queryClient.getQueryData<User>(['me']);
-  const loggedIn = user ? true : false;
+  const { data: user, isSuccess } = useGetSelfQuery();
 
   return (
     <>
-      <NavBar loggedIn={loggedIn} isAdmin={user?.isAdmin} />
+      <NavBar loggedIn={isSuccess} isAdmin={user?.isAdmin} />
       <Container>
         <Outlet />
       </Container>

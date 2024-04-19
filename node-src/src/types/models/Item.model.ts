@@ -1,17 +1,8 @@
 import { ItemStatus } from '../enums/ItemStatus';
 import { Bid } from './Bid.model';
 
-export type AddItemMutationProps = Item & { projectId: string };
+export type PostPutItemMutationProps = Partial<Item> & { projectId: string; files?: FileList };
 
-export interface DeleteItemMutationProps {
-  itemId: number;
-  projectId: string;
-}
-
-export interface EditItemMutationProps {
-  item: Item;
-  projectId: string;
-}
 export interface Item {
   id: number;
   title: string;

@@ -3,9 +3,9 @@ import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { getSelf } from './services';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { useGetSelfQuery } from './services/api';
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -14,26 +14,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const queryClient = new QueryClient();
-
 const RouterApp = () => {
-  const { data, isSuccess } = useQuery({
-    queryKey: ['me'],
-    queryFn: getSelf,
-    staleTime: 60 * 60 * 1000
-  });
+  const { data, isSuccess } = useGetSelfQuery();
 
   return <RouterProvider router={router} context={{ user: data, loggedIn: isSuccess }} />;
 };
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
       <ThemeProvider theme={theme}>
         <RouterApp />
       </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </Provider>
   );
 };
 

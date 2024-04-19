@@ -1,16 +1,22 @@
+import { useEffect } from 'react';
 import { ItemCarousel } from '..';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getOwnProjects } from '@ui/services';
-import { User } from '@ui/types';
+import { useGetOwnProjectsQuery, useGetSelfQuery } from '../../services/api';
+import { selectCurrentProject, setCurrentProject } from '../../state';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Home = () => {
-  const queryClient = useQueryClient();
-  const user = queryClient.getQueryData<User>(['me']);
-  const { data, isSuccess } = useQuery({
-    queryKey: ['project'],
-    queryFn: getOwnProjects,
-    enabled: !!user
-  });
+  const dispatch = useDispatch();
+  const { data: user } = useGetSelfQuery();
+  const { data: projects, isSuccess } = useGetOwnProjectsQuery();
+  const currentProject = useSelector(selectCurrentProject);
+
+  useEffect(() => {
+    if (projects) {
+      const defaultProject = projects[0].id;
+
+      dispatch(setCurrentProject(defaultProject));
+    }
+  }, [dispatch, projects]);
 
   if (user === undefined) {
     return <div>Home Page in Progress</div>;
@@ -21,9 +27,9 @@ export const Home = () => {
       <div>
         <ul>
           Project List
-          {data?.map((project) => <li key={project.id}>{project.projectName}</li>)}
+          {projects?.map((project) => <li key={project.id}>{project.projectName}</li>)}
         </ul>
-        <ItemCarousel projectId={data[0].id} isAdmin={false} />
+        {currentProject ? <ItemCarousel projectId={currentProject} isAdmin={false} /> : null}
       </div>
     );
   }
