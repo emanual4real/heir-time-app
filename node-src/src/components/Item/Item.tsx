@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
-import { Bid, BidPayload, Item, ItemStatus } from '@ui/types';
+import { Bid, BidPayload, Item, ItemStatus, PostPutItemMutationProps } from '@ui/types';
 import { BidDialog, DeleteDialog, EditItemDialog } from '..';
 import NoImage from '@ui/assets/no-image.jpg';
 
@@ -13,7 +13,7 @@ export interface ItemProps {
   item: Item;
   isAdmin?: boolean;
   handleDelete: (id: number) => void;
-  handleEdit: (item: FormData) => void;
+  handleEdit: (item: PostPutItemMutationProps) => void;
   handleSubmitBid: (bid: BidPayload) => void;
 }
 
@@ -32,7 +32,7 @@ export const ItemComponent = (props: ItemProps) => {
     props.handleDelete(props.item.id);
   };
 
-  const onEditClick = (item: FormData) => {
+  const onEditClick = (item: PostPutItemMutationProps) => {
     props.handleEdit(item);
   };
 

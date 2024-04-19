@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { BidPayload } from '@ui/types';
+import { BidPayload, PostPutItemMutationProps } from '@ui/types';
 import { Carousel, ItemComponent } from '@ui/components';
 import {
   useDeleteItemMutation,
@@ -24,7 +24,7 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
     deleteItem({ itemId: id, projectId: props.projectId });
   };
 
-  const handleEdit = async (item: FormData) => {
+  const handleEdit = async (item: PostPutItemMutationProps) => {
     updateItem(item);
   };
 

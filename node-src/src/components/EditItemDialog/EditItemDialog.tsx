@@ -5,13 +5,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ItemForm } from '..';
-import { Item } from '@ui/types';
+import { Item, PostPutItemMutationProps } from '@ui/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentProject } from '../../state';
 
 export interface EditItemDialogProps {
   item: Item;
-  onSubmit: (item: FormData) => void;
+  onSubmit: (item: PostPutItemMutationProps) => void;
 }
 
 export const EditItemDialog = (props: EditItemDialogProps) => {
@@ -31,15 +31,13 @@ export const EditItemDialog = (props: EditItemDialogProps) => {
   };
 
   const handleClickYes = () => {
-    if (form) {
-      const formdata = new FormData();
-      formdata.append('itemJson', JSON.stringify({ ...form, projectId: currentProject }));
-
-      if (file) {
-        formdata.append('file', file[0], file[0].name);
-      }
-
-      props.onSubmit(formdata);
+    if (currentProject) {
+      const payload: PostPutItemMutationProps = {
+        ...form,
+        projectId: currentProject,
+        files: file
+      };
+      props.onSubmit(payload);
       handleClose();
     }
   };
