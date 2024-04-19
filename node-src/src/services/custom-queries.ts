@@ -1,4 +1,4 @@
-import { PostPutItemMutationProps } from '../types/models';
+import { PostPutItemMutationProps } from '@ui/types';
 
 export const buildFileUploadRequest = (data: PostPutItemMutationProps, method: 'POST' | 'PUT') => {
   const myHeaders = new Headers();

@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { ItemForm } from '..';
 import { Item, PostPutItemMutationProps } from '@ui/types';
 import { useSelector } from 'react-redux';
-import { selectCurrentProject } from '../../state';
+import { selectCurrentProject } from '@ui/state';
 
 export interface EditItemDialogProps {
   item: Item;

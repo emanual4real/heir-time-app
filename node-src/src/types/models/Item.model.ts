@@ -1,5 +1,4 @@
-import { ItemStatus } from '../enums/ItemStatus';
-import { Bid } from './Bid.model';
+import { ItemStatus, Bid } from '@ui/types';
 
 export type PostPutItemMutationProps = Partial<Item> & { projectId: string; files?: FileList };
 

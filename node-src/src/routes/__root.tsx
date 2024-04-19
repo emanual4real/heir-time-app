@@ -3,7 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Container } from '@mui/material';
 import { NavBar } from '@ui/components';
 import { User } from '@ui/types';
-import { useGetSelfQuery } from '../services/api';
+import { useGetSelfQuery } from '@ui/services';
 
 interface RouteContext {
   user: User | null;

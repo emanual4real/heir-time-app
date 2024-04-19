@@ -7,7 +7,7 @@ import {
   TextField
 } from '@mui/material';
 import { Bid } from '@ui/types';
-import { dateStringToFormat } from '../../utils/date';
+import { dateStringToFormat } from '@ui/utils';
 
 interface BiddingFormProps {
   bid?: Bid;

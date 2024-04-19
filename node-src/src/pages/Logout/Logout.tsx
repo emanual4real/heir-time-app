@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
-import { useGetSelfQuery, useLogoutMutation } from '../../services/api';
+import { useGetSelfQuery, useLogoutMutation } from '@ui/services';
 
 export const Logout = () => {
   // hooks

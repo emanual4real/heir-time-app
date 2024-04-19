@@ -21,13 +21,13 @@
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": true,
     "paths": {
-      "@ui/context": ["./src/context"],
       "@ui/hooks": ["./src/hooks"],
       "@ui/types": ["./src/types"],
       "@ui/services": ["./src/services"],
       "@ui/pages": ["./src/pages"],
       "@ui/components": ["./src/components"],
       "@ui/utils": ["./src/utils"],
+      "@ui/state": ["./src/state"],
       "@ui/assets": ["./assets"]
     }
   },

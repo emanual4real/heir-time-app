@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
-import { useLoginMutation } from '../../services/api';
+import { useLoginMutation } from '@ui/services';
 
 export const Login = () => {
   const [emailAddress, setEmail] = useState('');

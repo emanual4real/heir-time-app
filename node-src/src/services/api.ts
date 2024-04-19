@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Item, PostPutItemMutationProps, Project, User } from '../types/models';
-import { BidPayload } from '../types/openApi/models/Bid.model';
+import { Item, PostPutItemMutationProps, Project, User } from '@ui/types';
+import { BidPayload } from '@ui/types';
 import { buildFileUploadRequest } from './custom-queries';
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;

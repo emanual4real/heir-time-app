@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { ItemCarousel } from '..';
-import { useGetOwnProjectsQuery, useGetSelfQuery } from '../../services/api';
-import { selectCurrentProject, setCurrentProject } from '../../state';
+import { useGetOwnProjectsQuery, useGetSelfQuery } from '@ui/services';
+import { selectCurrentProject, setCurrentProject } from '@ui/state';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const Home = () => {

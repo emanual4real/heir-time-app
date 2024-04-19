@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { format } from 'date-fns';
 import { Bid, Item } from '@ui/types';
 import { BiddingForm } from '..';
-import { useGetSelfQuery } from '../../services/api';
+import { useGetSelfQuery } from '@ui/services';
 
 export interface BidDialogProps {
   item: Item;

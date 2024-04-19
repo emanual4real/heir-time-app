@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ItemForm } from '.';
-import { ItemStatus } from '../../types/enums/ItemStatus';
+import { ItemStatus } from '@ui/types';
 import { format } from 'date-fns';
 
 const meta = {

@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { ItemCarousel } from '../pages/ItemCarousel';
+import { ItemCarousel } from '@ui/pages';
 
 const EditItemFormWithProps = () => {
   return <ItemCarousel projectId={'adsfkjasdf'} isAdmin={true} />;

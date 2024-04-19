@@ -6,7 +6,7 @@ import {
   useGetItemsByProjectIdQuery,
   useSubmitItemBidMutation,
   useUpdateItemMutation
-} from '../../services/api';
+} from '@ui/services';
 import './ItemCarousel.css';
 export interface ItemCarouselProps {
   projectId: string;
