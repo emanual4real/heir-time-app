@@ -1,8 +1,8 @@
 import { Box, Button } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import { NewItemDialog } from '@ui/components';
-import { PostPutItemMutationProps } from '@ui/types';
 import { usePostItemMutation } from '../../services/api';
+import { PostPutItemMutationProps } from '../../types/models';
 
 export const Admin = () => {
   const navigate = useNavigate({ from: '/admin' });

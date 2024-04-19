@@ -6,15 +6,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ItemForm } from '..';
 import { Item } from '@ui/types';
+import { useSelector } from 'react-redux';
+import { selectCurrentProject } from '../../state';
 
 export interface EditItemDialogProps {
   item: Item;
-  onSubmit: (item: Item) => void;
+  onSubmit: (item: FormData) => void;
 }
 
 export const EditItemDialog = (props: EditItemDialogProps) => {
+  const currentProject = useSelector(selectCurrentProject);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Item>(props.item);
+  const [file, setFile] = useState<FileList | undefined>(undefined);
 
   const disabled = form.title === '' || form.description === '' || form.location === '';
 
@@ -28,7 +32,14 @@ export const EditItemDialog = (props: EditItemDialogProps) => {
 
   const handleClickYes = () => {
     if (form) {
-      props.onSubmit(form);
+      const formdata = new FormData();
+      formdata.append('itemJson', JSON.stringify({ ...form, projectId: currentProject }));
+
+      if (file) {
+        formdata.append('file', file[0], file[0].name);
+      }
+
+      props.onSubmit(formdata);
       handleClose();
     }
   };
@@ -49,6 +60,9 @@ export const EditItemDialog = (props: EditItemDialogProps) => {
             item={form}
             onChange={(field) => {
               setForm({ ...form, ...field });
+            }}
+            uploadFile={(newFile) => {
+              setFile(newFile);
             }}
           />
         </DialogContent>

@@ -13,7 +13,7 @@ export interface ItemProps {
   item: Item;
   isAdmin?: boolean;
   handleDelete: (id: number) => void;
-  handleEdit: (item: Item) => void;
+  handleEdit: (item: FormData) => void;
   handleSubmitBid: (bid: BidPayload) => void;
 }
 
@@ -32,7 +32,7 @@ export const ItemComponent = (props: ItemProps) => {
     props.handleDelete(props.item.id);
   };
 
-  const onEditClick = (item: Item) => {
+  const onEditClick = (item: FormData) => {
     props.handleEdit(item);
   };
 

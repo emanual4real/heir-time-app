@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Item, PostPutItemMutationProps, Project, User } from '../types/models';
 import { BidPayload } from '../types/openApi/models/Bid.model';
+import { buildFileUploadRequest } from './custom-queries';
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
@@ -62,34 +63,38 @@ export const heirTimeApi = createApi({
         method: 'GET'
       })
     }),
-    postItem: builder.mutation<number, PostPutItemMutationProps>({
-      query: (body) => ({
-        url: '/item',
-        method: 'POST',
-        body,
-        headers: { accept: 'text/plain', 'Content-Type': 'multipart/form-data' }
-      })
+    postItem: builder.mutation<Item, PostPutItemMutationProps>({
+      queryFn: async (data: PostPutItemMutationProps) => {
+        const requestOptions = buildFileUploadRequest(data, 'POST');
+        const response = await fetch(`${API_URL}/item`, requestOptions);
+
+        return await response.json();
+      },
+      invalidatesTags: ['items']
     }),
-    updateItem: builder.mutation<number, PostPutItemMutationProps>({
-      query: (body) => ({
-        url: '/item',
-        method: 'PUT',
-        body,
-        headers: { accept: 'text/plain', 'Content-Type': 'multipart/form-data' }
-      })
+    updateItem: builder.mutation<Item, PostPutItemMutationProps>({
+      queryFn: async (data: PostPutItemMutationProps) => {
+        const requestOptions = buildFileUploadRequest(data, 'PUT');
+        const response = await fetch(`${API_URL}/item`, requestOptions);
+
+        return await response.json();
+      },
+      invalidatesTags: ['items']
     }),
     deleteItem: builder.mutation<number, { itemId: number; projectId: string }>({
       query: ({ itemId, projectId }) => ({
         url: `/item/${itemId}?projectId=${projectId}`,
         method: 'DELETE'
-      })
+      }),
+      invalidatesTags: ['items']
     }),
     submitItemBid: builder.mutation<Item, BidPayload>({
       query: (body) => ({
         url: '/item/bid',
         method: 'PUT',
         body
-      })
+      }),
+      invalidatesTags: ['items']
     })
   })
 });

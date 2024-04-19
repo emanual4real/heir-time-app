@@ -6,7 +6,8 @@ import './ItemForm.css';
 
 export interface ItemFormProps {
   item: Partial<Item>;
-  onChange: (field: Partial<Item & { files?: FileList }>) => void;
+  onChange: (field: Partial<Item>) => void;
+  uploadFile: (files: FileList) => void;
 }
 
 export const ItemForm = (props: ItemFormProps) => {
@@ -17,7 +18,9 @@ export const ItemForm = (props: ItemFormProps) => {
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ?? undefined;
 
-    props.onChange({ files });
+    if (files) {
+      props.uploadFile(files);
+    }
   };
 
   const releaseDate = (): string => {

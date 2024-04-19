@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { format } from 'date-fns';
 import { ItemForm } from '..';
-import { ItemStatus, PostPutItemMutationProps } from '@ui/types';
+import { Item, ItemStatus, PostPutItemMutationProps } from '@ui/types';
 import { useSelector } from 'react-redux';
 import { selectCurrentProject } from '../../state';
 
@@ -17,8 +17,7 @@ export interface NewItemDialogProps {
 export const NewItemDialog = (props: NewItemDialogProps) => {
   const currentProject = useSelector(selectCurrentProject);
 
-  const defaultState: PostPutItemMutationProps = {
-    projectId: currentProject ?? '',
+  const defaultState: Partial<Item> = {
     title: '',
     description: '',
     releaseDate: format(new Date(), 'yyyy-MM-dd'),
@@ -28,7 +27,8 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
   };
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<PostPutItemMutationProps>(defaultState);
+  const [form, setForm] = useState<Partial<Item>>(defaultState);
+  const [file, setFile] = useState<FileList | undefined>(undefined);
 
   const disabled = form.title === '' || form.description === '' || form.location === '';
 
@@ -46,8 +46,14 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
   };
 
   const handleClickYes = () => {
-    if (form) {
-      props.onSubmit(form);
+    if (form && currentProject) {
+      const payload: PostPutItemMutationProps = {
+        ...form,
+        projectId: currentProject,
+        files: file
+      };
+
+      props.onSubmit(payload);
       handleClose();
     }
   };
@@ -68,6 +74,9 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
             item={form}
             onChange={(field) => {
               setForm({ ...form, ...field });
+            }}
+            uploadFile={(newFile) => {
+              setFile(newFile);
             }}
           />
         </DialogContent>
