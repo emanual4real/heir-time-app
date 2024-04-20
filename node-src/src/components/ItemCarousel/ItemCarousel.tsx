@@ -8,20 +8,20 @@ import {
   useUpdateItemMutation
 } from '@ui/services';
 import './ItemCarousel.css';
-export interface ItemCarouselProps {
-  projectId: string;
-  isAdmin?: boolean;
-}
+import { useSelector } from 'react-redux';
+import { selectCurrentProject, selectIsProjectOwner } from '@ui/state';
 
-export const ItemCarousel = (props: ItemCarouselProps) => {
-  const { data, isSuccess, isLoading } = useGetItemsByProjectIdQuery(props.projectId);
+export const ItemCarousel = () => {
+  const currentProject = useSelector(selectCurrentProject);
+  const projectOwner = useSelector(selectIsProjectOwner);
+  const { data, isSuccess, isLoading } = useGetItemsByProjectIdQuery(currentProject);
 
   const [deleteItem] = useDeleteItemMutation();
   const [updateItem] = useUpdateItemMutation();
   const [submitBid] = useSubmitItemBidMutation();
 
   const handleDelete = async (id: number) => {
-    deleteItem({ itemId: id, projectId: props.projectId });
+    deleteItem({ itemId: id, projectId: currentProject });
   };
 
   const handleEdit = async (item: PostPutItemMutationProps) => {
@@ -43,9 +43,9 @@ export const ItemCarousel = (props: ItemCarouselProps) => {
           {data.map((item) => (
             <ItemComponent
               key={item.id}
-              projectId={props.projectId}
+              projectId={currentProject}
               item={item}
-              isAdmin={props.isAdmin}
+              isAdmin={projectOwner}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               handleSubmitBid={handleSubmitBid}

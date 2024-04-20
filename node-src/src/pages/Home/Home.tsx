@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { ItemCarousel } from '..';
+import { ItemCarousel } from '@ui/components';
 import { useGetOwnProjectsQuery, useGetSelfQuery } from '@ui/services';
-import { selectCurrentProject, selectIsProjectOwner, setCurrentProject } from '@ui/state';
+import { selectCurrentProject, setCurrentProject } from '@ui/state';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const Home = () => {
@@ -9,9 +9,6 @@ export const Home = () => {
   const { data: user } = useGetSelfQuery();
   const { data: projects, isSuccess } = useGetOwnProjectsQuery();
   const currentProject = useSelector(selectCurrentProject);
-  const projectOwner = useSelector(selectIsProjectOwner);
-
-  console.log('projectOwner', projectOwner);
 
   useEffect(() => {
     if (projects) {
@@ -32,7 +29,7 @@ export const Home = () => {
           Project List
           {projects?.map((project) => <li key={project.id}>{project.projectName}</li>)}
         </ul>
-        {currentProject ? <ItemCarousel projectId={currentProject} isAdmin={false} /> : null}
+        {currentProject ? <ItemCarousel /> : null}
       </div>
     );
   }

@@ -7,3 +7,4 @@ export * from './Item';
 export * from './ItemForm';
 export * from './NavBar';
 export * from './NewItemDialog';
+export * from './ItemCarousel';

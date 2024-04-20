@@ -25,7 +25,7 @@ export const { setCurrentProject } = uiSlice.actions;
 const selectUserData = heirTimeApi.endpoints.getSelf.select();
 
 // selectors
-export const selectCurrentProject = (state: RootState) => state.ui.currentProject;
+export const selectCurrentProject = (state: RootState) => state.ui.currentProject ?? '';
 
 export const selectIsProjectOwner = createSelector(
   selectUserData,
