@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev:no-build": "vite --mode dev",
     "dev": "tsc --noEmit && vite --mode dev",
     "prod": "vite --mode prod",
     "build:dev": "tsc && vite build --mode dev",
