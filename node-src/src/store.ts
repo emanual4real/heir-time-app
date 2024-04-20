@@ -2,13 +2,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import { heirTimeApi } from './services/api';
 import { uiSlice } from './state';
 
+const devMode = import.meta.env.MODE === 'dev';
+
 export const store = configureStore({
   reducer: {
     ui: uiSlice.reducer,
     [heirTimeApi.reducerPath]: heirTimeApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(heirTimeApi.middleware),
-  devTools: true
+  devTools: devMode
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
