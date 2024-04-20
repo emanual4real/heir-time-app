@@ -1,16 +1,15 @@
 import { Button } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
-import { useAuth } from '@ui/hooks';
-import { logout } from '@ui/services';
+import { useGetSelfQuery, useLogoutMutation } from '@ui/services';
 
 export const Logout = () => {
-  const { auth, setAuth } = useAuth();
+  // hooks
   const navigate = useNavigate({ from: '/logout' });
+  const { data: user } = useGetSelfQuery();
+  const [logout] = useLogoutMutation();
 
   const handleOnClick = async () => {
-    await logout();
-
-    setAuth({ loggedIn: false, user: null });
+    logout();
     navigate({ to: '/' });
   };
 
@@ -23,7 +22,7 @@ export const Logout = () => {
         alignItems: 'center',
         width: '100%'
       }}>
-      <Button variant="text" disabled={!auth.loggedIn} onClick={handleOnClick}>
+      <Button variant="text" disabled={!user} onClick={handleOnClick}>
         Logout
       </Button>
     </div>

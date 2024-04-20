@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { Button, FormControl, FormGroup, TextField } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
-import { login } from '@ui/services';
-import { useAuth } from '@ui/hooks';
+import { useLoginMutation } from '@ui/services';
 
 export const Login = () => {
-  const navigate = useNavigate({ from: '/login' });
-  const [email, setEmail] = useState('');
+  const [emailAddress, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [login] = useLoginMutation();
 
-  const { setAuth } = useAuth();
+  const navigate = useNavigate({ from: '/login' });
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
-    const res = await login(email, password);
+    login({ emailAddress, password });
 
-    setAuth({ loggedIn: true, user: res });
     navigate({ to: '/' });
     e.preventDefault();
   };
@@ -27,7 +25,7 @@ export const Login = () => {
             id="email"
             name="email"
             label="Email"
-            value={email}
+            value={emailAddress}
             helperText="Email address used to sign up"
             variant="filled"
             required

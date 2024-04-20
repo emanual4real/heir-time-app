@@ -2,19 +2,20 @@ import { rootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Container } from '@mui/material';
 import { NavBar } from '@ui/components';
-import { AuthState } from '@ui/context';
-import { useAuth } from '@ui/hooks';
+import { User } from '@ui/types';
+import { useGetSelfQuery } from '@ui/services';
 
 interface RouteContext {
-  auth: AuthState;
+  user: User | null;
+  loggedIn: boolean;
 }
 
 const RootComponent = () => {
-  const { auth } = useAuth();
+  const { data: user, isSuccess } = useGetSelfQuery();
 
   return (
     <>
-      <NavBar loggedIn={auth.loggedIn} isAdmin={auth.user?.isAdmin} />
+      <NavBar loggedIn={isSuccess} isAdmin={user?.isAdmin} />
       <Container>
         <Outlet />
       </Container>

@@ -1,10 +1,9 @@
 using System.Globalization;
 using heir_time_api.Controllers.InputModels;
 using heir_time_api.Models;
-using heir_time_api.Repositories.Items;
 using heir_time_api.Services.Bid;
 using heir_time_api.Services.Items;
-using heir_time_api.Services.S3;
+using heir_time_api.Services.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,212 +14,201 @@ namespace heir_time_api.Controllers;
 [Route("api/[controller]")]
 public class ItemController : ControllerBase
 {
-    readonly IConfiguration _configuration;
-    readonly IItemRepository _itemRepository;
-    readonly IItemService _itemService;
-    readonly IS3Service _s3Service;
-    readonly IBidService _bidService;
+    readonly private IItemService _itemService;
+    readonly private IBidService _bidService;
+    readonly private IUserService _userService;
 
-    public ItemController(IConfiguration configuration, IItemRepository repository, IItemService itemService, IBidService bidService, IS3Service s3Service)
+    public ItemController(IItemService itemService, IBidService bidService, IUserService userService)
     {
-        _configuration = configuration;
-        _itemRepository = repository;
         _itemService = itemService;
         _bidService = bidService;
-        _s3Service = s3Service;
+        _userService = userService;
     }
 
-    private static Item AddFileUrls(Item item, string prefix, IEnumerable<S3ObjectDto> files)
+    private async Task<User> GetUser()
     {
-        if (files.Any())
+        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+
+        if (userId != null)
         {
-            var fileKeys = item.FileKeys.Select(y => $"{prefix}/{y}");
-
-            if (fileKeys.Any())
-            {
-                var fileUrls = files.Where(y => fileKeys.Contains(y.Name)).Select(y => y.PresignedUrl);
-
-                item.FileUrls = fileUrls.ToList();
-
-            }
-
+            return await _userService.GetUserById(userId);
         }
-
-        return item;
+        return null;
     }
 
-    private static IEnumerable<Item> AddFileUrls(IEnumerable<Item> items, string prefix, IEnumerable<S3ObjectDto> files)
-    {
-        if (files.Any())
-        {
-            return items.Select(x =>
-            {
-                var fileKeys = x.FileKeys.Select(y => $"{prefix}/{y}");
 
-                if (fileKeys.Any())
-                {
-                    var fileUrls = files.Where(y => fileKeys.Contains(y.Name)).Select(y => y.PresignedUrl);
 
-                    x.FileUrls = fileUrls.ToList();
-
-                }
-
-                return x;
-            });
-        }
-
-        return items;
-    }
-
-    private async Task<Item> SaveFileToS3(Item item, IFormFile? file, string prefix)
-    {
-        if (file != null)
-        {
-            await _s3Service.SaveFile(file, prefix);
-
-            if (item.FileKeys != null)
-            {
-                item.FileKeys.Add(file.FileName);
-            }
-            else
-            {
-                item.FileKeys = [file.FileName];
-            }
-        }
-
-        return item;
-    }
-
-    // GET api/item/{id}
+    // GET api/item/{id}?projectId={projectId}
+    /// <summary>
+    /// Get an item
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="projectId"></param>
+    /// <returns>Item</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<Item?>> GetItem(string id)
+    public async Task<ActionResult<Item?>> GetItem(int id, [FromQuery] string projectId)
     {
-        var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
-        var files = await _s3Service.GetAllFiles(prefix);
-        var item = await _itemRepository.GetItemById(id);
+        var item = await _itemService.GetItem(projectId, id);
 
-        if (files != null && item != null && prefix != null)
+        if (item == null)
         {
-            return Ok(AddFileUrls(item, prefix, files));
+            return NoContent();
         }
+
         return Ok(item);
     }
 
-    // GET api/item/items
-    [Route("items")]
+    // GET api/item?projectId={projectId}
+    /// <summary>
+    /// Get all items from project
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <returns>List of Items</returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+    public async Task<ActionResult<IEnumerable<Item>>> GetItemsByProject([FromQuery] string projectId)
     {
-        var prefix = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
-        var files = await _s3Service.GetAllFiles(prefix);
+        var items = await _itemService.GetItemsByProject(projectId);
 
-        var items = await _itemService.GetAllItems();
-
-        if (files != null && items.Any() && prefix != null)
+        if (items != null)
         {
-            return Ok(AddFileUrls(items, prefix, files));
+            return Ok(items);
         }
-        return Ok(items);
 
-
+        return NoContent();
     }
 
     // POST api/item
+    /// <summary>
+    /// Create a new item with file
+    /// </summary>
+    /// <param name="itemWithFileInput"></param>
+    /// <param name="file"></param>
+    /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<Item?>> Post([FromForm] string itemJson, IFormFile? file)
+    public async Task<ActionResult<Item?>> CreateItem([FromForm] string itemWithFileInput, IFormFile? file)
     {
-        Item item = JsonConvert.DeserializeObject<Item>(itemJson);
-        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
-        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
-
-        if (isAdmin && userId != null)
+        var user = await GetUser();
+        ItemWithFileInput? form = JsonConvert.DeserializeObject<ItemWithFileInput>(itemWithFileInput);
+        var item = new Item()
         {
-            var prefix = userId;
-            var newItem = await SaveFileToS3(item, file, prefix);
+            Title = form.Title,
+            ReleaseDate = form.ReleaseDate,
+            ItemStatus = form.ItemStatus,
+        };
+        var projectId = form.ProjectId;
 
-            return await _itemRepository.InsertItem(newItem);
+        var newItem = await _itemService.AddItem(projectId, item, user, file);
+
+        if (newItem == null)
+        {
+            return NoContent();
         }
 
-        return Unauthorized();
+        return Ok(newItem);
     }
 
-    // PUT api/item
+    // PUT api/item?projectId={projectId}
+    /// <summary>
+    /// Update item and file
+    /// </summary>
+    /// <param name="itemJson"></param>
+    /// <param name="file"></param>
+    /// <param name="projectId"></param>
+    /// <returns>Item</returns>
     [HttpPut]
-    public async Task<ActionResult<Item?>> Update([FromForm] IFormFile? file, string itemJson)
+    public async Task<ActionResult<Item?>> UpdateItem([FromForm] string itemJson, IFormFile? file, [FromQuery] string projectId)
     {
-        Item item = JsonConvert.DeserializeObject<Item>(itemJson);
-        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
-        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+        var user = await GetUser();
+        Item? item = JsonConvert.DeserializeObject<Item>(itemJson);
 
-        if (isAdmin && userId != null)
+        if (item == null)
         {
-            var prefix = userId;
-            var newItem = await SaveFileToS3(item, file, prefix);
-
-            return await _itemRepository.UpdateItem(newItem);
+            return BadRequest();
         }
 
-        return Unauthorized();
+        var newItem = await _itemService.UpdateItem(projectId, item, user, file);
+
+        if (newItem == null)
+        {
+            return NoContent();
+        }
+
+        return Ok(newItem);
     }
 
-    // DELETE api/item/id
+    // DELETE api/item/id?projectId={projectId}
+    /// <summary>
+    /// Deletes a file
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="projectId"></param>
+    /// <returns>int</returns>
     [HttpDelete("{id}")]
-    public async Task<ActionResult<string?>> Delete(string id)
+    public async Task<ActionResult<int?>> Delete(int id, [FromQuery] string projectId)
     {
-        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
-        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+        var user = await GetUser();
 
-        if (isAdmin && userId != null)
+        var response = await _itemService.DeleteItem(projectId, id, user);
+
+        if (response == null)
         {
-            var item = await _itemRepository.GetItemById(id);
-
-            if (item != null && item.FileKeys != null && item.FileKeys.Count > 0)
-            {
-                var filePrefix = userId;
-                var fileKeys = item.FileKeys;
-                await _s3Service.DeleteFiles(filePrefix, fileKeys);
-            }
-
-            return await _itemRepository.DeleteItem(id);
+            return NoContent();
         }
 
-        return Unauthorized();
+        return Ok(response);
     }
 
-    // PUT api/item/bid
+    // PUT api/item/bid?projectId={projectId}
+    /// <summary>
+    /// Update bit on item
+    /// </summary>
+    /// <param name="bid"></param>
+    /// <returns>Item</returns>
     [Route("bid")]
     [HttpPut]
-    public async Task<Item?> SetBid([FromBody] BidInput bid)
+    public async Task<ActionResult<Item?>> SetBid([FromBody] BidInput bid)
     {
-        var userId = ControllerHelpers.GetClaim(HttpContext.User, "UserId");
+        var user = await GetUser();
 
-        if (userId == null)
-        {
-            return null;
-        }
         var cultureInfo = new CultureInfo("en-US");
         var newBid = new Bid()
         {
-            User = userId,
+            User = user.Id,
             Value = bid.Value,
             ReceivingDate = DateTime.Parse(bid.ReceivingDate, cultureInfo),
             CreatedAt = DateTime.Now,
         };
-        return await _bidService.AddBid(bid.ItemId, newBid);
-    }
 
-    // PUT api/item/winner
-    [Route("winner")]
-    [HttpPut]
-    public async Task<Item?> SetWinner([FromBody] WinnerInput input)
-    {
-        var isAdmin = ControllerHelpers.IsAdmin(HttpContext.User);
+        var item = await _bidService.AddBid(bid.ProjectId, bid.ItemId, newBid);
 
-        if (isAdmin)
+        if (item == null)
         {
-            return await _bidService.SetWinner(input.ItemId, input.UserId);
+            return NoContent();
         }
 
-        return null;
+        return Ok(item);
+    }
+
+    // PUT api/item/winner?projectId={projectId}
+    /// <summary>
+    /// Set the winner of the item
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="projectId"></param>
+    /// <returns></returns>
+    [Route("winner")]
+    [HttpPut]
+    public async Task<ActionResult<Item?>> SetWinner([FromBody] WinnerInput input, [FromQuery] string projectId)
+    {
+        var user = await GetUser();
+
+        var item = await _bidService.SetWinner(projectId, input.ItemId, input.UserId, user);
+
+        if (item == null)
+        {
+            return NoContent();
+        }
+
+        return Ok(item);
     }
 }

@@ -33,7 +33,7 @@ public class S3Service : IS3Service
         return await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, _bucketName);
     }
 
-    public async Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string? prefix)
+    public async Task<IEnumerable<S3ObjectDto>?> GetAllFiles(string? projectId, List<string> keys)
     {
         var bucketExists = await DoesBucketExist();
 
@@ -45,7 +45,7 @@ public class S3Service : IS3Service
         var request = new ListObjectsV2Request()
         {
             BucketName = _bucketName,
-            Prefix = prefix
+            Prefix = projectId
         };
 
         var result = await _s3Client.ListObjectsV2Async(request);
@@ -67,7 +67,7 @@ public class S3Service : IS3Service
         return s3Objects;
     }
 
-    public async Task<GetObjectResponse?> GetFile(string prefix, string key)
+    public async Task<GetObjectResponse?> GetFile(string projectId, string key)
     {
         var bucketExists = await DoesBucketExist();
 
@@ -79,7 +79,7 @@ public class S3Service : IS3Service
         return await _s3Client.GetObjectAsync(_bucketName, key);
     }
 
-    public async Task<string?> SaveFile(IFormFile file, string? prefix)
+    public async Task<string?> SaveFile(IFormFile file, string projectId)
     {
         var bucketExists = await DoesBucketExist();
 
@@ -91,16 +91,16 @@ public class S3Service : IS3Service
         var request = new PutObjectRequest()
         {
             BucketName = _bucketName,
-            Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+            Key = $"{projectId}/{file.FileName}",
             InputStream = file.OpenReadStream()
         };
         request.Metadata.Add("Content-Type", file.ContentType);
         await _s3Client.PutObjectAsync(request);
 
-        return $"{prefix}/{file.FileName}";
+        return $"{projectId}/{file.FileName}";
     }
 
-    public async Task<string?> DeleteFile(string prefix, string key)
+    public async Task<string?> DeleteFile(string projectId, string key)
     {
         var bucketExists = await DoesBucketExist();
 
@@ -109,16 +109,16 @@ public class S3Service : IS3Service
             return null;
         }
 
-        await _s3Client.DeleteObjectAsync(_bucketName, $"{prefix}/{key}");
+        await _s3Client.DeleteObjectAsync(_bucketName, $"{projectId}/{key}");
 
         return key;
     }
 
-    public async Task<List<string>?> DeleteFiles(string prefix, List<string> keys)
+    public async Task<List<string>?> DeleteFiles(string projectId, List<string> keys)
     {
         KeyVersion makeKeyVersion(string key) => new()
         {
-            Key = $"{prefix}/${key}"
+            Key = $"{projectId}/{key}"
         };
 
         var bucketExists = await DoesBucketExist();

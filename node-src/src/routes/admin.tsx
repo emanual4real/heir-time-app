@@ -4,7 +4,7 @@ import { Admin } from '@ui/pages';
 export const Route = createFileRoute('/admin')({
   beforeLoad: ({ context, location }) => {
     // TODO: not requested behavior, but working redirect based on auth context
-    if (!context.auth.loggedIn) {
+    if (!context.loggedIn) {
       throw redirect({
         to: '/login',
         search: {

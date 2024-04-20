@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 export const Undecided: Story = {
   args: {
     item: {
-      id: 'some id',
+      id: 0,
       title: 'Used Couch',
       description:
         'This couch has been used by a lot of people.  It gets around a lot.  I mean a lot!',
@@ -53,14 +53,15 @@ export const Undecided: Story = {
       ],
       fileKeys: [],
       fileUrls: []
-    }
+    },
+    projectId: 'asdf987234sdaf'
   }
 };
 
 export const Decided: Story = {
   args: {
     item: {
-      id: 'some id',
+      id: 1,
       title: 'Used Couch',
       description:
         'This couch has been used by a lot of people.  It gets around a lot.  I mean a lot!',
@@ -73,14 +74,15 @@ export const Decided: Story = {
       bids: [],
       fileKeys: [],
       fileUrls: []
-    }
+    },
+    projectId: 'asdf987234sdaf'
   }
 };
 
 export const Goodwill: Story = {
   args: {
     item: {
-      id: 'some id',
+      id: 2,
       title: 'Used Couch',
       description:
         'This couch has been used by a lot of people.  It gets around a lot.  I mean a lot!',
@@ -92,6 +94,7 @@ export const Goodwill: Story = {
       bids: [],
       fileKeys: [],
       fileUrls: []
-    }
+    },
+    projectId: 'asdf987234sdaf'
   }
 };

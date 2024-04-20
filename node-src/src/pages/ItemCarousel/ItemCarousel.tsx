@@ -1,71 +1,58 @@
-import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { deleteItem, updateItem, fetchItems, submitBid } from '@ui/services';
-import { BidPayload, Item } from '@ui/types';
+import { BidPayload, PostPutItemMutationProps } from '@ui/types';
 import { Carousel, ItemComponent } from '@ui/components';
+import {
+  useDeleteItemMutation,
+  useGetItemsByProjectIdQuery,
+  useSubmitItemBidMutation,
+  useUpdateItemMutation
+} from '@ui/services';
 import './ItemCarousel.css';
-
 export interface ItemCarouselProps {
+  projectId: string;
   isAdmin?: boolean;
 }
 
 export const ItemCarousel = (props: ItemCarouselProps) => {
-  const [items, setItems] = useState<Item[]>([]);
+  const { data, isSuccess, isLoading } = useGetItemsByProjectIdQuery(props.projectId);
 
-  useEffect(() => {
-    const getItems = async () => {
-      const data = await fetchItems();
+  const [deleteItem] = useDeleteItemMutation();
+  const [updateItem] = useUpdateItemMutation();
+  const [submitBid] = useSubmitItemBidMutation();
 
-      setItems(data);
-    };
-
-    getItems();
-  }, []);
-
-  const handleDelete = async (id: string) => {
-    const deletedId = await deleteItem(id);
-
-    if (deletedId) {
-      setItems(items.filter((row) => row.id !== deletedId));
-    }
+  const handleDelete = async (id: number) => {
+    deleteItem({ itemId: id, projectId: props.projectId });
   };
 
-  const handleEdit = async (item: Partial<Item>) => {
-    const originalItem = items.find((row) => row.id === item.id);
-    const newItem = { ...originalItem, ...item } as Item;
-    const response = await updateItem(newItem);
-
-    if (response) {
-      const updatedList = items.filter((row) => row.id !== response.id);
-      updatedList.push(response);
-      setItems(updatedList);
-    }
+  const handleEdit = async (item: PostPutItemMutationProps) => {
+    updateItem(item);
   };
 
   const handleSubmitBid = async (payload: BidPayload) => {
-    const response = await submitBid(payload);
-    const itemIndex = items.findIndex((row) => row.id === response.id);
-
-    const updatedItems = [...items];
-    updatedItems[itemIndex] = response;
-
-    setItems(updatedItems);
+    submitBid(payload);
   };
 
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-      <Carousel itemCount={items.length} itemsPerPage={2}>
-        {items.map((item) => (
-          <ItemComponent
-            key={item.id}
-            item={item}
-            isAdmin={props.isAdmin}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
-            handleSubmitBid={handleSubmitBid}
-          />
-        ))}
-      </Carousel>
-    </Box>
-  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isSuccess) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+        <Carousel itemCount={data.length} itemsPerPage={2}>
+          {data.map((item) => (
+            <ItemComponent
+              key={item.id}
+              projectId={props.projectId}
+              item={item}
+              isAdmin={props.isAdmin}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+              handleSubmitBid={handleSubmitBid}
+            />
+          ))}
+        </Carousel>
+      </Box>
+    );
+  }
 };

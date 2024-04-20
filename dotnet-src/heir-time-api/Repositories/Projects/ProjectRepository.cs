@@ -9,6 +9,20 @@ public class ProjectRepository : IProjectRepository
     readonly string collectionName = "projects";
     readonly IMongoCollection<Project> _collection;
 
+    private async Task<int> GetNextId(string projectId)
+    {
+        var project = await _collection.Find(x => x.Id == projectId).FirstOrDefaultAsync();
+
+        var maxId = project.Items.Select(x => x.Id).Max();
+
+        if (maxId != null)
+        {
+            return (int)(maxId + 1);
+        }
+
+        return 0;
+    }
+
     public ProjectRepository(IMongoClient client)
     {
         _collection = client.GetDatabase(databaseName).GetCollection<Project>(collectionName);
@@ -51,4 +65,5 @@ public class ProjectRepository : IProjectRepository
 
         return await _collection.Find(x => x.Id == project.Id).FirstOrDefaultAsync();
     }
+
 }

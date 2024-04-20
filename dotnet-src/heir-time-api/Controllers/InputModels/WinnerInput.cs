@@ -8,5 +8,5 @@ public class WinnerInput
     }
 
     public required string UserId { get; set; }
-    public required string ItemId { get; set; }
+    public required int ItemId { get; set; }
 }

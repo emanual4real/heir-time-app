@@ -11,18 +11,14 @@ namespace heir_time_api.Controllers;
 [Route("api/[controller]")]
 public class ProjectController : ControllerBase
 {
-    readonly IConfiguration _configuration;
-    readonly IItemService _itemService;
     readonly IProjectService _projectService;
     readonly IUserService _userService;
 
-    public ProjectController(IConfiguration configuration,
-    IItemService itemService,
+    public ProjectController(
     IProjectService projectService,
     IUserService userService)
     {
-        _configuration = configuration;
-        _itemService = itemService;
+
         _projectService = projectService;
         _userService = userService;
     }
@@ -48,7 +44,9 @@ public class ProjectController : ControllerBase
     {
         var user = await GetUser();
 
-        return await _projectService.GetProjectsByUser(user);
+        var projects = await _projectService.GetProjectsByUser(user);
+
+        return Ok(projects);
     }
 
     // GET api/project/{projectId}
@@ -60,21 +58,9 @@ public class ProjectController : ControllerBase
     [HttpGet("{projectId}")]
     public async Task<ActionResult<Project?>> GetProjectById(string projectId)
     {
-        return await _projectService.GetProjectById(projectId);
-    }
+        var project = await _projectService.GetProjectById(projectId);
 
-
-
-    // GET api/project/{projectId}/items
-    /// <summary>
-    /// Get all items for a project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <returns>List of Items</returns>
-    [HttpGet("{projectId}/items")]
-    public Task<ActionResult<List<Item?>>> GetItemsByProject(string projectId)
-    {
-        throw new NotImplementedException();
+        return Ok(project);
     }
 
     // POST api/project
@@ -91,43 +77,14 @@ public class ProjectController : ControllerBase
         // create new project
         var newProject = await _projectService.CreateProject(project, user);
 
-        if (newProject is not null)
+        if (newProject != null)
         {
-            // save project to user
-            user.OwnedProjects.Add(newProject.Id);
-            await _userService.UpdateUser(user);
+            await _userService.AddOwnedProject(user, newProject.Id);
 
-            return newProject;
+            return Ok(newProject);
         }
 
-
         return BadRequest("Unable to create project");
-    }
-
-    // POST api/project/{projectId}/item
-    /// <summary>
-    /// Create an item in a project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="item"></param>
-    /// <returns>Item</returns>
-    [HttpPost("{projectId}/item")]
-    public Task<ActionResult<Item?>> CreateItem(string projectId, [FromBody] Item item)
-    {
-        throw new NotImplementedException();
-    }
-
-    // PUT api/project/{projectId}/item
-    /// <summary>
-    /// Update an item in project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="item"></param>
-    /// <returns>Item</returns>
-    [HttpPut("{projectId}/item")]
-    public Task<ActionResult<Item?>> UpdateItem(string projectId, [FromBody] Item item)
-    {
-        throw new NotImplementedException();
     }
 
     // DELETE api/project/{projectId}
@@ -141,19 +98,21 @@ public class ProjectController : ControllerBase
     {
         var user = await GetUser();
 
-        return await _projectService.DeleteProject(projectId, user);
+        var deletedProjectId = await _projectService.DeleteProject(projectId, user);
+
+        if (deletedProjectId != null)
+        {
+            await _userService.RemoveOwnedProject(user, deletedProjectId);
+
+            return Ok(deletedProjectId);
+        }
+
+        return BadRequest("Unable to delete project");
     }
 
-    // DELETE api/project/{projectId}/item/{itemId}
-    /// <summary>
-    /// Delete an item in project
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="itemId"></param>
-    /// <returns>ItemId</returns>
-    [HttpDelete("{projectId}/item/{itemId}")]
-    public Task<ActionResult<List<Item?>>> DeleteItem(string projectId, string itemId)
-    {
-        throw new NotImplementedException();
-    }
+
+
+
+
+
 }

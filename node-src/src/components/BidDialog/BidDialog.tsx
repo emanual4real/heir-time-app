@@ -6,8 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { format } from 'date-fns';
 import { Bid, Item } from '@ui/types';
-import { useAuth } from '@ui/hooks';
 import { BiddingForm } from '..';
+import { useGetSelfQuery } from '@ui/services';
 
 export interface BidDialogProps {
   item: Item;
@@ -15,9 +15,9 @@ export interface BidDialogProps {
 }
 
 export const BidDialog = (props: BidDialogProps) => {
-  const { auth } = useAuth();
+  const { data: user } = useGetSelfQuery();
 
-  const userId = auth?.user?.id;
+  const userId = user?.id;
   const userBid = props.item.bids?.find((bid) => bid.user === userId);
   const defaultDate = format(Date.now(), 'yyyy-MM-dd');
   const defaultBid: Bid = {

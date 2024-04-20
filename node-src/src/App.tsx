@@ -2,9 +2,10 @@ import './App.css';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from './theme';
 import { RouterProvider } from '@tanstack/react-router';
-import { AuthProvider } from '@ui/context';
-import { useAuth } from '@ui/hooks';
 import { router } from './router';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { useGetSelfQuery } from './services/api';
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -14,18 +15,18 @@ declare module '@tanstack/react-router' {
 }
 
 const RouterApp = () => {
-  const { auth } = useAuth();
+  const { data, isSuccess } = useGetSelfQuery();
 
-  return <RouterProvider router={router} context={{ auth }} />;
+  return <RouterProvider router={router} context={{ user: data, loggedIn: isSuccess }} />;
 };
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
         <RouterApp />
-      </AuthProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

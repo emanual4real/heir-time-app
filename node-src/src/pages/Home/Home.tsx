@@ -1,27 +1,36 @@
-import { useAuth } from '@ui/hooks';
-import { ItemCarousel } from '..';
 import { useEffect } from 'react';
-import { getSelf } from '../../services/userService';
+import { ItemCarousel } from '..';
+import { useGetOwnProjectsQuery, useGetSelfQuery } from '@ui/services';
+import { selectCurrentProject, setCurrentProject } from '@ui/state';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Home = () => {
-  const { auth, setAuth } = useAuth();
+  const dispatch = useDispatch();
+  const { data: user } = useGetSelfQuery();
+  const { data: projects, isSuccess } = useGetOwnProjectsQuery();
+  const currentProject = useSelector(selectCurrentProject);
 
   useEffect(() => {
-    const autoLogin = async () => {
-      if (!auth.loggedIn) {
-        const user = await getSelf();
+    if (projects) {
+      const defaultProject = projects[0].id;
 
-        if (user !== null) {
-          setAuth({ loggedIn: true, user });
-        }
-      }
-    };
+      dispatch(setCurrentProject(defaultProject));
+    }
+  }, [dispatch, projects]);
 
-    autoLogin();
-  }, [auth.loggedIn, setAuth]);
-
-  if (auth.loggedIn) {
-    return <ItemCarousel isAdmin={false} />;
+  if (user === undefined) {
+    return <div>Home Page in Progress</div>;
   }
-  return <div>Home Page in Progress</div>;
+
+  if (isSuccess) {
+    return (
+      <div>
+        <ul>
+          Project List
+          {projects?.map((project) => <li key={project.id}>{project.projectName}</li>)}
+        </ul>
+        {currentProject ? <ItemCarousel projectId={currentProject} isAdmin={false} /> : null}
+      </div>
+    );
+  }
 };

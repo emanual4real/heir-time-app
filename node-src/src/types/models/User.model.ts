@@ -1,3 +1,8 @@
+export interface LoginMutationProps {
+  email: string;
+  password: string;
+}
+
 export interface User {
   id: string;
   firstName: string;

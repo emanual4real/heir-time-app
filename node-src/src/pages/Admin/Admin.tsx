@@ -1,18 +1,15 @@
 import { Box, Button } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import { NewItemDialog } from '@ui/components';
-import { postItemWithFile } from '@ui/services';
-import { Item } from '@ui/types';
+import { usePostItemMutation } from '@ui/services';
+import { PostPutItemMutationProps } from '@ui/types';
 
 export const Admin = () => {
   const navigate = useNavigate({ from: '/admin' });
+  const [addItem] = usePostItemMutation();
 
-  const onSubmit = (item: Partial<Item & { files: FileList }>) => {
-    const newItem = { ...item };
-    delete newItem.files;
-    const { files } = item;
-
-    postItemWithFile(newItem, files);
+  const onSubmit = (newItem: PostPutItemMutationProps) => {
+    addItem(newItem);
   };
 
   return (
