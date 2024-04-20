@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
 import { Bid, BidPayload, Item, ItemStatus, PostPutItemMutationProps } from '@ui/types';
-import { BidDialog, DeleteDialog, EditItemDialog } from '..';
+import { BidDialogReduxWrapper, DeleteDialog, EditItemDialog } from '..';
 import NoImage from '@ui/assets/no-image.jpg';
 
 export interface ItemProps {
@@ -85,7 +85,7 @@ export const ItemComponent = (props: ItemProps) => {
       </CardContent>
       <CardActions>
         {props.item.itemStatus === ItemStatus.Undecided ? (
-          <BidDialog item={props.item} onSubmit={onBidClick} />
+          <BidDialogReduxWrapper item={props.item} onSubmit={onBidClick} />
         ) : null}
         {props.isAdmin ? <DeleteDialog handleDelete={onDeleteClick} /> : null}
         {props.isAdmin ? <EditItemDialog item={props.item} onSubmit={onEditClick} /> : null}

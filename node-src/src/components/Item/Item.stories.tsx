@@ -54,7 +54,16 @@ export const Undecided: Story = {
       fileKeys: [],
       fileUrls: []
     },
-    projectId: 'asdf987234sdaf'
+    projectId: 'asdf987234sdaf',
+    handleDelete: () => {
+      // TODO:
+    },
+    handleEdit: () => {
+      // TODO:
+    },
+    handleSubmitBid: () => {
+      // TODO:
+    }
   }
 };
 
@@ -75,7 +84,16 @@ export const Decided: Story = {
       fileKeys: [],
       fileUrls: []
     },
-    projectId: 'asdf987234sdaf'
+    projectId: 'asdf987234sdaf',
+    handleDelete: () => {
+      // TODO:
+    },
+    handleEdit: () => {
+      // TODO:
+    },
+    handleSubmitBid: () => {
+      // TODO:
+    }
   }
 };
 
@@ -95,6 +113,15 @@ export const Goodwill: Story = {
       fileKeys: [],
       fileUrls: []
     },
-    projectId: 'asdf987234sdaf'
+    projectId: 'asdf987234sdaf',
+    handleDelete: () => {
+      // TODO:
+    },
+    handleEdit: () => {
+      // TODO:
+    },
+    handleSubmitBid: () => {
+      // TODO:
+    }
   }
 };

@@ -8,16 +8,16 @@ import { format } from 'date-fns';
 import { Bid, Item } from '@ui/types';
 import { BiddingForm } from '..';
 import { useGetSelfQuery } from '@ui/services';
+import { User } from '../../types/openApi/models/User.model';
 
 export interface BidDialogProps {
   item: Item;
+  user?: User;
   onSubmit: (bid: Bid) => void;
 }
 
 export const BidDialog = (props: BidDialogProps) => {
-  const { data: user } = useGetSelfQuery();
-
-  const userId = user?.id;
+  const userId = props.user?.id;
   const userBid = props.item.bids?.find((bid) => bid.user === userId);
   const defaultDate = format(Date.now(), 'yyyy-MM-dd');
   const defaultBid: Bid = {
@@ -58,11 +58,12 @@ export const BidDialog = (props: BidDialogProps) => {
       </Button>
       <Dialog
         open={open}
+        maxWidth={'lg'}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title">{'Delete this item forever?'}</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="alert-dialog-title">{'Place a bid on this item'}</DialogTitle>
+        <DialogContent sx={{ width: '1000px' }}>
           <BiddingForm bid={bid} onChange={handleChange} />
         </DialogContent>
         <DialogActions>
@@ -74,4 +75,10 @@ export const BidDialog = (props: BidDialogProps) => {
       </Dialog>
     </>
   );
+};
+
+export const BidDialogReduxWrapper = (props: BidDialogProps) => {
+  const { data: user } = useGetSelfQuery();
+
+  return <BidDialog {...props} user={user} />;
 };

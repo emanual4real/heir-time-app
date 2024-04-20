@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { BidDialog } from '.';
-import { Item } from '@ui/types';
 
 const meta = {
   title: 'Components/BidDialog',
@@ -20,6 +19,20 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    item: {} as Item
+    item: {
+      id: 0,
+      title: 'some item',
+      description: 'some description',
+      itemStatus: 0,
+      statusName: 'Undecided',
+      releaseDate: Date.now().toString(),
+      fileKeys: [],
+      fileUrls: [],
+      bids: []
+    },
+    user: { id: '1ad9a8d7f134', firstName: 'John', lastName: 'Doe', emailAddress: 'john@doe.com' },
+    onSubmit: () => {
+      console.log('empty');
+    }
   }
 };

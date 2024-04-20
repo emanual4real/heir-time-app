@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Bid } from '@ui/types';
 import { dateStringToFormat } from '@ui/utils';
+import { format } from 'date-fns';
 
 interface BiddingFormProps {
   bid?: Bid;
@@ -15,6 +16,13 @@ interface BiddingFormProps {
 }
 
 export const BiddingForm = (props: BiddingFormProps) => {
+  const getStringDate = () => {
+    if (props.bid?.receivingDate) {
+      return dateStringToFormat(props.bid?.receivingDate, 'yyyy-MM-dd');
+    }
+
+    return format(Date.now(), 'yyyy-MM-dd');
+  };
   const handleOnChange = ($event: React.SyntheticEvent<Element, Event>) => {
     if ($event.target instanceof HTMLInputElement) {
       const { name, value } = $event.target;
@@ -36,24 +44,26 @@ export const BiddingForm = (props: BiddingFormProps) => {
           <span>{"Please don't give this to me"}</span>
           <span>{"I can't live without this"}</span>
         </div>
-        <RadioGroup
-          aria-labelledby="want-radio-group-label"
-          row
-          name="value"
-          value={props.bid?.value ?? 5}
-          onChange={handleOnChange}>
-          <FormControlLabel value={0} control={<Radio />} label="0" labelPlacement="top" />
-          <FormControlLabel value={1} control={<Radio />} label="1" labelPlacement="top" />
-          <FormControlLabel value={2} control={<Radio />} label="2" labelPlacement="top" />
-          <FormControlLabel value={3} control={<Radio />} label="3" labelPlacement="top" />
-          <FormControlLabel value={4} control={<Radio />} label="4" labelPlacement="top" />
-          <FormControlLabel value={5} control={<Radio />} label="5" labelPlacement="top" />
-          <FormControlLabel value={6} control={<Radio />} label="6" labelPlacement="top" />
-          <FormControlLabel value={7} control={<Radio />} label="7" labelPlacement="top" />
-          <FormControlLabel value={8} control={<Radio />} label="8" labelPlacement="top" />
-          <FormControlLabel value={9} control={<Radio />} label="9" labelPlacement="top" />
-          <FormControlLabel value={10} control={<Radio />} label="10" labelPlacement="top" />
-        </RadioGroup>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <RadioGroup
+            aria-labelledby="want-radio-group-label"
+            row
+            name="value"
+            value={props.bid?.value ?? 5}
+            onChange={handleOnChange}>
+            <FormControlLabel value={0} control={<Radio />} label="0" labelPlacement="top" />
+            <FormControlLabel value={1} control={<Radio />} label="1" labelPlacement="top" />
+            <FormControlLabel value={2} control={<Radio />} label="2" labelPlacement="top" />
+            <FormControlLabel value={3} control={<Radio />} label="3" labelPlacement="top" />
+            <FormControlLabel value={4} control={<Radio />} label="4" labelPlacement="top" />
+            <FormControlLabel value={5} control={<Radio />} label="5" labelPlacement="top" />
+            <FormControlLabel value={6} control={<Radio />} label="6" labelPlacement="top" />
+            <FormControlLabel value={7} control={<Radio />} label="7" labelPlacement="top" />
+            <FormControlLabel value={8} control={<Radio />} label="8" labelPlacement="top" />
+            <FormControlLabel value={9} control={<Radio />} label="9" labelPlacement="top" />
+            <FormControlLabel value={10} control={<Radio />} label="10" labelPlacement="top" />
+          </RadioGroup>
+        </div>
         <br />
         <FormControl sx={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
           <FormControlLabel
@@ -61,11 +71,11 @@ export const BiddingForm = (props: BiddingFormProps) => {
               <TextField
                 name="receivingDate"
                 type="date"
-                value={dateStringToFormat(props.bid?.receivingDate ?? '', 'yyyy-MM-dd')}
+                value={getStringDate()}
                 sx={{ marginLeft: '5px' }}
               />
             }
-            label="Choose receiving date"
+            label="Choose available date"
             labelPlacement="start"
             onChange={handleOnChange}
           />

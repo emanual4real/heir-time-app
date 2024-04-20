@@ -34,6 +34,9 @@ export const NewItem: Story = {
     },
     onChange: () => {
       // TODO:
+    },
+    uploadFile: () => {
+      // TODO:
     }
   }
 };
@@ -50,6 +53,9 @@ export const EditItem: Story = {
       statusName: ItemStatus[ItemStatus.Decided]
     },
     onChange: () => {
+      // TODO:
+    },
+    uploadFile: () => {
       // TODO:
     }
   }

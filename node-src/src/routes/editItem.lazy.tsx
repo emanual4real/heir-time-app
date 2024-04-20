@@ -1,8 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { ItemCarousel } from '@ui/pages';
+import { ItemCarousel } from '@ui/components';
 
 const EditItemFormWithProps = () => {
-  return <ItemCarousel projectId={'adsfkjasdf'} isAdmin={true} />;
+  return <ItemCarousel />;
 };
 
 export const Route = createLazyFileRoute('/editItem')({

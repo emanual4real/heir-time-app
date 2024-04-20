@@ -33,6 +33,9 @@ export const Primary: Story = {
       bids: [],
       fileKeys: [],
       fileUrls: []
+    },
+    onSubmit: () => {
+      // TODO:
     }
   }
 };
