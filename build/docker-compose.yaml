@@ -9,10 +9,10 @@ services:
       - "8080:8080"
     env_file:
       - ../.env
-    links:
-      - mongo
-    depends_on:
-     - mongo
+    # links:
+    #   - mongo
+    # depends_on:
+    #  - mongo
     networks:
       - app-network
     environment:
@@ -36,22 +36,22 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
 
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    # volumes:
-      # - db-data:/etc/data
-    volumes:
-      - type: bind
-        source: ../db
-        target: /data/db
-    networks:
-      - app-network
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+  # mongo:
+  #   image: mongo
+  #   restart: always
+  #   ports:
+  #     - "27017:27017"
+  #   # volumes:
+  #     # - db-data:/etc/data
+  #   volumes:
+  #     - type: bind
+  #       source: ../db
+  #       target: /data/db
+  #   networks:
+  #     - app-network
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: example
 
 networks:
   app-network:

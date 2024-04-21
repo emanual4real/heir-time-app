@@ -10,7 +10,7 @@ export interface User {
   emailAddress: string;
   isAdmin?: boolean;
   ownedProjects?: string[];
-  endowmentProjects?: string[];
+  projects?: string[];
   phoneNumber?: string;
   address?: string;
 }
