@@ -68,7 +68,7 @@ export const NewItemDialog = (props: NewItemDialogProps) => {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title">{'Delete this item forever?'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Add a new item to give away'}</DialogTitle>
         <DialogContent>
           <ItemForm
             item={form}
