@@ -132,7 +132,9 @@ public class ItemService : IItemService
     {
         var project = await GetProject(projectId);
 
-        if (project.Owner == user.Id)
+        var createItemAuthorized = project.Owner == user.Id || project.Admins.Exists(x => x == user.Id);
+
+        if (createItemAuthorized)
         {
             var newItem = await SaveFileToS3(item, file, projectId);
 
@@ -148,7 +150,9 @@ public class ItemService : IItemService
     {
         var project = await GetProject(projectId);
 
-        if (project.Owner == user.Id)
+        var updateItemAuthorized = project.Owner == user.Id || project.Admins.Exists(x => x == user.Id);
+
+        if (updateItemAuthorized)
         {
             var newItem = await SaveFileToS3(item, file, projectId);
 
@@ -184,8 +188,10 @@ public class ItemService : IItemService
     public async Task<int?> DeleteItem(string projectId, int itemId, Models.User user)
     {
         var project = await GetProject(projectId);
-        // Must be owner to edit project
-        if (project.Owner == user.Id)
+
+        var deleteItemAuthorized = project.Owner == user.Id || project.Admins.Exists(x => x == user.Id);
+
+        if (deleteItemAuthorized)
         {
             var item = await _itemRepository.GetItemById(projectId, itemId);
 

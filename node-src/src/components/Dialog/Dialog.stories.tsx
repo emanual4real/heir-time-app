@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { withActions } from '@storybook/addon-actions/decorator';
-import { fn } from '@storybook/test';
 import { Dialog } from '.';
 
 const meta = {
@@ -14,7 +13,6 @@ const meta = {
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
-  args: { onSubmit: fn() },
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     buttonText: { control: 'text', description: 'title of the button to open dialog' },
