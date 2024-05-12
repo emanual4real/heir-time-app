@@ -94,6 +94,8 @@ public class ItemController : ControllerBase
             Title = form.Title,
             ReleaseDate = form.ReleaseDate,
             ItemStatus = form.ItemStatus,
+            Description = form.Description,
+            Location = form.Location
         };
         var projectId = form.ProjectId;
 
@@ -111,20 +113,24 @@ public class ItemController : ControllerBase
     /// <summary>
     /// Update item and file
     /// </summary>
-    /// <param name="itemJson"></param>
+    /// <param name="itemWithFileInput"></param>
     /// <param name="file"></param>
-    /// <param name="projectId"></param>
     /// <returns>Item</returns>
     [HttpPut]
-    public async Task<ActionResult<Item?>> UpdateItem([FromForm] string itemJson, IFormFile? file, [FromQuery] string projectId)
+    public async Task<ActionResult<Item?>> UpdateItem([FromForm] string itemWithFileInput, IFormFile? file)
     {
         var user = await GetUser();
-        Item? item = JsonConvert.DeserializeObject<Item>(itemJson);
-
-        if (item == null)
+        ItemWithFileInput? form = JsonConvert.DeserializeObject<ItemWithFileInput>(itemWithFileInput);
+        var item = new Item()
         {
-            return BadRequest();
-        }
+            Id = form.Id,
+            Title = form.Title,
+            ReleaseDate = form.ReleaseDate,
+            ItemStatus = form.ItemStatus,
+            Description = form.Description,
+            Location = form.Location
+        };
+        var projectId = form.ProjectId;
 
         var newItem = await _itemService.UpdateItem(projectId, item, user, file);
 

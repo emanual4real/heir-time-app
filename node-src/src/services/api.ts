@@ -61,7 +61,8 @@ export const heirTimeApi = createApi({
       query: (projectId) => ({
         url: `/item?projectId=${projectId}`,
         method: 'GET'
-      })
+      }),
+      providesTags: ['items']
     }),
     postItem: builder.mutation<Item, PostPutItemMutationProps>({
       queryFn: async (data: PostPutItemMutationProps) => {
