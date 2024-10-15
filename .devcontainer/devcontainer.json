@@ -42,19 +42,19 @@
 				"dbaeumer.vscode-eslint",
 				"johnpapa.Angular2",
 				"johnpapa.angular-essentials",
-				"angular.ng-template"
+				"Angular.ng-template",
+				"nrwl.angular-console"
 			]
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
-		4200
+		4200,
+		8080,
+		"app:4200",
+		"app:8080",
+		"db:27017"
 	]
-	// "forwardPorts": [
-	// 	4200,
-	// 	"app:4200",
-	// 	"db:27017"
-	// ],
 	// "portsAttributes": {
 	// 	"4200": {
 	// 		"label": "Angular app",
