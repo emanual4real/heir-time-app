@@ -2,11 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '@types';
 
-
 @Injectable({
   providedIn: 'root',
 })
-export class UserServiceService {
+export class UserService {
   constructor(private http: HttpClient) {}
 
   baseApiUrl = 'http://localhost:8080/api';
@@ -20,7 +19,7 @@ export class UserServiceService {
   }
 
   getUserByEmail(emailAddress: string) {
-    let queryParams = new HttpParams();
+    const queryParams = new HttpParams();
     queryParams.set('email', emailAddress);
     return this.http.get<User>(`${this.baseApiUrl}/user/me`, {
       params: queryParams,

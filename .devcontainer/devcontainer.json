@@ -51,10 +51,7 @@
 	"forwardPorts": [
 		4200,
 		8080,
-		"app:4200",
-		"app:8080",
-		"db:27017"
-	]
+	],
 	// "portsAttributes": {
 	// 	"4200": {
 	// 		"label": "Angular app",

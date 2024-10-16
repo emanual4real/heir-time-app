@@ -23,6 +23,7 @@
       }
     },
     {
+      "label": "angular test",
       "type": "npm",
       "script": "test",
       "isBackground": true,

@@ -57,7 +57,8 @@
           "buildTarget": "heir-time:build:production"
         },
         "development": {
-          "buildTarget": "heir-time:build:development"
+          "buildTarget": "heir-time:build:development",
+          "host": "0.0.0.0"
         }
       },
       "defaultConfiguration": "development"

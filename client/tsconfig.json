@@ -25,6 +25,9 @@
       ],
       "@components": [
         "./src/components"
+      ],
+      "@interceptors": [
+        "./src/interceptors"
       ]
     },
     "esModuleInterop": true,
