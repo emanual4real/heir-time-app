@@ -1,1 +1,21 @@
-<p>navbar works!</p>
+<mat-toolbar>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>{{ appTitle }}</span>
+  <span class="example-spacer"></span>
+  <img src="/favicon.ico" alt="logo" />
+
+  @let user = user$ | async;
+  <ng-container>
+    @if (user !== null) { Welcome {{ user.firstName }}
+    <button mat-button (click)="logout()">Logout</button>
+    } @else {
+    <button mat-button (click)="login()">Login</button>
+    }
+  </ng-container>
+</mat-toolbar>

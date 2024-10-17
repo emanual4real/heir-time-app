@@ -1,32 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService } from 'src/services/user';
-import { User } from '@types';
+import { ItemStatus } from '@types';
+import { ItemComponent } from '../item/item.component';
+import { Item } from 'src/types/models/item';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ItemComponent, NavbarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-// implements OnInit
 export class HomeComponent {
-  user!: User;
-
-  constructor(private userService: UserService) {}
-
-  data$ = this.userService.user;
-
-  login() {
-    this.userService.login('emanual4real@hotmail.com', 'Password123');
-  }
-
-  logout() {
-    this.userService.logout();
-  }
-
-  // ngOnInit(): void {
-  //   this.userService.login('emanual4real@hotmail.com', 'Password123');
-  // }
+  item: Item = {
+    id: 1,
+    title: 'Some Shiba Inu',
+    releaseDate: '10/16/2024',
+    itemStatus: ItemStatus.Decided,
+    statusName: 'Decided',
+    description: 'Just a dog',
+    location: 'Asheville, NC',
+    imagePath: 'https://material.angular.io/assets/img/examples/shiba2.jpg',
+    recipient: 'some one',
+    bids: [],
+    fileKeys: [],
+    fileUrls: [],
+  };
 }
