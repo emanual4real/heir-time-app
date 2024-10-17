@@ -1,2 +1,5 @@
 <p>home works!</p>
-{{ user | json }}
+
+<button (click)="login()">Login</button>
+<button (click)="logout()">Logout</button>
+<div>{{ data$ | async | json }}</div>

@@ -10,16 +10,23 @@ import { User } from '@types';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit {
+// implements OnInit
+export class HomeComponent {
   user!: User;
 
   constructor(private userService: UserService) {}
 
-  ngOnInit(): void {
-    this.userService
-      .login('emanual4real@hotmail.com', 'Password123')
-      .subscribe((data) => {
-        this.user = data;
-      });
+  data$ = this.userService.user;
+
+  login() {
+    this.userService.login('emanual4real@hotmail.com', 'Password123');
   }
+
+  logout() {
+    this.userService.logout();
+  }
+
+  // ngOnInit(): void {
+  //   this.userService.login('emanual4real@hotmail.com', 'Password123');
+  // }
 }
