@@ -13,4 +13,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 export class MenuComponent {
   @Input({ required: true }) opened = false;
   @Output() menuClick = new EventEmitter();
+
+  closeSideNav() {
+    this.menuClick.emit();
+  }
 }

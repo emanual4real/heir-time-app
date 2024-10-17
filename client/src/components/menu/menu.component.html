@@ -1,8 +1,10 @@
 <mat-drawer-container class="side-nav">
   <mat-drawer mode="side" [opened]="opened"
     ><ul>
-      <li><a [routerLink]="['/']">Home</a></li>
-      <li><a [routerLink]="['/projects']">Projects</a></li>
+      <li><a [routerLink]="['/']" (click)="closeSideNav()">Home</a></li>
+      <li>
+        <a [routerLink]="['/projects']" (click)="closeSideNav()">Projects</a>
+      </li>
       <li>Stuff</li>
     </ul></mat-drawer
   >
