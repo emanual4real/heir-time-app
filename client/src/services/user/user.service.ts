@@ -1,21 +1,31 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '@types';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private baseApiUrl = 'http://localhost:8080/api';
+  private _user = new BehaviorSubject<User | null>(null);
+
+  private _userList = new BehaviorSubject<User[]>([]);
+
+  readonly user = this._user.asObservable();
+  readonly userList = this._userList.asObservable();
+
   constructor(private http: HttpClient) {}
 
-  baseApiUrl = 'http://localhost:8080/api';
-
+  // TODO: probably don't need this once you login
   getMe() {
     return this.http.get<User>(`${this.baseApiUrl}/user/me`);
   }
 
   getAllUsers() {
-    return this.http.get<User[]>(`${this.baseApiUrl}/user`);
+    this.http.get<User[]>(`${this.baseApiUrl}/user`).subscribe((data) => {
+      this._userList.next(data);
+    });
   }
 
   getUserByEmail(emailAddress: string) {
@@ -33,10 +43,16 @@ export class UserService {
 
   login(emailAddress: string, password: string) {
     const body = { emailAddress, password };
-    return this.http.post<User>(`${this.baseApiUrl}/user/login`, body);
+    this.http
+      .post<User>(`${this.baseApiUrl}/user/login`, body)
+      .subscribe((data) => {
+        this._user.next(data);
+      });
   }
 
   logout() {
-    return this.http.get(`${this.baseApiUrl}/user/logout`);
+    this.http.get(`${this.baseApiUrl}/user/logout`).subscribe(() => {
+      this._user.next({} as User);
+    });
   }
 }
