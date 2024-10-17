@@ -2,12 +2,13 @@
   <button
     mat-icon-button
     class="example-icon"
-    aria-label="Example icon-button with menu icon"
+    aria-label="menu icon"
+    (click)="menuClick.emit()"
   >
     <mat-icon>menu</mat-icon>
   </button>
   <span>{{ appTitle }}</span>
-  <span class="example-spacer"></span>
+  <span class="spacer"></span>
   <img src="/favicon.ico" alt="logo" />
 
   @let user = user$ | async;

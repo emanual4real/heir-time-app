@@ -1,0 +1,10 @@
+<mat-drawer-container class="side-nav">
+  <mat-drawer mode="side" [opened]="opened"
+    ><ul>
+      <li><a [routerLink]="['/']">Home</a></li>
+      <li><a [routerLink]="['/projects']">Projects</a></li>
+      <li>Stuff</li>
+    </ul></mat-drawer
+  >
+  <mat-drawer-content><ng-content /></mat-drawer-content>
+</mat-drawer-container>

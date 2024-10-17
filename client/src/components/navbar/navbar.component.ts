@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { UserService } from 'src/services/user';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
+  @Output() menuClick = new EventEmitter();
   appTitle = 'Heir Time';
 
   user$ = this.userService.user;

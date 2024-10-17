@@ -1,3 +1,4 @@
-<app-navbar />
-
-<div style="width: 30%"><app-item [item]="item" /></div>
+<app-navbar (menuClick)="handleMenuClick()" />
+<app-menu [opened]="sideMenuToggle" (menuClick)="handleMenuClick()">
+  <router-outlet />
+</app-menu>
