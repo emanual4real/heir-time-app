@@ -9,17 +9,35 @@
     "importHelpers": true,
     "target": "es2022",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@components": ["./src/components"],
-      "@interceptors": ["./src/interceptors"],
-      "@resolvers": ["./src/resolvers"],
-      "@services": ["./src/services"],
-      "@types": ["./src/types"],
-      "@utils": ["./src/utils"]
+      "@components": [
+        "./src/components"
+      ],
+      "@interceptors": [
+        "./src/interceptors"
+      ],
+      "@resolvers": [
+        "./src/resolvers"
+      ],
+      "@services": [
+        "./src/services"
+      ],
+      "@state": [
+        "./src/+state"
+      ],
+      "@types": [
+        "./src/types"
+      ],
+      "@utils": [
+        "./src/utils"
+      ]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -44,7 +62,10 @@
     }
   ],
   "compileOnSave": false,
-  "exclude": ["node_modules", "tmp"],
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

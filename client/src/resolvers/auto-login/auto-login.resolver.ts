@@ -1,19 +1,20 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
-import { UserService } from '@services';
+
 import { map, tap } from 'rxjs';
+import { UsersFacade } from '@state';
 
 export const autoLoginResolver: ResolveFn<boolean> = () => {
-  const userService = inject(UserService);
+  const userFacade = inject(UsersFacade);
 
-  const user$ = userService.user;
+  const currentUser$ = userFacade.currentUser$;
 
-  return user$.pipe(
+  return currentUser$.pipe(
     tap((data) => {
       if (data === null) {
-        userService.getMe();
+        userFacade.getCurrentUser();
       }
     }),
-    map(() => true),
+    map(() => true)
   );
 };

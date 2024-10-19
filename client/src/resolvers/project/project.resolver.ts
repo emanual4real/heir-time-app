@@ -1,13 +1,14 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
-import { ProjectService, UserService } from '@services';
+import { ProjectService } from '@services';
+import { UsersFacade } from '@state';
 import { map, tap } from 'rxjs';
 
 export const projectResolver: ResolveFn<boolean> = () => {
-  const userService = inject(UserService);
+  const userFacade = inject(UsersFacade);
   const projectService = inject(ProjectService);
 
-  const user$ = userService.user;
+  const user$ = userFacade.currentUser$;
 
   return user$.pipe(
     // filter((user) => user !== null),
@@ -16,6 +17,6 @@ export const projectResolver: ResolveFn<boolean> = () => {
         projectService.getUserProject();
       }
     }),
-    map(() => true),
+    map(() => true)
   );
 };

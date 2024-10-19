@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { UserService } from 'src/services/user';
+import { UsersFacade } from '@state';
 
 @Component({
   selector: 'app-navbar',
@@ -16,16 +16,16 @@ export class NavbarComponent {
   @Output() menuClick = new EventEmitter();
   appTitle = 'Heir Time';
 
-  user$ = this.userService.user;
+  user$ = this.userFacade.currentUser$;
 
-  constructor(private userService: UserService) {}
+  constructor(private userFacade: UsersFacade) {}
 
   // TODO: temporary
   login() {
-    this.userService.login('emanual4real@hotmail.com', 'Password123');
+    this.userFacade.login('emanual4real@hotmail.com', 'Password123');
   }
 
   logout() {
-    this.userService.logout();
+    this.userFacade.logout();
   }
 }
