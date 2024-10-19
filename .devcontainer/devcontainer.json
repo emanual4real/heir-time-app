@@ -41,7 +41,6 @@
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
 				"johnpapa.Angular2",
-				"johnpapa.angular-essentials",
 				"Angular.ng-template",
 				"nrwl.angular-console"
 			]

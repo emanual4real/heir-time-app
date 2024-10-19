@@ -1,1 +1,2 @@
-export * from './projects.component';
+export * from './new-project';
+export * from './project-home';

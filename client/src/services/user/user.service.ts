@@ -17,9 +17,10 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // TODO: probably don't need this once you login
   getMe() {
-    return this.http.get<User>(`${this.baseApiUrl}/user/me`);
+    this.http.get<User>(`${this.baseApiUrl}/user/me`).subscribe((data) => {
+      this._user.next(data);
+    });
   }
 
   getAllUsers() {
@@ -52,7 +53,7 @@ export class UserService {
 
   logout() {
     this.http.get(`${this.baseApiUrl}/user/logout`).subscribe(() => {
-      this._user.next({} as User);
+      this._user.next(null);
     });
   }
 }

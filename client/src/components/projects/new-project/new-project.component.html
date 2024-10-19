@@ -1,0 +1,13 @@
+Create New Project
+<p>
+  <mat-form-field appearance="fill">
+    <mat-label>Project Name</mat-label>
+    <input
+      matInput
+      placeholder="Placeholder"
+      [formControl]="projectForm.controls.projectName"
+    />
+  </mat-form-field>
+</p>
+
+<button mat-button (click)="createProject()">Create</button>

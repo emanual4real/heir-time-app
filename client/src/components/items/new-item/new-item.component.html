@@ -1,0 +1,66 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          placeholder="Title"
+          [formControl]="itemForm.controls.title"
+        />
+      </mat-form-field>
+    </mat-card-title>
+  </mat-card-header>
+  <input type="file" />
+  <mat-card-content>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          placeholder="Description"
+          [formControl]="itemForm.controls.description"
+        ></textarea>
+        <mat-hint>Information about the item</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Item Status</mat-label>
+        <mat-select [formControl]="itemForm.controls.itemStatus">
+          @for (item of itemStatusOptions; track $index) {
+            <ng-container>
+              <mat-option [value]="item.value">{{ item.label }}</mat-option>
+            </ng-container>
+          }
+        </mat-select>
+        <mat-hint>Current status of item</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Current Location</mat-label>
+        <input
+          matInput
+          placeholder="Location"
+          [formControl]="itemForm.controls.location"
+        />
+        <mat-hint>Where the item resides</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Earliest Release Date</mat-label>
+        <input
+          matInput
+          placeholder="Release Date"
+          [formControl]="itemForm.controls.releaseDate"
+        />
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="createItem()">Create</button>
+  </mat-card-actions>
+</mat-card>

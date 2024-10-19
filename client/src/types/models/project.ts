@@ -5,6 +5,13 @@ export interface Project {
   projectName: string;
   owner: string;
   admins: string[];
-  users?: string[];
+  users: string[];
+  items: Item[];
+}
+
+export interface NewProjectPayload {
+  projectName: string;
+  admins: string[];
+  users: string[];
   items: Item[];
 }
