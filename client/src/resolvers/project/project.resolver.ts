@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { ProjectService, UserService } from '@services';
-import { filter, map, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
-export const projectResolver: ResolveFn<boolean> = (route, state) => {
+export const projectResolver: ResolveFn<boolean> = () => {
   const userService = inject(UserService);
   const projectService = inject(ProjectService);
 

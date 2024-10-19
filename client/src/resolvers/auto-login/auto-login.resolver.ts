@@ -3,7 +3,7 @@ import { ResolveFn } from '@angular/router';
 import { UserService } from '@services';
 import { map, tap } from 'rxjs';
 
-export const autoLoginResolver: ResolveFn<boolean> = (route, state) => {
+export const autoLoginResolver: ResolveFn<boolean> = () => {
   const userService = inject(UserService);
 
   const user$ = userService.user;

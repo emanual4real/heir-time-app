@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatFormField,
@@ -28,7 +28,7 @@ import { NewItemComponent } from 'src/components/items';
   templateUrl: './project-home.component.html',
   styleUrl: './project-home.component.css',
 })
-export class ProjectHomeComponent implements OnInit {
+export class ProjectHomeComponent {
   // item: Item = {
   //   id: 1,
   //   title: 'Some Shiba Inu',
@@ -51,8 +51,4 @@ export class ProjectHomeComponent implements OnInit {
   );
 
   constructor(private projectService: ProjectService) {}
-
-  ngOnInit(): void {
-    console.log('something');
-  }
 }
