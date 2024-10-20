@@ -23,6 +23,38 @@ export class ProjectsEffects {
     );
   });
 
+  createProject$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProjectsActions.createUserProject),
+      switchMap((action) =>
+        this.projectService.createProject(action.project).pipe(
+          map((project) =>
+            ProjectsActions.createUserProjectSuccess({ project })
+          ),
+          catchError((error) =>
+            of(ProjectsActions.createUserProjectFailure({ error }))
+          )
+        )
+      )
+    );
+  });
+
+  deleteProject$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProjectsActions.deleteUserProject),
+      switchMap((action) =>
+        this.projectService.deleteProject(action.projectId).pipe(
+          map((projectId) =>
+            ProjectsActions.deleteUserProjectSuccess({ projectId })
+          ),
+          catchError((error) =>
+            of(ProjectsActions.deleteUserProjectFailure({ error }))
+          )
+        )
+      )
+    );
+  });
+
   getProjectsAfterLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(CurrentUserActions.userLoginSuccess),

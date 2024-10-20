@@ -23,15 +23,11 @@ export class ProjectService {
   }
 
   deleteProject(projectId: string) {
-    const queryParams = new HttpParams();
-    queryParams.set('projectId', projectId);
-    return this.http.delete<Project>(`${this.baseApiUrl}/project`, {
-      params: queryParams,
-    });
+    return this.http.delete<string>(`${this.baseApiUrl}/project/${projectId}`);
   }
 
-  createProject(payload: NewProjectPayload) {
-    const body = { ...payload };
+  createProject(project: NewProjectPayload) {
+    const body = { ...project };
     return this.http.post<Project>(`${this.baseApiUrl}/project`, body);
   }
 }

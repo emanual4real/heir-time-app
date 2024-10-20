@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ProjectService } from '@services';
 import { NewProjectPayload } from '@types';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -10,6 +9,7 @@ import {
   MatLabel,
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ProjectsFacade } from '@state';
 
 @Component({
   selector: 'app-new-project',
@@ -33,7 +33,7 @@ export class NewProjectComponent {
 
   constructor(
     private fb: FormBuilder,
-    private projectService: ProjectService,
+    private projectFacade: ProjectsFacade
   ) {}
 
   createProject() {
@@ -43,7 +43,7 @@ export class NewProjectComponent {
       users: [],
       items: [],
     };
-    this.projectService.createProject(newProject);
+    this.projectFacade.createProject(newProject);
     this.projectForm.reset();
   }
 }

@@ -11,6 +11,7 @@ import { map } from 'rxjs';
 import { NewProjectComponent } from '../new-project';
 import { NewItemComponent } from 'src/components/items';
 import { ProjectsFacade } from '@state';
+import { DeleteProjectComponent } from '../delete-project';
 
 @Component({
   selector: 'app-project-home',
@@ -18,6 +19,7 @@ import { ProjectsFacade } from '@state';
   imports: [
     CommonModule,
     NewProjectComponent,
+    DeleteProjectComponent,
     MatFormField,
     MatFormFieldModule,
     MatInputModule,
