@@ -22,6 +22,7 @@ export const ProjectsActions = createActionGroup({
     'Delete User Project Failure': props<{ error: HttpErrorResponse }>(),
 
     'Reset Projects': emptyProps(),
+    'Select Project': props<{ projectId: string }>(),
   },
 });
 

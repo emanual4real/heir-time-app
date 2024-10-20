@@ -11,6 +11,13 @@ export const selectCurrentUserProjects = createSelector(
   }
 );
 
+export const selectCurrentProject = createSelector(
+  selectProjectsState,
+  (state) => {
+    return state.currentProject;
+  }
+);
+
 export const selectProjectsLoading = createSelector(
   selectProjectsState,
   (state) => {

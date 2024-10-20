@@ -12,6 +12,8 @@ import { NewProjectComponent } from '../new-project';
 import { NewItemComponent } from 'src/components/items';
 import { ProjectsFacade } from '@state';
 import { DeleteProjectComponent } from '../delete-project';
+import { ViewProjectComponent } from '../view-project';
+import { ProjectListComponent } from '../project-list';
 
 @Component({
   selector: 'app-project-home',
@@ -26,6 +28,8 @@ import { DeleteProjectComponent } from '../delete-project';
     MatLabel,
     NewItemComponent,
     ReactiveFormsModule,
+    ProjectListComponent,
+    ViewProjectComponent,
   ],
   templateUrl: './project-home.component.html',
   styleUrl: './project-home.component.css',

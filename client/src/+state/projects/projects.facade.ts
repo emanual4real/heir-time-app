@@ -1,6 +1,9 @@
 import { select, Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
-import { selectCurrentUserProjects } from './projects.selectors';
+import {
+  selectCurrentProject,
+  selectCurrentUserProjects,
+} from './projects.selectors';
 import { ProjectsActions } from './projects.actions';
 import { NewProjectPayload } from '@types';
 
@@ -10,10 +13,16 @@ import { NewProjectPayload } from '@types';
 export class ProjectsFacade {
   projects$ = this.store.pipe(select(selectCurrentUserProjects));
 
+  currentProject$ = this.store.pipe(select(selectCurrentProject));
+
   constructor(private store: Store) {}
 
   getCurrentUserProjects() {
     this.store.dispatch(ProjectsActions.getUserProjects());
+  }
+
+  setCurrentProject(projectId: string) {
+    this.store.dispatch(ProjectsActions.selectProject({ projectId }));
   }
 
   createProject(project: NewProjectPayload) {

@@ -1,0 +1,18 @@
+<div>
+  View Projects
+
+  @if (currentProject$ | async; as project) {
+    <div class="label-value-grid-container">
+      <div>Project Name:</div>
+      <div>{{ project.projectName }}</div>
+      <div>Project Owner:</div>
+      <div>{{ project.owner }}</div>
+      <div>Item Count:</div>
+      <div>{{ project.items.length }}</div>
+      <div>User Count:</div>
+      <div>{{ project.users.length }}</div>
+      <div>Admin Count:</div>
+      <div>{{ project.admins.length }}</div>
+    </div>
+  }
+</div>

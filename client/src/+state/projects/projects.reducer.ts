@@ -6,11 +6,13 @@ export const projectsFeatureKey = 'projects';
 
 export interface ProjectState {
   projects: Project[];
+  currentProject: Project | null;
   isLoading: boolean;
 }
 
 const initialState: ProjectState = {
   projects: [],
+  currentProject: null,
   isLoading: false,
 };
 
@@ -59,9 +61,17 @@ const reducer = createReducer(
     error: null,
   })),
   on(ProjectsActions.deleteUserProjectSuccess, (state, action) => {
+    const newProjectList = state.projects.filter(
+      (row) => row.id !== action.projectId
+    );
+    const isLastProject = newProjectList.length === 0;
+    const isCurrentProject = state?.currentProject?.id === action.projectId;
+
     return {
       ...state,
-      projects: state.projects.filter((row) => row.id !== action.projectId),
+      projects: newProjectList,
+      currentProject:
+        isLastProject || isCurrentProject ? null : state.currentProject,
       isLoading: false,
     };
   }),
@@ -73,7 +83,13 @@ const reducer = createReducer(
     };
   }),
   // reset projects
-  on(ProjectsActions.resetProjects, () => initialState)
+  on(ProjectsActions.resetProjects, () => initialState),
+  // select project
+  on(ProjectsActions.selectProject, (state, action) => ({
+    ...state,
+    currentProject:
+      state.projects.find((row) => row.id === action.projectId) ?? null,
+  }))
 );
 
 export const projectsFeature = createFeature({

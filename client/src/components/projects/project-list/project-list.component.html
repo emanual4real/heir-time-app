@@ -1,0 +1,20 @@
+<div>
+  Project List
+
+  <div>Current Project is: {{ selectedProjectName$ | async }}</div>
+  @if (projects$ | async; as projects) {
+    <ul>
+      @for (project of projects; track $index) {
+        <div class="flex-row">
+          <li>{{ project.projectName }}</li>
+          <button
+            mat-button
+            [disabled]="isCurrentProject$(project.id) | async"
+            (click)="setCurrentProject(project.id)">
+            Select
+          </button>
+        </div>
+      }
+    </ul>
+  }
+</div>

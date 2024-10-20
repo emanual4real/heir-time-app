@@ -8,3 +8,10 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.label-value-grid-container {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: 10px;
+  justify-content: start;
+}
