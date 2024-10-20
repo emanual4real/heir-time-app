@@ -8,7 +8,7 @@ import { ProjectsFacade } from '@state';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './project-list.component.html',
-  styleUrl: './project-list.component.css',
+  styleUrl: './project-list.component.scss',
 })
 export class ProjectListComponent {
   projects$ = this.projectFacade.projects$;

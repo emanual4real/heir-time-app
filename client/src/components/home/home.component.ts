@@ -9,7 +9,7 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [CommonModule, MenuComponent, NavbarComponent, RouterOutlet],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   sideMenuToggle = false;

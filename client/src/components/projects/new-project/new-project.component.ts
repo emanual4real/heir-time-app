@@ -24,7 +24,7 @@ import { ProjectsFacade } from '@state';
     ReactiveFormsModule,
   ],
   templateUrl: './new-project.component.html',
-  styleUrl: './new-project.component.css',
+  styleUrl: './new-project.component.scss',
 })
 export class NewProjectComponent {
   projectForm = this.fb.group({

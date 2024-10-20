@@ -10,7 +10,7 @@ import { UsersFacade } from '@state';
   standalone: true,
   imports: [CommonModule, MatToolbarModule, MatButtonModule, MatIconModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css',
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
   @Output() menuClick = new EventEmitter();

@@ -7,7 +7,7 @@ import { ProjectsFacade } from '@state';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './view-project.component.html',
-  styleUrl: './view-project.component.css',
+  styleUrl: './view-project.component.scss',
 })
 export class ViewProjectComponent {
   currentProject$ = this.projectFacade.currentProject$;

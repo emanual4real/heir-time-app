@@ -29,7 +29,7 @@ import { ItemService } from '@services';
     ReactiveFormsModule,
   ],
   templateUrl: './new-item.component.html',
-  styleUrl: './new-item.component.css',
+  styleUrl: './new-item.component.scss',
 })
 export class NewItemComponent {
   itemForm: FormGroup<ItemFormGroup> = this.fb.group<ItemFormGroup>({
@@ -45,7 +45,7 @@ export class NewItemComponent {
 
   constructor(
     private fb: FormBuilder,
-    private itemService: ItemService,
+    private itemService: ItemService
   ) {}
 
   createItem() {

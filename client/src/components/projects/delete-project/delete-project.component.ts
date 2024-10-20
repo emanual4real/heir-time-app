@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [CommonModule, MatButtonModule],
   templateUrl: './delete-project.component.html',
-  styleUrl: './delete-project.component.css',
+  styleUrl: './delete-project.component.scss',
 })
 export class DeleteProjectComponent {
   projects$ = this.projectFacade.projects$;

@@ -32,7 +32,7 @@ import { ProjectListComponent } from '../project-list';
     ViewProjectComponent,
   ],
   templateUrl: './project-home.component.html',
-  styleUrl: './project-home.component.css',
+  styleUrl: './project-home.component.scss',
 })
 export class ProjectHomeComponent {
   // item: Item = {

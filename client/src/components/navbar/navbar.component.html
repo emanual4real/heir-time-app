@@ -1,10 +1,10 @@
 <mat-toolbar>
   <button
     mat-icon-button
+    color="primary"
     class="example-icon"
     aria-label="menu icon"
-    (click)="menuClick.emit()"
-  >
+    (click)="menuClick.emit()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>{{ appTitle }}</span>
@@ -13,10 +13,11 @@
 
   @let user = user$ | async;
   <ng-container>
-    @if (user !== null) { Welcome {{ user.firstName }}
-    <button mat-button (click)="logout()">Logout</button>
+    @if (user !== null) {
+      Welcome {{ user.firstName }}
+      <button mat-button color="primary" (click)="logout()">Logout</button>
     } @else {
-    <button mat-button (click)="login()">Login</button>
+      <button mat-button color="primary" (click)="login()">Login</button>
     }
   </ng-container>
 </mat-toolbar>

@@ -28,7 +28,7 @@ import { itemStatusSelectOptions } from '@utils';
     ReactiveFormsModule,
   ],
   templateUrl: './item.component.html',
-  styleUrl: './item.component.css',
+  styleUrl: './item.component.scss',
 })
 export class ItemComponent implements OnInit {
   @Input({ required: true }) item!: Item;

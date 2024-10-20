@@ -8,7 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   standalone: true,
   imports: [CommonModule, MatSidenavModule, RouterLink],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css',
+  styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
   @Input({ required: true }) opened = false;
