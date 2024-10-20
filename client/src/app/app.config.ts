@@ -11,13 +11,16 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { commonHeadersInterceptor } from 'src/interceptors/common-headers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideStore(),
     provideStoreDevtools({ logOnly: !isDevMode() }),
     provideEffects(),
-    provideHttpClient(withInterceptors([credentialsInterceptor])),
+    provideHttpClient(
+      withInterceptors([commonHeadersInterceptor, credentialsInterceptor])
+    ),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideAnimationsAsync(),
