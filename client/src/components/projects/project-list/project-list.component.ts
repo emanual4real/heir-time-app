@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { map } from 'rxjs';
 import { ProjectsFacade } from '@state';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss',
 })

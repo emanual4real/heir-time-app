@@ -1,13 +1,11 @@
-<!-- <div style="width: 30%"><app-item [item]="item" [readOnly]="false" /></div> -->
+<h2 class="page-header">Projects</h2>
 
-Current Projects
-
-<app-new-project />
-
-<app-delete-project />
-
-<app-project-list />
-
-<app-view-project />
-
-<!-- <app-new-item /> -->
+<mat-tab-group
+  class="project-tabs"
+  [dynamicHeight]="true"
+  [mat-stretch-tabs]="true">
+  <mat-tab label="Project List"> <app-project-list /> </mat-tab>
+  <mat-tab label="View/Edit Project"> <app-view-project /> </mat-tab>
+  <mat-tab label="Add New Project"> <app-new-project /> </mat-tab>
+  <mat-tab label="Delete Project"> <app-delete-project /> </mat-tab>
+</mat-tab-group>

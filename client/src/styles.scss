@@ -16,3 +16,14 @@ body {
   gap: 10px;
   justify-content: start;
 }
+
+.page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.page-content {
+  margin-top: 2rem;
+}

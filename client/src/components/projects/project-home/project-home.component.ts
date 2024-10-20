@@ -1,12 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatFormField,
-  MatFormFieldModule,
-  MatLabel,
-} from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
 import { map } from 'rxjs';
 import { NewProjectComponent } from '../new-project';
 import { NewItemComponent } from 'src/components/items';
@@ -14,6 +7,7 @@ import { ProjectsFacade } from '@state';
 import { DeleteProjectComponent } from '../delete-project';
 import { ViewProjectComponent } from '../view-project';
 import { ProjectListComponent } from '../project-list';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-project-home',
@@ -22,14 +16,10 @@ import { ProjectListComponent } from '../project-list';
     CommonModule,
     NewProjectComponent,
     DeleteProjectComponent,
-    MatFormField,
-    MatFormFieldModule,
-    MatInputModule,
-    MatLabel,
     NewItemComponent,
-    ReactiveFormsModule,
     ProjectListComponent,
     ViewProjectComponent,
+    MatTabsModule,
   ],
   templateUrl: './project-home.component.html',
   styleUrl: './project-home.component.scss',
