@@ -1,5 +1,9 @@
 import { Route } from '@angular/router';
-import { HomeComponent, ProjectHomeComponent } from '@components';
+import {
+  HomeComponent,
+  ItemHomeComponent,
+  ProjectHomeComponent,
+} from '@components';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
 import { autoLoginResolver } from '@resolvers';
@@ -24,6 +28,10 @@ export const appRoutes: Route[] = [
       {
         path: 'projects',
         component: ProjectHomeComponent,
+      },
+      {
+        path: 'items',
+        component: ItemHomeComponent,
       },
     ],
   },

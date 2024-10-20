@@ -1,0 +1,11 @@
+<h2 class="page-header">Items</h2>
+
+<mat-tab-group
+  class="project-tabs"
+  [dynamicHeight]="true"
+  [mat-stretch-tabs]="true">
+  <mat-tab label="Item List"> <app-item-list /> </mat-tab>
+  <!-- <mat-tab label="View/Edit Item"> <app-item /> </mat-tab> -->
+  <mat-tab label="Add New Item"> <app-new-item /> </mat-tab>
+  <mat-tab label="Delete Item"> <app-delete-item /> </mat-tab>
+</mat-tab-group>
