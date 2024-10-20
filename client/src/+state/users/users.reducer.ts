@@ -36,13 +36,13 @@ const reducer = createReducer(
   })),
   on(CurrentUserActions.userLoginSuccess, (state, action) => ({
     ...state,
-    currentUser: action.res,
+    currentUser: action.user,
     loggedIn: true,
   })),
   on(CurrentUserActions.userLoginFailure, (state, action) => ({
     ...state,
     loggedIn: false,
-    error: action.res,
+    error: action.error,
   })),
   on(CurrentUserActions.userRegister, (state) => state),
   on(CurrentUserActions.userLogout, () => initialState),

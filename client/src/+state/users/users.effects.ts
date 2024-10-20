@@ -11,12 +11,17 @@ export class UsersEffects {
     return this.actions$.pipe(
       ofType(CurrentUserActions.userLogin),
       switchMap((action) =>
-        this.userService.login(action.payload).pipe(
-          map((user) => CurrentUserActions.userLoginSuccess({ res: user })),
-          catchError((error) =>
-            of(CurrentUserActions.userLoginFailure({ res: error }))
+        this.userService
+          .login({
+            emailAddress: action.emailAddress,
+            password: action.password,
+          })
+          .pipe(
+            map((user) => CurrentUserActions.userLoginSuccess({ user })),
+            catchError((error) =>
+              of(CurrentUserActions.userLoginFailure({ error }))
+            )
           )
-        )
       )
     );
   });
@@ -26,9 +31,9 @@ export class UsersEffects {
       ofType(CurrentUserActions.getCurrentUser),
       switchMap(() =>
         this.userService.getCurrentUser().pipe(
-          map((user) => CurrentUserActions.userLoginSuccess({ res: user })),
+          map((user) => CurrentUserActions.userLoginSuccess({ user })),
           catchError((error) =>
-            of(CurrentUserActions.userLoginFailure({ res: error }))
+            of(CurrentUserActions.userLoginFailure({ error }))
           )
         )
       )

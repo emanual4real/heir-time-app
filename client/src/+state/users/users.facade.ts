@@ -14,7 +14,7 @@ export class UsersFacade {
 
   login(emailAddress: string, password: string) {
     this.store.dispatch(
-      CurrentUserActions.userLogin({ payload: { emailAddress, password } })
+      CurrentUserActions.userLogin({ emailAddress, password })
     );
   }
 

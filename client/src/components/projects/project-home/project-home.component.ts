@@ -7,10 +7,10 @@ import {
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ProjectService } from 'src/services/project';
 import { map } from 'rxjs';
 import { NewProjectComponent } from '../new-project';
 import { NewItemComponent } from 'src/components/items';
+import { ProjectsFacade } from '@state';
 
 @Component({
   selector: 'app-project-home',
@@ -44,11 +44,11 @@ export class ProjectHomeComponent {
   //   fileUrls: [],
   // };
 
-  projects$ = this.projectService.projects;
+  projects$ = this.projectFacade.projects$;
 
   projectNameList$ = this.projects$.pipe(
-    map((data) => data.map((row) => row.projectName)),
+    map((data) => data.map((row) => row.projectName))
   );
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectFacade: ProjectsFacade) {}
 }
