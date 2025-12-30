@@ -1,28 +1,14 @@
-import {
-  ApplicationConfig,
-  provideZoneChangeDetection,
-  isDevMode,
-} from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { appRoutes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { credentialsInterceptor } from '@interceptors';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { commonHeadersInterceptor } from 'src/interceptors/common-headers';
+import { provideStore } from '@ngrx/store';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(routes),
     provideStore(),
-    provideStoreDevtools({ logOnly: !isDevMode() }),
     provideEffects(),
-    provideHttpClient(
-      withInterceptors([commonHeadersInterceptor, credentialsInterceptor])
-    ),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes),
-    provideAnimationsAsync(),
   ],
 };

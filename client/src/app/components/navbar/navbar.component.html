@@ -1,0 +1,23 @@
+<mat-toolbar>
+  <button
+    mat-icon-button
+    color="primary"
+    class="example-icon"
+    aria-label="menu icon"
+    (click)="menuClick.emit()"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>{{ appTitle }}</span>
+  <span class="spacer"></span>
+  <img src="/favicon.ico" alt="logo" />
+
+  @let user = user$ | async;
+  <ng-container>
+    @if (user !== null) { Welcome {{ user.firstName }}
+    <button mat-button color="primary" (click)="logout()">Logout</button>
+    } @else {
+    <button mat-button color="primary" (click)="login()">Login</button>
+    }
+  </ng-container>
+</mat-toolbar>

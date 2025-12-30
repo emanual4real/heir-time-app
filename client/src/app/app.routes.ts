@@ -1,24 +1,14 @@
 import { Route } from '@angular/router';
-import {
-  HomeComponent,
-  ItemHomeComponent,
-  ProjectHomeComponent,
-} from '@components';
+import { HomeComponent, ItemHomeComponent, ProjectHomeComponent } from '@components';
 import { provideEffects } from '@ngrx/effects';
 import { provideState } from '@ngrx/store';
-import { autoLoginResolver } from '@resolvers';
-import {
-  ProjectsEffects,
-  projectsFeature,
-  UsersEffects,
-  usersFeature,
-} from 'src/+state';
+import { ProjectsEffects, projectsFeature, UsersEffects, usersFeature } from '@state';
 
-export const appRoutes: Route[] = [
+export const routes: Route[] = [
   {
     path: '',
     component: HomeComponent,
-    resolve: [autoLoginResolver],
+    resolve: [],
     providers: [
       provideState(projectsFeature),
       provideState(usersFeature),

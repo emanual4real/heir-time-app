@@ -1,0 +1,12 @@
+<div class="page-content">
+  @if (projects$ | async; as projects) {
+  <ul>
+    @for (project of projects; track $index) {
+    <div class="flex-row">
+      <li>{{ project.projectName }}</li>
+      <button (click)="deleteProject(project.id)">Delete</button>
+    </div>
+    }
+  </ul>
+  }
+</div>

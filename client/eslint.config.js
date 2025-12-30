@@ -1,55 +1,44 @@
-const nx = require('@nx/eslint-plugin');
+// @ts-check
+const eslint = require("@eslint/js");
+const { defineConfig } = require("eslint/config");
+const tseslint = require("typescript-eslint");
+const angular = require("angular-eslint");
 
-module.exports = [
-  ...nx.configs['flat/angular'],
-  ...nx.configs['flat/base'],
-  ...nx.configs['flat/typescript'],
-  ...nx.configs['flat/javascript'],
-  ...nx.configs['flat/angular-template'],
+module.exports = defineConfig([
   {
-    ignores: ['**/dist'],
-  },
-  {
-    files: ['**/*.ts'],
-    // Override or add rules here
+    files: ["**/*.ts"],
+    extends: [
+      eslint.configs.recommended,
+      tseslint.configs.recommended,
+      tseslint.configs.stylistic,
+      angular.configs.tsRecommended,
+    ],
+    processor: angular.processInlineTemplates,
     rules: {
-      'max-lines': ['error', { max: 500, skipBlankLines: true }],
-      'no-console': ['error', { allow: ['error'] }],
-      'no-unused-vars': ['off'],
-      '@typescript-eslint/no-unused-vars': ['error'],
-      '@typescript-eslint/no-explicit-any': ['error'],
-    },
-  },
-  ...nx.configs['flat/angular'],
-  ...nx.configs['flat/angular-template'],
-  {
-    files: ['**/*.ts'],
-    rules: {
-      '@angular-eslint/directive-selector': [
-        'error',
+      "@angular-eslint/directive-selector": [
+        "error",
         {
-          type: 'attribute',
-          prefix: 'app',
-          style: 'camelCase',
+          type: "attribute",
+          prefix: "app",
+          style: "camelCase",
         },
       ],
-      '@angular-eslint/component-selector': [
-        'error',
+      "@angular-eslint/component-selector": [
+        "error",
         {
-          type: 'element',
-          prefix: 'app',
-          style: 'kebab-case',
+          type: "element",
+          prefix: "app",
+          style: "kebab-case",
         },
       ],
     },
   },
   {
-    files: ['**/*.html'],
-    // Override or add rules here
-    rules: {
-      '@angular-eslint/template/alt-text': ['error'],
-      '@angular-eslint/template/prefer-self-closing-tags': ['error'],
-      '@angular-eslint/template/elements-content': ['warn'],
-    },
-  },
-];
+    files: ["**/*.html"],
+    extends: [
+      angular.configs.templateRecommended,
+      angular.configs.templateAccessibility,
+    ],
+    rules: {},
+  }
+]);
